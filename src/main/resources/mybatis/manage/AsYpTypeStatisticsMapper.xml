@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpTypeStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpTypeStatistics" >
+    <id column="type_statistic_id" property="typeStatisticId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="counts" property="counts" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseRowMap" type="com.aoshi.domain.AsResultMap" extends="BaseResultMap">
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    type_statistic_id, category_id, counts, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_type_statistics
+    where type_statistic_id = #{typeStatisticId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_type_statistics
+    where type_statistic_id = #{typeStatisticId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpTypeStatistics" >
+    insert into as_yp_type_statistics (type_statistic_id, category_id, counts, 
+      create_time)
+    values (#{typeStatisticId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{counts,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpTypeStatistics" >
+    insert into as_yp_type_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeStatisticId != null" >
+        type_statistic_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="counts != null" >
+        counts,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeStatisticId != null" >
+        #{typeStatisticId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="counts != null" >
+        #{counts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpTypeStatistics" >
+    update as_yp_type_statistics
+    <set >
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="counts != null" >
+        counts = #{counts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where type_statistic_id = #{typeStatisticId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpTypeStatistics" >
+    update as_yp_type_statistics
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      counts = #{counts,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where type_statistic_id = #{typeStatisticId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getYpServiceTypeList" resultMap="BaseRowMap">
+  	SELECT
+		statistics.*, category.`name`
+	FROM
+		as_yp_type_statistics statistics
+	JOIN as_yp_base_category category ON statistics.category_id = category.id
+	WHERE
+		category.type = 2 and category.status = 0
+  </select>
+  
+  <select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_yp_type_statistics WHERE category_id = #{categoryId}
+  	</select>
+  
+</mapper>

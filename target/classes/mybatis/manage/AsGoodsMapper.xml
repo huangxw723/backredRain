@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsGoods" >
+    <id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+    <result column="goods_thumb" property="goodsThumb" jdbcType="VARCHAR" />
+    <result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
+    <result column="sales_price" property="salesPrice" jdbcType="DECIMAL" />
+    <result column="goods_store" property="goodsStore" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="unit_id" property="unitId" jdbcType="INTEGER" />
+    <result column="shop_shipping_id" property="shopShippingId" jdbcType="INTEGER" />
+    <result column="is_point" property="isPoint" jdbcType="INTEGER" />
+    <result column="point_worth" property="pointWorth" jdbcType="INTEGER" />
+    <result column="point_price" property="pointPrice" jdbcType="DECIMAL" />
+    <result column="is_enough" property="isEnough" jdbcType="INTEGER" />
+    <result column="is_point_pay" property="isPointPay" jdbcType="INTEGER" />
+    <result column="is_on_sale" property="isOnSale" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="collect_count" property="collectCount" jdbcType="INTEGER" />
+    <result column="sales_count" property="salesCount" jdbcType="INTEGER" />
+    <result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsGoods" extends="BaseResultMap" >
+    <result column="goods_desc" property="goodsDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Need_Column_List" >
+    goods_id,  goods_name, goods_img,  
+    market_price, sales_price, goods_store,  
+    point_worth, point_price, goods_type
+  </sql>
+  <sql id="Base_Column_List" >
+    goods_id, goods_sn, goods_name, brand_id, shop_id, city_id, area_id, goods_img, goods_thumb, 
+    market_price, sales_price, goods_store, weight, unit_id, shop_shipping_id, is_point, 
+    point_worth, point_price, is_enough, is_point_pay, is_on_sale, is_delete, create_user, 
+    create_time, update_user, update_time, remark, collect_count, sales_count, goods_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    goods_desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_goods
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_goods
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsGoods" >
+    insert into as_goods (goods_id, goods_sn, goods_name, 
+      brand_id, shop_id, city_id, 
+      area_id, goods_img, goods_thumb, 
+      market_price, sales_price, goods_store, 
+      weight, unit_id, shop_shipping_id, 
+      is_point, point_worth, point_price, 
+      is_enough, is_point_pay, is_on_sale, 
+      is_delete, create_user, create_time, 
+      update_user, update_time, remark, 
+      collect_count, sales_count, goods_type, 
+      goods_desc)
+    values (#{goodsId,jdbcType=INTEGER}, #{goodsSn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+      #{brandId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, 
+      #{areaId,jdbcType=INTEGER}, #{goodsImg,jdbcType=VARCHAR}, #{goodsThumb,jdbcType=VARCHAR}, 
+      #{marketPrice,jdbcType=DECIMAL}, #{salesPrice,jdbcType=DECIMAL}, #{goodsStore,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DECIMAL}, #{unitId,jdbcType=INTEGER}, #{shopShippingId,jdbcType=INTEGER}, 
+      #{isPoint,jdbcType=INTEGER}, #{pointWorth,jdbcType=INTEGER}, #{pointPrice,jdbcType=DECIMAL}, 
+      #{isEnough,jdbcType=INTEGER}, #{isPointPay,jdbcType=INTEGER}, #{isOnSale,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{collectCount,jdbcType=INTEGER}, #{salesCount,jdbcType=INTEGER}, #{goodsType,jdbcType=INTEGER}, 
+      #{goodsDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsGoods" keyColumn="goods_id" keyProperty="goodsId" >
+    insert into as_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsSn != null" >
+        goods_sn,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="goodsImg != null" >
+        goods_img,
+      </if>
+      <if test="goodsThumb != null" >
+        goods_thumb,
+      </if>
+      <if test="marketPrice != null" >
+        market_price,
+      </if>
+      <if test="salesPrice != null" >
+        sales_price,
+      </if>
+      <if test="goodsStore != null" >
+        goods_store,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="unitId != null" >
+        unit_id,
+      </if>
+      <if test="shopShippingId != null" >
+        shop_shipping_id,
+      </if>
+      <if test="isPoint != null" >
+        is_point,
+      </if>
+      <if test="pointWorth != null" >
+        point_worth,
+      </if>
+      <if test="pointPrice != null" >
+        point_price,
+      </if>
+      <if test="isEnough != null" >
+        is_enough,
+      </if>
+      <if test="isPointPay != null" >
+        is_point_pay,
+      </if>
+      <if test="isOnSale != null" >
+        is_on_sale,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="collectCount != null" >
+        collect_count,
+      </if>
+      <if test="salesCount != null" >
+        sales_count,
+      </if>
+      <if test="goodsType != null" >
+        goods_type,
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsSn != null" >
+        #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsImg != null" >
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsThumb != null" >
+        #{goodsThumb,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesPrice != null" >
+        #{salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsStore != null" >
+        #{goodsStore,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="unitId != null" >
+        #{unitId,jdbcType=INTEGER},
+      </if>
+      <if test="shopShippingId != null" >
+        #{shopShippingId,jdbcType=INTEGER},
+      </if>
+      <if test="isPoint != null" >
+        #{isPoint,jdbcType=INTEGER},
+      </if>
+      <if test="pointWorth != null" >
+        #{pointWorth,jdbcType=INTEGER},
+      </if>
+      <if test="pointPrice != null" >
+        #{pointPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isEnough != null" >
+        #{isEnough,jdbcType=INTEGER},
+      </if>
+      <if test="isPointPay != null" >
+        #{isPointPay,jdbcType=INTEGER},
+      </if>
+      <if test="isOnSale != null" >
+        #{isOnSale,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="collectCount != null" >
+        #{collectCount,jdbcType=INTEGER},
+      </if>
+      <if test="salesCount != null" >
+        #{salesCount,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null" >
+        #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsDesc != null" >
+        #{goodsDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsGoods" >
+    update as_goods
+    <set >
+      <if test="goodsSn != null" >
+        goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsImg != null" >
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsThumb != null" >
+        goods_thumb = #{goodsThumb,jdbcType=VARCHAR},
+      </if>
+      <if test="marketPrice != null" >
+        market_price = #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesPrice != null" >
+        sales_price = #{salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsStore != null" >
+        goods_store = #{goodsStore,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="unitId != null" >
+        unit_id = #{unitId,jdbcType=INTEGER},
+      </if>
+      <if test="shopShippingId != null" >
+        shop_shipping_id = #{shopShippingId,jdbcType=INTEGER},
+      </if>
+      <if test="isPoint != null" >
+        is_point = #{isPoint,jdbcType=INTEGER},
+      </if>
+      <if test="pointWorth != null" >
+        point_worth = #{pointWorth,jdbcType=INTEGER},
+      </if>
+      <if test="pointPrice != null" >
+        point_price = #{pointPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="isEnough != null" >
+        is_enough = #{isEnough,jdbcType=INTEGER},
+      </if>
+      <if test="isPointPay != null" >
+        is_point_pay = #{isPointPay,jdbcType=INTEGER},
+      </if>
+      <if test="isOnSale != null" >
+        is_on_sale = #{isOnSale,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="collectCount != null" >
+        collect_count = #{collectCount,jdbcType=INTEGER},
+      </if>
+      <if test="salesCount != null" >
+        sales_count = #{salesCount,jdbcType=INTEGER},
+      </if>
+      <if test="goodsType != null" >
+        goods_type = #{goodsType,jdbcType=INTEGER},
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc = #{goodsDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsGoods" >
+    update as_goods
+    set goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_thumb = #{goodsThumb,jdbcType=VARCHAR},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      sales_price = #{salesPrice,jdbcType=DECIMAL},
+      goods_store = #{goodsStore,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DECIMAL},
+      unit_id = #{unitId,jdbcType=INTEGER},
+      shop_shipping_id = #{shopShippingId,jdbcType=INTEGER},
+      is_point = #{isPoint,jdbcType=INTEGER},
+      point_worth = #{pointWorth,jdbcType=INTEGER},
+      point_price = #{pointPrice,jdbcType=DECIMAL},
+      is_enough = #{isEnough,jdbcType=INTEGER},
+      is_point_pay = #{isPointPay,jdbcType=INTEGER},
+      is_on_sale = #{isOnSale,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      collect_count = #{collectCount,jdbcType=INTEGER},
+      sales_count = #{salesCount,jdbcType=INTEGER},
+      goods_type = #{goodsType,jdbcType=INTEGER},
+      goods_desc = #{goodsDesc,jdbcType=LONGVARCHAR}
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsGoods" >
+    update as_goods
+    set goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_thumb = #{goodsThumb,jdbcType=VARCHAR},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      sales_price = #{salesPrice,jdbcType=DECIMAL},
+      goods_store = #{goodsStore,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DECIMAL},
+      unit_id = #{unitId,jdbcType=INTEGER},
+      shop_shipping_id = #{shopShippingId,jdbcType=INTEGER},
+      is_point = #{isPoint,jdbcType=INTEGER},
+      point_worth = #{pointWorth,jdbcType=INTEGER},
+      point_price = #{pointPrice,jdbcType=DECIMAL},
+      is_enough = #{isEnough,jdbcType=INTEGER},
+      is_point_pay = #{isPointPay,jdbcType=INTEGER},
+      is_on_sale = #{isOnSale,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      collect_count = #{collectCount,jdbcType=INTEGER},
+      sales_count = #{salesCount,jdbcType=INTEGER},
+      goods_type = #{goodsType,jdbcType=INTEGER}
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <select id="getGoodsList" parameterType="com.aoshi.domain.AsGoods" resultMap="BaseResultMap">
+  	select 
+  		<include refid="Need_Column_List"></include>
+  	from as_goods
+  	where 1=1 and is_delete = 0  and goods_type = 2 
+  	<if test="keyword != null and keyword !=''">
+  		and goods_name like CONCAT( CONCAT('%',#{keyword}), '%')
+  	</if>
+  	<if test="sSalesPrice != null and sSalesPrice !=''">
+  		and sales_price &gt;= #{sSalesPrice}
+  	</if>
+  	<if test="eSalesPrice != null and eSalesPrice !=''">
+  		and sales_price &lt;= #{eSalesPrice}
+  	</if>
+  	order by  create_time desc
+  </select>
+  
+  <update id="deleteGoodsAlls" parameterType="java.lang.Integer">
+  	update as_goods
+    set   
+      is_delete = 1
+    where goods_id  in
+  	<foreach item="goodsId" index="index" collection="array" open="(" separator="," close=")">
+     #{goodsId}
+    </foreach>
+  </update>
+  
+  
+  
+</mapper>

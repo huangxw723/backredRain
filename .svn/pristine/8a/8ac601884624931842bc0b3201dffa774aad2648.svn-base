@@ -1,0 +1,17 @@
+package com.aoshi.dao;
+
+import com.aoshi.domain.AsAttachment;
+
+public interface AsAttachmentMapper {
+    int deleteByPrimaryKey(Integer sysAttachmentId);
+
+    int insert(AsAttachment record);
+
+    int insertSelective(AsAttachment record);
+
+    AsAttachment selectByPrimaryKey(Integer sysAttachmentId);
+
+    int updateByPrimaryKeySelective(AsAttachment record);
+
+    int updateByPrimaryKey(AsAttachment record);
+}

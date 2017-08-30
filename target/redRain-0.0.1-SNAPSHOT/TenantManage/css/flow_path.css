@@ -1,0 +1,25 @@
+body {
+	background: url(../images/bg_process.png) no-repeat;
+	background-size: 100% 100%;
+	overflow: hidden;
+}
+
+.detailed_flow_path {
+	background: url(../images/process_pic.png) no-repeat;
+	width: 1203px;
+	height: 261px;
+	margin: 266px auto;
+	margin-bottom: 0;
+}
+
+.fill_datum {
+	width: 164px;
+	height: 54px;
+	line-height: 54px;
+	text-align: center;
+	background: #fff;
+	color: #1ca8ed;
+	font-size: 20px;
+	display: block;
+	margin: 44px auto;
+}

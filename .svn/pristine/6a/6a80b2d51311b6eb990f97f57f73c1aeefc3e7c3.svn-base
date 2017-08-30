@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>重设密码</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<style>
+		body {
+			background: url(images/bg_back.png) no-repeat;
+			background-size: 100% 100%;
+		}
+
+		.between {
+			position: absolute;
+		    top: 25%;
+		    width: 100%;
+		    left: 50%;
+		    transform: translate(-50%,50%);
+		    text-align: center;
+		}
+
+		.towards_right {
+			content: '';
+			/*position: absolute;*/
+			display: inline-block;
+			background: url(images/icon_right_arrow.png) no-repeat;
+			width: 153px;
+			height: 55px;
+		}
+
+		.step_box {
+			display: inline-block;
+			color: #1ca8ed;
+		}
+
+		.step_box > span {
+			font-size: 14px;
+		}
+
+		.step {
+			width: 44px;
+			height: 44px;
+			text-align: center;
+			margin: 0 auto;
+			font-size: 30px;
+			line-height: 44px;
+			border: 1px solid #1ca8ed;
+			border-radius: 44px;
+			margin-bottom: 10px;
+		}
+
+		.current {
+			color: #ea4043;
+		}
+
+		.current .step {
+			border: 1px solid #ea4043;
+			background: #ea4043;
+			color: #fff;
+		}
+
+		#app {
+			width: 1200px;
+			height: 100%;
+			margin: 0 auto;
+			background: #fff;
+			position: relative;
+		}
+
+		input {
+			padding-left: 10px;
+		}
+
+		.iphone {
+			position: absolute;
+			top: 50%;
+			width: 100%;
+			text-align: center;
+		}
+
+		.obligate_phone {
+			width: 300px;
+			height: 30px;
+			border: 1px solid #000;
+		}
+
+		.import_code {
+			width: 300px;
+			height: 30px;
+			border: 1px solid #000;
+		}
+
+		.dit {
+			display: inline-block;
+			width: 80px;
+			text-align: right;
+		}
+
+		.submit {
+			display: inline-block;
+			width: 164px;
+			height: 54px;
+			color: #fff;
+			font-size: 20px;
+			background: #1ca8ed;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			cursor:pointer;
+			transform: translate(-50%,-300%);
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<form action="" method="post" name="loginForm" id="loginForm">
+			<input type="hidden" name="local" id="local"  value=""/>
+			<input type="hidden" name="phone" id="phone"  value=""/>
+			<div class="between">
+				<div class="step_box">
+					<div class="step">1</div>
+					<span>输入信息</span>
+				</div>
+				<i class="towards_right"></i>
+				<div class="step_box">
+					<div class="step">2</div>
+					<span>验证信息</span>
+				</div>
+				<i class="towards_right"></i>
+				<div class="step_box current">
+					<div class="step">3</div>
+					<span>重设密码</span>
+				</div>
+			</div>
+
+			<div class="iphone">
+				<div>
+					<span class="dit">设置新密码:</span>
+					<input type="password" placeholder="6到20位" name="password" id="password" class="obligate_phone" />
+				</div>
+				<div class="mt20">
+					<span class="dit">确认密码:</span>
+					<input type="password" placeholder="6到20位" name="confirmPassword" id="confirmPassword" class="import_code" />
+				</div>
+			</div>
+			<input type="button" name="" id="to-recover" value="确定" class="submit" onclick="severCheck();" />
+		</form>
+	</div>
+
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+
+	<script type="text/javascript">
+
+		jQuery(function(){
+			//rul链接地址
+			//var allUrl = window.location.href;
+			//url参数
+			var url = location.search;
+			var	phone = url.substring(7,18);
+			$("#phone").val(phone);
+			//截取服务地址
+			var allUrl = window.location.href;
+			var index = allUrl.indexOf("/TenantManage/again_set_password.html");
+			var local = allUrl.substring(0,index);
+			$("#local").val(local);
+		});
+
+		$(document).keyup(function(event) {
+			if (event.keyCode == 13) {
+				$("#to-recover").trigger("click");
+			}
+		});
+
+		//服务器校验
+		function severCheck(){
+			if(check()){
+				var phone = $("#phone").val();
+				var password = $("#password").val();
+				var confirmPassword = $("#confirmPassword").val();
+				var local = $("#local").val();
+				$.ajax({
+					type: "POST",
+					url:  local+'/TenantManage/updatePwd',
+					async: false,
+					data: {
+						phone:phone,
+						password:password,
+						confirmPassword:confirmPassword,
+						tm:new Date().getTime()
+					},
+					dataType:'json',
+					cache: false,
+					success: function(data){
+						if(data.status == 1){
+							alert(data.msg);
+							return
+						}else if(data.status == 2){
+							alert(data.msg);
+							return
+						}else if(data.status == 0){
+							alert(data.msg);
+							window.location.href=local+"/login_toLogin";
+							return
+						}else {
+							alert(data.msg);
+							return
+						}
+
+					}
+				});
+			}
+		}
+
+		//客户端校验
+		function check() {
+			var password = $("#password").val();
+			var confirmPassword = $("#confirmPassword").val();
+			if (password == "") {
+				alert('请设置新密码！');
+				$("#password").focus();
+				return false;
+			}
+			if (password.length >20 ||password.length < 6) {
+				alert('密码长度6到20位！');
+				$("#password").focus();
+				return false;
+			}
+			if (confirmPassword == "") {
+				alert('请确认密码！');
+				$("#confirmPassword").focus();
+				return false;
+			}
+			if (confirmPassword.length >20 ||confirmPassword.length < 6) {
+				alert('密码长度6到20位！');
+				$("#confirmPassword").focus();
+				return false;
+			}
+			if(password != confirmPassword){
+				alert("两次密码不一致，请重新输入！")
+				$("#confirmPassword").val("");
+				$("#confirmPassword").focus();
+				return;
+			}
+			return true;
+		}
+
+	</script>
+	
+</body>
+</html>

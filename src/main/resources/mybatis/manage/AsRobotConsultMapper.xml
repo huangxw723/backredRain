@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsRobotConsultMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsRobotConsult" >
+    <id column="robot_consult_id" property="robotConsultId" jdbcType="INTEGER" />
+    <result column="use_type" property="useType" jdbcType="INTEGER" />
+    <result column="contact_sex" property="contactSex" jdbcType="INTEGER" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="contact_age" property="contactAge" jdbcType="VARCHAR" />
+    <result column="contact_phone" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_address" property="companyAddress" jdbcType="VARCHAR" />
+    <result column="adoption_period" property="adoptionPeriod" jdbcType="INTEGER" />
+    <result column="requirement" property="requirement" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="unionid" property="unionid" jdbcType="VARCHAR" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="wechar_nickname" property="wecharNickname" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    robot_consult_id, use_type, contact_sex, contact_name, contact_age, contact_phone, 
+    company_name, company_address, adoption_period, requirement, source, unionid, openid, 
+    wechar_nickname, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_robot_consult
+    where robot_consult_id = #{robotConsultId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_robot_consult
+    where robot_consult_id = #{robotConsultId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsRobotConsult" >
+    insert into as_robot_consult (robot_consult_id, use_type, contact_sex, 
+      contact_name, contact_age, contact_phone, 
+      company_name, company_address, adoption_period, 
+      requirement, source, unionid, 
+      openid, wechar_nickname, create_time
+      )
+    values (#{robotConsultId,jdbcType=INTEGER}, #{useType,jdbcType=INTEGER}, #{contactSex,jdbcType=INTEGER}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactAge,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, #{adoptionPeriod,jdbcType=INTEGER}, 
+      #{requirement,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, #{unionid,jdbcType=VARCHAR}, 
+      #{openid,jdbcType=VARCHAR}, #{wecharNickname,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsRobotConsult" >
+    insert into as_robot_consult
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="robotConsultId != null" >
+        robot_consult_id,
+      </if>
+      <if test="useType != null" >
+        use_type,
+      </if>
+      <if test="contactSex != null" >
+        contact_sex,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="contactAge != null" >
+        contact_age,
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="companyAddress != null" >
+        company_address,
+      </if>
+      <if test="adoptionPeriod != null" >
+        adoption_period,
+      </if>
+      <if test="requirement != null" >
+        requirement,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="unionid != null" >
+        unionid,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="wecharNickname != null" >
+        wechar_nickname,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="robotConsultId != null" >
+        #{robotConsultId,jdbcType=INTEGER},
+      </if>
+      <if test="useType != null" >
+        #{useType,jdbcType=INTEGER},
+      </if>
+      <if test="contactSex != null" >
+        #{contactSex,jdbcType=INTEGER},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactAge != null" >
+        #{contactAge,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null" >
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptionPeriod != null" >
+        #{adoptionPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="requirement != null" >
+        #{requirement,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="unionid != null" >
+        #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="wecharNickname != null" >
+        #{wecharNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsRobotConsult" >
+    update as_robot_consult
+    <set >
+      <if test="useType != null" >
+        use_type = #{useType,jdbcType=INTEGER},
+      </if>
+      <if test="contactSex != null" >
+        contact_sex = #{contactSex,jdbcType=INTEGER},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactAge != null" >
+        contact_age = #{contactAge,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null" >
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="adoptionPeriod != null" >
+        adoption_period = #{adoptionPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="requirement != null" >
+        requirement = #{requirement,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="unionid != null" >
+        unionid = #{unionid,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="wecharNickname != null" >
+        wechar_nickname = #{wecharNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where robot_consult_id = #{robotConsultId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsRobotConsult" >
+    update as_robot_consult
+    set use_type = #{useType,jdbcType=INTEGER},
+      contact_sex = #{contactSex,jdbcType=INTEGER},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_age = #{contactAge,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      adoption_period = #{adoptionPeriod,jdbcType=INTEGER},
+      requirement = #{requirement,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
+      unionid = #{unionid,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      wechar_nickname = #{wecharNickname,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where robot_consult_id = #{robotConsultId,jdbcType=INTEGER}
+  </update>
+  <select id="listAll" resultMap="BaseRowMap">
+    select * from as_robot_consult where 1=1
+    <if test="contactName != null and contactName != ''">
+      and contact_name like concat(concat('%',#{contactName}),'%')
+    </if>
+    <if test="contactPhone != null and contactPhone != ''">
+      and contact_phone like concat(concat('%',#{contactPhone}),'%')
+    </if>
+    <if test="useType != null and useType != ''">
+      and use_type = #{useType}
+    </if>
+    order by create_time desc
+  </select>
+</mapper>

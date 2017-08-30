@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityAdMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityAd" >
+    <id column="ad_id" property="adId" jdbcType="INTEGER" />
+    <result column="ad_name" property="adName" jdbcType="VARCHAR" />
+    <result column="ad_type" property="adType" jdbcType="INTEGER" />
+    <result column="ad_start_time" property="adStartTime" jdbcType="VARCHAR" />
+    <result column="ad_end_time" property="adEndTime" jdbcType="VARCHAR" />
+    <result column="ad_img" property="adImg" jdbcType="VARCHAR" />
+    <result column="ad_desc" property="adDesc" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="ad_sn" property="adSn" jdbcType="VARCHAR" />
+    <result column="ad_url_type" property="adUrlType" jdbcType="INTEGER" />
+    <result column="ad_url" property="adUrl" jdbcType="VARCHAR" />
+    <result column="ad_pos_type" property="adPosType" jdbcType="INTEGER" />
+    <result column="ref_id" property="refId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ad_id, ad_name, ad_type, ad_start_time, ad_end_time, ad_img, ad_desc, status, ad_sn, 
+    ad_url_type, ad_url, ad_pos_type, ref_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_ad
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_ad
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityAd" >
+    insert into as_activity_ad (ad_id, ad_name, ad_type, 
+      ad_start_time, ad_end_time, ad_img, 
+      ad_desc, status, ad_sn, 
+      ad_url_type, ad_url, ad_pos_type, 
+      ref_id)
+    values (#{adId,jdbcType=INTEGER}, #{adName,jdbcType=VARCHAR}, #{adType,jdbcType=INTEGER}, 
+      #{adStartTime,jdbcType=VARCHAR}, #{adEndTime,jdbcType=VARCHAR}, #{adImg,jdbcType=VARCHAR}, 
+      #{adDesc,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{adSn,jdbcType=VARCHAR}, 
+      #{adUrlType,jdbcType=INTEGER}, #{adUrl,jdbcType=VARCHAR}, #{adPosType,jdbcType=INTEGER}, 
+      #{refId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityAd" >
+    insert into as_activity_ad
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adId != null" >
+        ad_id,
+      </if>
+      <if test="adName != null" >
+        ad_name,
+      </if>
+      <if test="adType != null" >
+        ad_type,
+      </if>
+      <if test="adStartTime != null" >
+        ad_start_time,
+      </if>
+      <if test="adEndTime != null" >
+        ad_end_time,
+      </if>
+      <if test="adImg != null" >
+        ad_img,
+      </if>
+      <if test="adDesc != null" >
+        ad_desc,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="adSn != null" >
+        ad_sn,
+      </if>
+      <if test="adUrlType != null" >
+        ad_url_type,
+      </if>
+      <if test="adUrl != null" >
+        ad_url,
+      </if>
+      <if test="adPosType != null" >
+        ad_pos_type,
+      </if>
+      <if test="refId != null" >
+        ref_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adId != null" >
+        #{adId,jdbcType=INTEGER},
+      </if>
+      <if test="adName != null" >
+        #{adName,jdbcType=VARCHAR},
+      </if>
+      <if test="adType != null" >
+        #{adType,jdbcType=INTEGER},
+      </if>
+      <if test="adStartTime != null" >
+        #{adStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adEndTime != null" >
+        #{adEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adImg != null" >
+        #{adImg,jdbcType=VARCHAR},
+      </if>
+      <if test="adDesc != null" >
+        #{adDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adSn != null" >
+        #{adSn,jdbcType=VARCHAR},
+      </if>
+      <if test="adUrlType != null" >
+        #{adUrlType,jdbcType=INTEGER},
+      </if>
+      <if test="adUrl != null" >
+        #{adUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="adPosType != null" >
+        #{adPosType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null" >
+        #{refId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityAd" >
+    update as_activity_ad
+    <set >
+      <if test="adName != null" >
+        ad_name = #{adName,jdbcType=VARCHAR},
+      </if>
+      <if test="adType != null" >
+        ad_type = #{adType,jdbcType=INTEGER},
+      </if>
+      <if test="adStartTime != null" >
+        ad_start_time = #{adStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adEndTime != null" >
+        ad_end_time = #{adEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adImg != null" >
+        ad_img = #{adImg,jdbcType=VARCHAR},
+      </if>
+      <if test="adDesc != null" >
+        ad_desc = #{adDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adSn != null" >
+        ad_sn = #{adSn,jdbcType=VARCHAR},
+      </if>
+      <if test="adUrlType != null" >
+        ad_url_type = #{adUrlType,jdbcType=INTEGER},
+      </if>
+      <if test="adUrl != null" >
+        ad_url = #{adUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="adPosType != null" >
+        ad_pos_type = #{adPosType,jdbcType=INTEGER},
+      </if>
+      <if test="refId != null" >
+        ref_id = #{refId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityAd" >
+    update as_activity_ad
+    set ad_name = #{adName,jdbcType=VARCHAR},
+      ad_type = #{adType,jdbcType=INTEGER},
+      ad_start_time = #{adStartTime,jdbcType=VARCHAR},
+      ad_end_time = #{adEndTime,jdbcType=VARCHAR},
+      ad_img = #{adImg,jdbcType=VARCHAR},
+      ad_desc = #{adDesc,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      ad_sn = #{adSn,jdbcType=VARCHAR},
+      ad_url_type = #{adUrlType,jdbcType=INTEGER},
+      ad_url = #{adUrl,jdbcType=VARCHAR},
+      ad_pos_type = #{adPosType,jdbcType=INTEGER},
+      ref_id = #{refId,jdbcType=INTEGER}
+    where ad_id = #{adId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPosType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_ad
+    where ad_pos_type = #{adPosType,jdbcType=INTEGER}
+  </select>
+
+ <select id="getAdPosTypeRefId"  resultType="java.lang.Integer" parameterType="java.lang.Integer">
+ 	SELECT COUNT(*) FROM as_activity_ad WHERE 1=1
+ 	  <if test="adPosType != null" >
+ 		AND ad_pos_type = #{adPosType,jdbcType=INTEGER}
+      </if>
+     <if test="refId != null" >
+       AND ref_id = #{refId,jdbcType=INTEGER}
+     </if>
+  </select>
+
+<!--通过广告板块类型 判断大转盘-logo和大转盘-首页广告只能有一条-->
+  <select id="getAdPosType"  resultType="java.lang.Integer" parameterType="java.lang.Integer">
+ 	SELECT COUNT(*) FROM as_activity_ad WHERE  ad_pos_type = #{adPosType,jdbcType=INTEGER}
+  </select>
+
+  <select id="getPointActivityCount"  resultType="java.lang.Integer" parameterType="java.lang.Integer">
+ 	SELECT COUNT(*) FROM as_activity_ad WHERE STATUS =1 AND  ad_url_type=0
+ 	  <if test="adPosType != null" >
+ 		AND ad_pos_type = #{adPosType,jdbcType=INTEGER}
+    </if>
+
+  </select>
+  <select id="getActivityAdDataInfo" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+    *
+    from as_activity_ad
+    where 
+    <if test="adId != null" >
+       ad_id = #{adId,jdbcType=INTEGER}
+    </if>
+  </select>
+  <!--adPosType是9时查询4(弹窗)和5(悬浮)类型的广告。adPosType是10时查询2(云屏红包雨)和6(云屏logo)和7(云屏转盘)类型的广告。-->
+  <select id="listAll" resultMap="BaseResultMap" parameterType="pd">
+    select 
+    *
+    from as_activity_ad
+    where 1=1
+    <if test="keyWord != null and keyWord != ''">
+    	and  ad_name like concat(concat('%', #{keyWord}),'%')
+  	</if>
+  	<if test="adPosType != null and adPosType != '' and adPosType != 9 and adPosType != 10">
+  		 and ad_pos_type = #{adPosType}
+  	</if>
+    <if test="adPosType == 9">
+  		 and ad_pos_type in(4,5)
+  	</if>
+    <if test="adPosType == 10">
+      and ad_pos_type in(2,6,7)
+    </if>
+  	<if test="adUrlType != null and adUrlType != ''">
+  		 and ad_url_type = #{adUrlType}
+  	</if>
+  	<if test="status != null and status != '' and status!=3">
+  		and status = #{status}
+  	</if>
+    order by ad_id desc
+  </select>
+
+<!--获取指定类型中最大结束时间-->
+  <select id="getMaxEndTime" resultType="java.lang.String" >
+    SELECT
+    max(ad_end_time) AS maxEndTime
+    FROM
+    as_activity_ad
+    WHERE 1=1
+    <if test="adPosType != null and adPosType != ''">
+      AND ad_pos_type = #{adPosType}
+    </if>
+
+  </select>
+
+  <update id="updateTimeByRefId" parameterType="Map" >
+    update as_activity_ad
+    set
+    ad_start_time = #{startTime,jdbcType=VARCHAR},
+    ad_end_time = #{endTime,jdbcType=VARCHAR}
+    where ref_id = #{activityId,jdbcType=INTEGER}
+  </update>
+
+
+</mapper>

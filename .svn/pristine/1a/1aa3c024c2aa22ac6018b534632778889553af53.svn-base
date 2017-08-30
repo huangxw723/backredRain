@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCouponMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCoupon" >
+    <id column="coupon_id" property="couponId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="business_district_id" property="businessDistrictId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="descp" property="descp" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="receive_count" property="receiveCount" jdbcType="INTEGER" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="prize_type_id" property="prizeTypeId" jdbcType="INTEGER" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithShop" extends="BaseResultMap" type="com.aoshi.domain.AsCoupon">
+  	<association property="shop" column="shop_id" javaType="com.aoshi.domain.AsShop">
+  		<id column="shop_id" property="shopId"/>
+  		<result column="shop_name" property="name"/>
+  	</association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    coupon_id, store_id, shop_id, business_district_id, status, name, logo_url, start_time, 
+    end_time, descp, create_time, receive_count, sn, price, prize_type_id, color
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_coupon
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_coupon
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCoupon" useGeneratedKeys="true" keyProperty="couponId">
+    insert into as_coupon (coupon_id, store_id, shop_id, 
+      business_district_id, status, name, 
+      logo_url, start_time, end_time, 
+      descp, create_time, receive_count, 
+      sn, price, prize_type_id, 
+      color)
+    values (#{couponId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{businessDistrictId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{logoUrl,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{descp,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{receiveCount,jdbcType=INTEGER}, 
+      #{sn,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{prizeTypeId,jdbcType=INTEGER}, 
+      #{color,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCoupon" useGeneratedKeys="true" keyProperty="couponId">
+    insert into as_coupon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="couponId != null" >
+        coupon_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="businessDistrictId != null" >
+        business_district_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="descp != null" >
+        descp,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="receiveCount != null" >
+        receive_count,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="prizeTypeId != null" >
+        prize_type_id,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="couponId != null" >
+        #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null" >
+        #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        #{descp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCount != null" >
+        #{receiveCount,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeTypeId != null" >
+        #{prizeTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCoupon" >
+    update as_coupon
+    <set >
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null" >
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        descp = #{descp,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCount != null" >
+        receive_count = #{receiveCount,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeTypeId != null" >
+        prize_type_id = #{prizeTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCoupon" >
+    update as_coupon
+    set store_id = #{storeId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      descp = #{descp,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      receive_count = #{receiveCount,jdbcType=INTEGER},
+      sn = #{sn,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      prize_type_id = #{prizeTypeId,jdbcType=INTEGER},
+      color = #{color,jdbcType=VARCHAR}
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </update>
+  <select id="queryList" parameterType="com.aoshi.domain.AsCoupon" resultMap="ResultMapWithShop">
+  	select 
+  		coupon.*,
+  		shop.name shop_name,
+  		shop.shop_id
+  	from as_coupon coupon 
+  	left join as_shop shop 
+  	on coupon.shop_id = shop.shop_id
+  	 where 1=1 
+  	 <if test="name != null">
+  	 	and coupon.name like CONCAT(CONCAT('%',#{name}),'%') 
+  	 </if>
+  	 <if test="shopId != null">
+  	 	and coupon.shop_id = #{shopId} 
+  	 </if>
+  	 <if test="status != null">
+  	 	and coupon.status = #{status} 
+  	 </if>
+  	  order by coupon_id desc 
+  </select>
+</mapper>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOwnActivityHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOwnActivityHistory" >
+    <id column="own_activity_history_id" property="ownActivityHistoryId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="count" property="count" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="operator_id" property="operatorId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="own_activity_id" property="ownActivityId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    own_activity_history_id, user_id, count, source, create_time, operator, operator_id, 
+    shop_id, own_activity_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_own_activity_history
+    where own_activity_history_id = #{ownActivityHistoryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_own_activity_history
+    where own_activity_history_id = #{ownActivityHistoryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOwnActivityHistory" >
+    insert into as_own_activity_history (own_activity_history_id, user_id, count, 
+      source, create_time, operator, 
+      operator_id, shop_id, own_activity_id
+      )
+    values (#{ownActivityHistoryId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{count,jdbcType=INTEGER}, 
+      #{source,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{operatorId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{ownActivityId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOwnActivityHistory" >
+    insert into as_own_activity_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ownActivityHistoryId != null" >
+        own_activity_history_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="count != null" >
+        count,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="operatorId != null" >
+        operator_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="ownActivityId != null" >
+        own_activity_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ownActivityHistoryId != null" >
+        #{ownActivityHistoryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="ownActivityId != null" >
+        #{ownActivityId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOwnActivityHistory" >
+    update as_own_activity_history
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="count != null" >
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        operator_id = #{operatorId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="ownActivityId != null" >
+        own_activity_id = #{ownActivityId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where own_activity_history_id = #{ownActivityHistoryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOwnActivityHistory" >
+    update as_own_activity_history
+    set user_id = #{userId,jdbcType=INTEGER},
+      count = #{count,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operator_id = #{operatorId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      own_activity_id = #{ownActivityId,jdbcType=INTEGER}
+    where own_activity_history_id = #{ownActivityHistoryId,jdbcType=INTEGER}
+  </update>
+  <select id="listAll" resultMap="BaseRowMap">
+   select h.*,a.activity_name activityName,u.account,info.nick_name nickName
+   FROM  as_own_activity_history h
+   left join as_user u on h.user_id = u.user_id
+   left join as_user_info info on h.user_id = info.user_id
+   left join as_own_activity a on h.own_activity_id=a.own_activity_id
+   where 1 = 1
+   <if test="keyWord != null and keyWord != ''">
+    and (
+    h.user_id LIKE concat(concat('%',#{keyWord}),'%')
+    or h.operator LIKE concat(concat('%',#{keyWord}),'%')
+    or info.nick_name LIKE concat(concat('%',#{keyWord}),'%')
+    )
+   </if>
+    <if test="shopId !='null' and shopId != '' ">
+      AND h.shop_id =#{shopId}
+    </if>
+    <if test="startTime != null and startTime != '' ">
+      AND h.create_time <![CDATA[>=]]> #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and endTime != '' ">
+      AND h.create_time <![CDATA[<=]]> #{endTime,jdbcType=VARCHAR}
+    </if>
+    ORDER BY h.create_time DESC
+   </select>
+</mapper>

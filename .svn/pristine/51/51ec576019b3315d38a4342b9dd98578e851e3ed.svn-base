@@ -1,0 +1,53 @@
+package com.aoshi.common.asenum;
+
+public class CommonStr {
+
+	public static final String exists = "y";
+	
+	public static final String noexists = "n";
+
+	public static final String datePattern = "yyyy-MM-dd";
+
+	public static final String dateTimePattern = "yyyy-MM-dd HH:mm";
+
+	public static final String timePattern = "hh:mm:ss";
+	
+	public static final int FLIP_IMG_WIDTH= 750;
+
+	public static final int FLIP_IMG_HEIGHT= 750;
+
+	public static final int SUSPEND_IMG_WIDTH= 120;
+
+	public static final int SUSPEND_IMG_HEIGHT= 120;
+
+	public static final int IMG_WIDTH= 750;
+
+	public static final int IMG_HEIGHT = 350;
+	
+	public static final int IMG_SIZE = 30;
+	
+    public static final int IMG_YP_WIDTH= 1188;
+	
+	public static final int IMG_YP_HEIGHT = 1022;
+
+	public static final int IMG_YP_LOGO_WIDTH= 200;
+
+	public static final int IMG_YP_LOGO_HEIGHT = 100;
+
+	public static final int IMG_YP_HOME_WIDTH= 550;
+
+	public static final int IMG_YP_HOME_HEIGHT = 500;
+	
+    public static final int IMG_SHOP_LOG_WIDTH= 750;
+	 
+	public static final int IMG_SHOP_LOG_HEIGHT= 750;
+	
+    public static final int IMG_ACTIVITYREDRAIN_WIDTH= 480;
+	 
+	public static final int IMG_ACTIVITYREDRAIN_HEIGHT= 300;
+	
+	public static final int IMG_ACTIVITYREDRAINBG_WIDTH= 710;
+	 
+	public static final int IMG_ACTIVITYREDRAINBG_HEIGHT= 1084;
+		
+}

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.SysGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.SysGroup" >
+    <id column="GROUP_ID" property="groupId" jdbcType="VARCHAR" />
+    <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap type="com.aoshi.domain.SysGroup" id="ResultMapWithChildren" extends="BaseResultMap">
+  	<collection property="children" ofType="com.aoshi.domain.SysGroup" notNullColumn="GROUP_ID2">
+  		<id property="groupId" column="GROUP_ID2"/>
+    	<result property="groupName" column="GROUP_NAME2"/>
+    	<result property="parentId" column="PARENT_ID2"/>
+    	
+    	<collection property="children" ofType="com.aoshi.domain.SysGroup" notNullColumn="GROUP_ID3">
+    		<id property="groupId" column="GROUP_ID3"/>
+    	<result property="groupName" column="GROUP_NAME3"/>
+    	<result property="parentId" column="PARENT_ID3"/>
+    	</collection>
+  	</collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    GROUP_ID, GROUP_NAME, PARENT_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_group
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_group
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.SysGroup" >
+    insert into sys_group (GROUP_ID, GROUP_NAME, PARENT_ID
+      )
+    values (#{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.SysGroup" useGeneratedKeys="true" keyProperty="groupId">
+    insert into sys_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="groupId != null" >
+        GROUP_ID,
+      </if>
+      <if test="groupName != null" >
+        GROUP_NAME,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.SysGroup" >
+    update sys_group
+    <set >
+      <if test="groupName != null" >
+        GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.SysGroup" >
+    update sys_group
+    set GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=VARCHAR}
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByParentId" parameterType="java.lang.Integer" resultMap="ResultMapWithChildren">
+  	select 
+  		g1.*,
+  		g2. GROUP_ID GROUP_ID2,
+  		g2. GROUP_NAME GROUP_NAME2,
+  		g2. PARENT_ID PARENT_ID2,
+  		g3. GROUP_ID GROUP_ID3,
+  		g3. GROUP_NAME GROUP_NAME3,
+  		g3. PARENT_ID PARENT_ID3
+  	from 
+  		sys_group g1 
+  	left join 
+  		sys_group g2 
+  	on g1.GROUP_ID = g2.PARENT_ID 
+  	left join sys_group g3 
+  	on g2.GROUP_ID = g3.PARENT_ID 
+  	where g1.PARENT_ID = #{parentId}
+  </select>
+  <select id="selectByAttr" parameterType="com.aoshi.domain.SysGroup" resultMap="BaseResultMap">
+  	select * from sys_group where 1=1 
+  	<if test="groupName != null and groupName != ''">
+  		AND GROUP_NAME like concat(concat('%',#{groupName}),'%')
+  	</if>
+  	
+  </select>
+</mapper>

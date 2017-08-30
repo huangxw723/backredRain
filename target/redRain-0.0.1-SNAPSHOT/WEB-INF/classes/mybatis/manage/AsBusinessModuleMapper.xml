@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBusinessModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBusinessModule" >
+    <id column="business_module_id" property="businessModuleId" jdbcType="INTEGER" />
+    <result column="business_template_id" property="businessTemplateId" jdbcType="INTEGER" />
+    <result column="background_image" property="backgroundImage" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="parent_module_id" property="parentModuleId" jdbcType="INTEGER" />
+     <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <resultMap type="com.aoshi.domain.AsBusinessModule" id="ResultMapWithTemplate" extends="BaseResultMap">
+  	<association property="template" javaType="java.util.Map" notNullColumn="parent_business_module_id">
+  		<id property="parentBusinessModuleId" column="parent_business_module_id"/>
+  		<result property="id" column="id"/>
+  		<result property="templateName" column="template_name"/>
+  		<result property="rootBusinessTemplateId" column="root_business_template_id"/>
+  		<result property="path" column="path"/>
+  		<result property="userId" column="user_id"/>
+  	</association>
+  	<association property="investMent" column="business_module_id" resultMap="com.aoshi.dao.AsModuleInvestmentMapper.BaseResultMap"/>
+  	<association property="shop" column="business_module_id" notNullColumn="shop_name" resultMap="com.aoshi.dao.AsModuleShopMapper.BaseResultMap"/>
+  	<collection property="children" ofType="com.aoshi.domain.AsBusinessModule" 
+  	select="selectByParent" column="{businessModuleId=business_module_id}"></collection>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    business_module_id, business_template_id, background_image, position, user_id, status, 
+    create_time, type, parent_module_id,content
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_business_module
+    where business_module_id = #{businessModuleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_business_module
+    where business_module_id = #{businessModuleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBusinessModule" >
+    insert into as_business_module (business_module_id, business_template_id, 
+      background_image, position, user_id, 
+      status, create_time, type, 
+      parent_module_id, content
+      )
+    values (#{businessModuleId,jdbcType=INTEGER}, #{businessTemplateId,jdbcType=INTEGER}, 
+      #{backgroundImage,jdbcType=VARCHAR}, #{position,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{parentModuleId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBusinessModule" useGeneratedKeys="true" keyProperty="businessModuleId">
+    insert into as_business_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessModuleId != null" >
+        business_module_id,
+      </if>
+      <if test="businessTemplateId != null" >
+        business_template_id,
+      </if>
+      <if test="backgroundImage != null" >
+        background_image,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="parentModuleId != null" >
+        parent_module_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessModuleId != null" >
+        #{businessModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="businessTemplateId != null" >
+        #{businessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="backgroundImage != null" >
+        #{backgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      
+      <if test="parentModuleId != null" >
+        #{parentModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBusinessModule" >
+    update as_business_module
+    <set >
+      <if test="businessTemplateId != null" >
+        business_template_id = #{businessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="backgroundImage != null" >
+        background_image = #{backgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    
+      <if test="parentModuleId != null" >
+        parent_module_id = #{parentModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where business_module_id = #{businessModuleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBusinessModule" >
+    update as_business_module
+    set business_template_id = #{businessTemplateId,jdbcType=INTEGER},
+      background_image = #{backgroundImage,jdbcType=VARCHAR},
+      position = #{position,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      parent_module_id = #{parentModuleId,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where business_module_id = #{businessModuleId,jdbcType=INTEGER}
+  </update>
+  
+	<select id="selectByBusinessTemplateIdWithTemplate" parameterType="java.lang.Integer" resultMap="ResultMapWithTemplate">
+  		SELECT
+			m.*,
+			t.*,
+			t.business_template_id as id,
+			i.*,
+			s.*,
+			child.* 
+		FROM
+		as_business_module m
+		LEFT JOIN as_business_template t ON m.business_module_id = t.parent_business_module_id
+		LEFT JOIN as_module_investment i on m.business_module_id = i.business_module_id 
+		LEFT JOIN as_module_shop s on m.business_module_id = s.business_module_id 
+		left join as_business_module child on m.business_module_id = child.parent_module_id
+		where m.business_template_id = #{businessTemplateId}
+  		
+  </select>
+  <select id="selectByParent" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select * from as_business_module where parent_module_id = #{businessModuleId}
+  </select>
+  
+  <select id="selectBusinessModuleByTemplateId" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select * from as_business_module where business_template_id = #{businessTemplateId} 
+  	<if test="sort == 'asc'">
+  		order by position asc
+  	</if>
+  	<if test="sort == 'desc'">
+  		order by position desc
+  	</if>
+  </select>
+  
+  <delete id="deleteByIds">
+  	delete from as_business_module where business_module_id in 
+  	<foreach collection="list" item="bid" open="(" separator="," close=")">
+  		#{bid}
+  	</foreach>
+  </delete>
+</mapper>

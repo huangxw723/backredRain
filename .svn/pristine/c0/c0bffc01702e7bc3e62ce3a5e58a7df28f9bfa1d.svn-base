@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeCategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeCategory" >
+    <id column="prize_category_id" property="prizeCategoryId" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_category_id, prize_config_id, category_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_prize_category
+    where prize_category_id = #{prizeCategoryId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByConfigId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_prize_category
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize_category
+    where prize_category_id = #{prizeCategoryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrizeCategory" >
+    insert into as_prize_category (prize_category_id, prize_config_id, category_id, 
+      create_time)
+    values (#{prizeCategoryId,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrizeCategory" >
+    insert into as_prize_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeCategoryId != null" >
+        prize_category_id,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeCategoryId != null" >
+        #{prizeCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrizeCategory" >
+    update as_prize_category
+    <set >
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where prize_category_id = #{prizeCategoryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrizeCategory" >
+    update as_prize_category
+    set prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where prize_category_id = #{prizeCategoryId,jdbcType=INTEGER}
+  </update>
+  	
+  	<select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_prize_category WHERE category_id = #{categoryId}
+  	</select>
+  
+</mapper>

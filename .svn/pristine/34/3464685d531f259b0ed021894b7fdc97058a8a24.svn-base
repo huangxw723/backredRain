@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpScreensaverMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpScreensaver" >
+    <id column="screensaver_id" property="screensaverId" jdbcType="INTEGER" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="sitel_link_url" property="sitelLinkUrl" jdbcType="VARCHAR" />
+    <result column="user_template_id" property="userTemplateId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    screensaver_id, img, sitel_link_url, user_template_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_screensaver
+    where screensaver_id = #{screensaverId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_screensaver
+    where screensaver_id = #{screensaverId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpScreensaver" >
+    insert into as_yp_screensaver (screensaver_id, img, sitel_link_url, 
+      user_template_id, create_time)
+    values (#{screensaverId,jdbcType=INTEGER}, #{img,jdbcType=VARCHAR}, #{sitelLinkUrl,jdbcType=VARCHAR}, 
+      #{userTemplateId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpScreensaver" useGeneratedKeys="true" keyProperty="screensaverId">
+    insert into as_yp_screensaver
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="screensaverId != null" >
+        screensaver_id,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="sitelLinkUrl != null" >
+        sitel_link_url,
+      </if>
+      <if test="userTemplateId != null" >
+        user_template_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="screensaverId != null" >
+        #{screensaverId,jdbcType=INTEGER},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="sitelLinkUrl != null" >
+        #{sitelLinkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userTemplateId != null" >
+        #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpScreensaver" >
+    update as_yp_screensaver
+    <set >
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="sitelLinkUrl != null" >
+        sitel_link_url = #{sitelLinkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="userTemplateId != null" >
+        user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where screensaver_id = #{screensaverId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpScreensaver" >
+    update as_yp_screensaver
+    set img = #{img,jdbcType=VARCHAR},
+      sitel_link_url = #{sitelLinkUrl,jdbcType=VARCHAR},
+      user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where screensaver_id = #{screensaverId,jdbcType=INTEGER}
+  </update>
+</mapper>

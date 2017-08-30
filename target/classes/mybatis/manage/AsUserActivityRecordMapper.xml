@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUserActivityRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUserActivityRecord" >
+    <id column="user_activity_record" property="userActivityRecord" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="own_activity_id" property="ownActivityId" jdbcType="INTEGER" />
+    <result column="beacon_link_id" property="beaconLinkId" jdbcType="INTEGER" />
+    <result column="activity_link_id" property="activityLinkId" jdbcType="INTEGER" />
+    <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_activity_record, user_id, store_id, shop_id, own_activity_id, beacon_link_id, 
+    activity_link_id, activity_type, prize_config_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_user_activity_record
+    where user_activity_record = #{userActivityRecord,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_user_activity_record
+    where user_activity_record = #{userActivityRecord,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUserActivityRecord" >
+    insert into as_user_activity_record (user_activity_record, user_id, store_id, 
+      shop_id, own_activity_id, beacon_link_id, 
+      activity_link_id, activity_type, prize_config_id, 
+      create_time)
+    values (#{userActivityRecord,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=INTEGER}, #{ownActivityId,jdbcType=INTEGER}, #{beaconLinkId,jdbcType=INTEGER}, 
+      #{activityLinkId,jdbcType=INTEGER}, #{activityType,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsUserActivityRecord" >
+    insert into as_user_activity_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userActivityRecord != null" >
+        user_activity_record,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="ownActivityId != null" >
+        own_activity_id,
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id,
+      </if>
+      <if test="activityLinkId != null" >
+        activity_link_id,
+      </if>
+      <if test="activityType != null" >
+        activity_type,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userActivityRecord != null" >
+        #{userActivityRecord,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="ownActivityId != null" >
+        #{ownActivityId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="activityLinkId != null" >
+        #{activityLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="activityType != null" >
+        #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUserActivityRecord" >
+    update as_user_activity_record
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="ownActivityId != null" >
+        own_activity_id = #{ownActivityId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id = #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="activityLinkId != null" >
+        activity_link_id = #{activityLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_activity_record = #{userActivityRecord,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUserActivityRecord" >
+    update as_user_activity_record
+    set user_id = #{userId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      own_activity_id = #{ownActivityId,jdbcType=INTEGER},
+      beacon_link_id = #{beaconLinkId,jdbcType=INTEGER},
+      activity_link_id = #{activityLinkId,jdbcType=INTEGER},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where user_activity_record = #{userActivityRecord,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOwnGiftMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeConfig" >
+    <id column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="activity_shake_id" property="activityShakeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="is_jackpot" property="isJackpot" jdbcType="INTEGER" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="back_url" property="backUrl" jdbcType="VARCHAR" />
+    <result column="counts" property="counts" jdbcType="INTEGER" />
+    <result column="surplus_counts" property="surplusCounts" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+    <result column="inactive_time" property="inactiveTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_time" property="auditTime" jdbcType="VARCHAR" />
+    <result column="descp" property="descp" jdbcType="LONGVARCHAR" />
+    <result column="reason" property="reason" jdbcType="LONGVARCHAR" />
+    <association property="asYpBaseCategory" javaType="com.aoshi.domain.AsYpBaseCategory">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="caName" property="name" jdbcType="VARCHAR" />
+   	</association>
+  </resultMap>
+
+  <resultMap id="WithShopName" type="com.aoshi.domain.AsPrizeConfig" extends="BaseResultMap" >
+    <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <resultMap type="com.aoshi.domain.AsYpBaseCategory" id="asYpBaseCategory">
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List" >
+    prize_config_id, category_id, activity_shake_id, name, is_jackpot, logo_url, back_url, 
+    counts, surplus_counts, start_time, end_time,active_time, inactive_time, create_time, shop_id, store_id, sn, price, activity_type,
+    status, audit_status
+  </sql>
+  <sql id="Blob_Column_List" >
+    descp,reason
+  </sql>
+  
+  <select id="queryAll" resultMap="WithShopName" parameterType="java.lang.Integer" >
+    select 
+    p.*,c.id,c.name as caName,s.name as shopName
+    from as_prize_config p
+    LEFT JOIN as_yp_base_category c ON p.category_id=c.id
+    LEFT JOIN as_shop s ON p.shop_id = s.shop_id
+    where p.activity_type = 4
+    <if test="shopId != 0">
+   		 and p.shop_id = #{shopId} 
+  	</if>
+     <if test="keyWord != null and keyWord != '' and shopId == 0">
+	  and  (p.name like '%${keyWord}%' or p.sn like '%${keyWord}%' or s.name like '%${keyWord}%')
+	</if>
+    <if test="keyWord != null  and keyWord != '' and shopId != 0">
+	  and  (p.name like '%${keyWord}%' or p.sn like '%${keyWord}%')
+	</if>
+    <if test="categoryId != null and categoryId !=''">
+	  and  p.category_id = #{categoryId}
+	</if>
+    order by p.create_time desc
+    
+  </select>
+  
+  <select id="queryToGift" resultMap="WithShopName" parameterType="java.lang.Integer" >
+    select 
+    p.*,c.id,c.name as caName,s.name as shopName
+    from as_prize_config p
+    left join as_yp_base_category c ON p.category_id=c.id
+    left join as_shop s ON p.shop_id=s.shop_id
+    where p.activity_type = 4
+    and p.inactive_time  &gt; now()
+    <if test="shopId != 0">
+   		 and p.shop_id = #{shopId,jdbcType=INTEGER} 
+  	</if>
+     <if test="keyWord != null and keyWord != ''">
+	and  (p.name like '%${keyWord}%' or p.sn like '%${keyWord}%') 
+	</if>
+    order by p.create_time desc
+    
+  </select>
+  
+  <select id="queryType" resultMap="asYpBaseCategory" parameterType="java.lang.Integer">
+  	select id,name from as_yp_base_category WHERE TYPE=#{type,jdbcType=INTEGER} and STATUS = 0
+  </select>
+  
+  <select id="queryGift" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	SELECT * FROM as_prize_config WHERE shop_id = #{shopId} AND activity_type = 4
+  </select>
+  
+  <insert id="save" parameterType="com.aoshi.domain.AsPrizeConfig" >
+    insert into as_prize_config (
+      prize_config_id, category_id, 
+      name, logo_url, 
+      counts, surplus_counts, 
+      start_time, end_time,active_time, inactive_time, create_time,
+      shop_id,store_id, sn, price,
+      activity_type, status,audit_status,audit_time, descp)
+      
+    values (#{prizeConfigId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{counts,jdbcType=INTEGER}, #{surplusCounts,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR},#{activeTime,jdbcType=VARCHAR}, #{inactiveTime,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER},
+      #{sn,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{activityType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},  #{auditStatus,jdbcType=INTEGER}, #{auditTime,jdbcType=VARCHAR},
+      #{descp,jdbcType=LONGVARCHAR})
+  </insert>
+  
+   <select id="toEdit" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  	SELECT p.*,c.name as caName FROM as_prize_config p LEFT JOIN as_yp_base_category c ON p.category_id = c.id WHERE prize_config_id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <update id="edit" parameterType="com.aoshi.domain.AsPrizeConfig" >
+   	UPDATE as_prize_config
+    <set >
+       <if test="prizeConfigId != null and prizeConfigId != '' ">
+        prize_config_id = #{prizeConfigId},
+      </if>
+      <if test="categoryId != null and categoryId !='' " >
+        category_id = #{categoryId},
+      </if>
+      <if test="name != null and name !='' " >
+        name = #{name},
+      </if>
+      <if test="logoUrl != null and logoUrl !='' " >
+        logo_url = #{logoUrl},
+      </if>
+
+        counts = #{counts},
+        surplus_counts = #{surplusCounts},
+
+      <if test="startTime != null and startTime !='' " >
+        start_time = #{startTime},
+      </if>
+      <if test="endTime != null and endTime !='' " >
+        end_time = #{endTime},
+      </if>
+      <if test="activeTime != null and activeTime !='' " >
+        active_time = #{activeTime},
+      </if>
+      <if test="inactiveTime != null and inactiveTime !='' " >
+        inactive_time = #{inactiveTime},
+      </if>
+      <if test="shopId != null and shopId !='' " >
+        shop_id = #{shopId},
+      </if>
+
+        store_id = #{storeId},
+
+      <if test="price != null   " >
+        price = #{price},
+      </if>
+      <if test="descp != null and descp !='' " >
+        descp = #{descp},
+      </if>
+    </set>
+    where prize_config_id=#{prizeConfigId}     	
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Integer">
+  	DELETE FROM as_prize_config WHERE prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </delete>
+ 
+</mapper>

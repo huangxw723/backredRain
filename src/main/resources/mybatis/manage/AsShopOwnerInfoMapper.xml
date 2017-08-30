@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsShopOwnerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsShopOwnerInfo" >
+    <id column="shop_owner_info_id" property="shopOwnerInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="screen_domain_id" property="screenDomainId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicant_certificate_type" property="applicantCertificateType" jdbcType="INTEGER" />
+    <result column="applicant_certificate_num" property="applicantCertificateNum" jdbcType="VARCHAR" />
+    <result column="corporation" property="corporation" jdbcType="VARCHAR" />
+    <result column="corporation_certificate_type" property="corporationCertificateType" jdbcType="INTEGER" />
+    <result column="corporation_certificate_num" property="corporationCertificateNum" jdbcType="VARCHAR" />
+    <result column="identity_front" property="identityFront" jdbcType="VARCHAR" />
+    <result column="identity_back" property="identityBack" jdbcType="VARCHAR" />
+    <result column="business_licence" property="businessLicence" jdbcType="VARCHAR" />
+    <result column="business_certificate" property="businessCertificate" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_time" property="auditTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsShopOwnerInfo" extends="BaseResultMap" >
+    <result column="reason" property="reason" jdbcType="LONGVARCHAR" />
+  </resultMap>
+	<resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  	<result column="create_user" jdbcType="VARCHAR" property="createUser" />
+  	<result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+  	<result column="store_id" jdbcType="VARCHAR" property="storeId" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    shop_owner_info_id, user_id, status, shop_id, name, screen_domain_id, create_time, 
+    tel, email, applicant, applicant_certificate_type, applicant_certificate_num, corporation, 
+    corporation_certificate_type, corporation_certificate_num, identity_front, identity_back, 
+    business_licence, business_certificate, audit_status, audit_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    reason
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_shop_owner_info
+    where shop_owner_info_id = #{shopOwnerInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_shop_owner_info
+    where shop_owner_info_id = #{shopOwnerInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsShopOwnerInfo" >
+    insert into as_shop_owner_info (shop_owner_info_id, user_id, status, 
+      shop_id, name, screen_domain_id, 
+      create_time, tel, email, 
+      applicant, applicant_certificate_type, applicant_certificate_num, 
+      corporation, corporation_certificate_type, 
+      corporation_certificate_num, identity_front, 
+      identity_back, business_licence, business_certificate, 
+      audit_status, audit_time, reason
+      )
+    values (#{shopOwnerInfoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{screenDomainId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{applicantCertificateType,jdbcType=INTEGER}, #{applicantCertificateNum,jdbcType=VARCHAR}, 
+      #{corporation,jdbcType=VARCHAR}, #{corporationCertificateType,jdbcType=INTEGER}, 
+      #{corporationCertificateNum,jdbcType=VARCHAR}, #{identityFront,jdbcType=VARCHAR}, 
+      #{identityBack,jdbcType=VARCHAR}, #{businessLicence,jdbcType=VARCHAR}, #{businessCertificate,jdbcType=VARCHAR}, 
+      #{auditStatus,jdbcType=INTEGER}, #{auditTime,jdbcType=VARCHAR}, #{reason,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="shopOwnerInfoId">
+    insert into as_shop_owner_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopOwnerInfoId != null" >
+        shop_owner_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="applicant != null" >
+        applicant,
+      </if>
+      <if test="applicantCertificateType != null" >
+        applicant_certificate_type,
+      </if>
+      <if test="applicantCertificateNum != null" >
+        applicant_certificate_num,
+      </if>
+      <if test="corporation != null" >
+        corporation,
+      </if>
+      <if test="corporationCertificateType != null" >
+        corporation_certificate_type,
+      </if>
+      <if test="corporationCertificateNum != null" >
+        corporation_certificate_num,
+      </if>
+      <if test="identityFront != null" >
+        identity_front,
+      </if>
+      <if test="identityBack != null" >
+        identity_back,
+      </if>
+      <if test="businessLicence != null" >
+        business_licence,
+      </if>
+      <if test="businessCertificate != null" >
+        business_certificate,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopOwnerInfoId != null" >
+        #{shopOwnerInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="screenDomainId != null" >
+        #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantCertificateType != null" >
+        #{applicantCertificateType,jdbcType=INTEGER},
+      </if>
+      <if test="applicantCertificateNum != null" >
+        #{applicantCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="corporation != null" >
+        #{corporation,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationCertificateType != null" >
+        #{corporationCertificateType,jdbcType=INTEGER},
+      </if>
+      <if test="corporationCertificateNum != null" >
+        #{corporationCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="identityFront != null" >
+        #{identityFront,jdbcType=VARCHAR},
+      </if>
+      <if test="identityBack != null" >
+        #{identityBack,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicence != null" >
+        #{businessLicence,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCertificate != null" >
+        #{businessCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsShopOwnerInfo" >
+    update as_shop_owner_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applicantCertificateType != null" >
+        applicant_certificate_type = #{applicantCertificateType,jdbcType=INTEGER},
+      </if>
+      <if test="applicantCertificateNum != null" >
+        applicant_certificate_num = #{applicantCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="corporation != null" >
+        corporation = #{corporation,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationCertificateType != null" >
+        corporation_certificate_type = #{corporationCertificateType,jdbcType=INTEGER},
+      </if>
+      <if test="corporationCertificateNum != null" >
+        corporation_certificate_num = #{corporationCertificateNum,jdbcType=VARCHAR},
+      </if>
+      <if test="identityFront != null" >
+        identity_front = #{identityFront,jdbcType=VARCHAR},
+      </if>
+      <if test="identityBack != null" >
+        identity_back = #{identityBack,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicence != null" >
+        business_licence = #{businessLicence,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCertificate != null" >
+        business_certificate = #{businessCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where shop_owner_info_id = #{shopOwnerInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsShopOwnerInfo" >
+    update as_shop_owner_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      applicant_certificate_type = #{applicantCertificateType,jdbcType=INTEGER},
+      applicant_certificate_num = #{applicantCertificateNum,jdbcType=VARCHAR},
+      corporation = #{corporation,jdbcType=VARCHAR},
+      corporation_certificate_type = #{corporationCertificateType,jdbcType=INTEGER},
+      corporation_certificate_num = #{corporationCertificateNum,jdbcType=VARCHAR},
+      identity_front = #{identityFront,jdbcType=VARCHAR},
+      identity_back = #{identityBack,jdbcType=VARCHAR},
+      business_licence = #{businessLicence,jdbcType=VARCHAR},
+      business_certificate = #{businessCertificate,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=LONGVARCHAR}
+    where shop_owner_info_id = #{shopOwnerInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsShopOwnerInfo" >
+    update as_shop_owner_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      applicant_certificate_type = #{applicantCertificateType,jdbcType=INTEGER},
+      applicant_certificate_num = #{applicantCertificateNum,jdbcType=VARCHAR},
+      corporation = #{corporation,jdbcType=VARCHAR},
+      corporation_certificate_type = #{corporationCertificateType,jdbcType=INTEGER},
+      corporation_certificate_num = #{corporationCertificateNum,jdbcType=VARCHAR},
+      identity_front = #{identityFront,jdbcType=VARCHAR},
+      identity_back = #{identityBack,jdbcType=VARCHAR},
+      business_licence = #{businessLicence,jdbcType=VARCHAR},
+      business_certificate = #{businessCertificate,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=VARCHAR}
+    where shop_owner_info_id = #{shopOwnerInfoId,jdbcType=INTEGER}
+  </update>
+<select id="selectByShopId" parameterType="pd" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop_owner_info
+    where 
+    shop_id = #{ashopId}
+  </select>
+  
+  <select id="listAll" resultMap="BaseRowMap">
+  	SELECT
+		*,OWNER.status as ownerStatus
+	FROM
+		as_shop shop
+	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+	JOIN as_user user ON OWNER.user_id = user.user_id
+	where user.status != 1 
+	<if test="keyWord != null and keyWord != ''">
+		and (
+		user.account LIKE concat(concat('%',#{keyWord}),'%')
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or shop.tel LIKE concat(concat('%',#{keyWord}),'%') 
+		)
+	</if>
+	order by user.user_id desc
+  </select>
+  
+  <update id="updateStatus">
+  	update as_shop_owner_info set status = #{status} where user_id = #{userId} and status != #{status}
+  </update>
+  
+  <delete id="deleteByUserId">
+  	delete from as_shop_owner_info where user_id = #{userId}
+  </delete>
+  
+  <select id="findByUserId" resultMap="BaseRowMap">
+  	SELECT
+		*
+	FROM
+		as_shop shop
+	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+	JOIN as_user user ON OWNER.user_id = user.user_id
+	where user.user_id = #{userId}
+  </select>
+  
+  <select id="findBySysUserId" resultMap="BaseRowMap">
+  	select owner.* from as_shop_owner_info owner 
+  	join as_user user on owner.user_id = user.user_id
+  	where 
+  	user.status = 0 
+  	and user.sys_user_id = #{sysUserId} 
+  </select>
+
+  <!--用戶是否被禁用-->
+  <select id="getStatusBySysUserId" resultMap="BaseRowMap">
+  	select owner.* from as_shop_owner_info owner
+  	join as_user user on owner.user_id = user.user_id
+  	where
+  	owner.status = 0
+  	and user.sys_user_id = #{sysUserId}
+  </select>
+
+<!--   获取商家管理员信息 站点信息   -->
+  <select id="findOwnerInfo" resultMap="BaseRowMap">
+  	SELECT
+	OWNER.* 
+	FROM
+    as_shop_owner_info OWNER
+	JOIN  as_shop shop ON shop.shop_id = OWNER .shop_id
+	JOIN as_user user ON OWNER.user_id = user.user_id
+	where user.user_id = #{userId}
+  </select>
+  
+  <select id="isJoinActivity" resultType="java.lang.Integer">
+  
+  </select>
+  <select id="findData" resultType="String">
+    select 
+    user_id
+    from as_shop_owner_info
+    where shop_id = #{shopId}
+  </select>
+  
+   <delete id="deleteAlls">
+    delete from as_shop_owner_info
+    where shop_id = #{shopId}
+  </delete>
+  
+  <select id="getShopOwnerInfoByUserIds" resultMap="BaseRowMap">
+  	SELECT
+		owner.*,user.type,user.account,user.create_time as createTime,shop.name as shopName
+	FROM
+		as_shop_owner_info owner
+	JOIN
+		as_shop shop
+	ON owner.shop_id = shop.shop_id
+	JOIN
+		as_user user
+	ON owner.user_id = user.user_id
+	WHERE
+		owner.user_id IN 
+	<foreach close=")" collection="ids" index="" item="id" open="(" separator=",">
+      #{id}  
+    </foreach> 
+	ORDER BY
+		shop_owner_info_id DESC
+  </select>
+  
+  <select id="getOwnerInfo" resultMap="BaseResultMap" >
+  	SELECT
+	OWNER.* 
+	FROM
+    as_shop_owner_info OWNER
+	where user_id = #{userId}
+  </select>
+  
+  <select id="getShopOwnerByUserId" resultMap="BaseResultMap">
+  	SELECT
+    OWNER.*
+	FROM
+	   as_shop shop
+	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+	JOIN as_user USER ON OWNER .user_id = USER .user_id
+	WHERE
+    USER.user_id = #{userId}
+  </select>
+  <select id="getShopOwnerListAudit" resultMap="BaseRowMap">
+  SELECT shop.`name` shopName,info.applicant, `user`.account account,shop.shop_id shopId,
+  info.shop_owner_info_id shopOwnerInfoId,info.audit_status auditStatus,info.create_time createTime   
+  FROM  as_shop_owner_info info 
+  left JOIN  as_shop shop on info.shop_id=shop.shop_id 
+  JOIN as_user user on info.user_id = `user`.user_id
+  WHERE 1=1
+  AND (info.audit_status =0 AND shop.store_id !=0 and shop.type=2)
+  <if test="keyWord != null and keyWord != ''">
+  and(user.account LIKE concat(concat('%',#{keyWord}),'%')
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or info.applicant LIKE concat(concat('%',#{keyWord}),'%')) 
+  </if>
+  <if test="startTime != null and startTime != '' ">
+	AND info.create_time <![CDATA[>=]]> #{startTime,jdbcType=VARCHAR}
+  </if>
+  <if test="endTime != null and endTime != '' ">
+	AND info.create_time <![CDATA[<=]]> #{endTime,jdbcType=VARCHAR}
+  </if>
+  <if test="storeId !=null and storeId !=''">
+    AND shop.store_id=#{storeId}
+  </if>
+    ORDER BY info.create_time DESC
+  </select>
+  <select id="getShopOperatListAudit" resultMap="BaseRowMap">
+  SELECT shop.`name` shopName,shop.type shopType,shop.shop_id shopId,info.applicant, `user`.account account,
+  info.shop_owner_info_id shopOwnerInfoId,info.`name` Name,info.audit_status auditStatus,info.create_time createTime
+  ,store.`name` storeName,store.store_id storeId 
+  FROM  as_shop_owner_info info 
+  JOIN  as_shop shop on info.shop_id=shop.shop_id
+  LEFT JOIN as_store store on shop.store_id= store.store_id
+  JOIN as_user user on info.user_id = `user`.user_id
+  WHERE 1=1
+  <if test="keyWord != null and keyWord != ''">
+	AND (user.account LIKE concat(concat('%',#{keyWord}),'%')
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or info.applicant LIKE concat(concat('%',#{keyWord}),'%')) 
+  </if>
+  <if test="type =='' or type ==null ">
+   AND(
+        (info.audit_status=0 and shop.type=1) 
+         OR  
+        ((info.audit_status=1 and shop.type=2  ) 
+         OR (info.audit_status=0 and shop.store_id=0 and shop.type=2))
+      )
+  </if>
+  <if test="type == 1"> 
+   AND info.audit_status=0 and shop.type=1
+  </if>
+  <if test="type == 2">
+   AND (info.audit_status=1 and shop.type=2  ) or (info.audit_status=0 and shop.store_id=0 and shop.type=2)
+  </if>
+  <if test="startTime != null and startTime != '' ">
+	AND info.create_time  <![CDATA[>=]]>  #{startTime,jdbcType=VARCHAR}
+  </if>
+  <if test="endTime != null and endTime != '' ">
+	AND info.create_time  <![CDATA[<=]]>  #{endTime,jdbcType=VARCHAR}
+  </if>
+  ORDER BY info.create_time DESC
+  </select>
+</mapper>

@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsShopMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsShop" >
+    <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="floor" property="floor" jdbcType="INTEGER" />
+    <result column="business_district_id" property="businessDistrictId" jdbcType="INTEGER" />
+  	<result column="descp" property="descp" jdbcType="LONGVARCHAR" />
+  	<result column="trade_category_id" property="tradeCategoryId" jdbcType="INTEGER" />
+  	<result column="address" property="address" jdbcType="VARCHAR" />
+  	<result column="contact_mail" property="contactMail" jdbcType="VARCHAR" />
+  	<result column="count_num" property="countNum" jdbcType="INTEGER" />
+  	<result column="type" property="type" jdbcType="INTEGER" />
+  	<result column="lng" property="lng" jdbcType="VARCHAR" />
+    <result column="lat" property="lat" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="qr_code_url" property="qrCodeUrl" jdbcType="VARCHAR" />
+    <result column="main_pic_url" property="mainPicUrl" jdbcType="VARCHAR" />
+    
+  	<result column="region" property="region" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  <result column="ownerStatus" property="shopStatus" jdbcType="INTEGER" />
+   <result column="user.account" property="account" jdbcType="VARCHAR" />
+   <result column="user.create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+   <resultMap extends="BaseResultMap" id="ExBaseMap" type="com.aoshi.domain.AsResultMap">
+     <result column="tradeCategoryName" property="tradeCategoryName" jdbcType="VARCHAR" />
+     <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+     <result column="areName" property="areName" jdbcType="VARCHAR" />
+     <result column="businesSdistrictName" property="businesSdistrictName" jdbcType="VARCHAR" />
+     <result column="storeName" property="storeName" jdbcType="VARCHAR" />
+     <result column="provinceName" property="provinceName" jdbcType="VARCHAR" />
+     <result column="email" property="email" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    shop_id, name, logo_url, create_time, store_id, tel, contact, floor, business_district_id,descp, trade_category_id ,
+    address, contact_mail,count_num, type, lng, lat, province_id, city_id, area_id, qr_code_url, main_pic_url,region
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_shop
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsShop" useGeneratedKeys="true" keyProperty="shopId">
+    insert into as_shop (shop_id, name, logo_url, 
+      create_time, store_id, tel, 
+      contact, floor,region, business_district_id, descp, province_id, city_id, area_id, qr_code_url, main_pic_url 
+      )
+    values (#{shopId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{storeId,jdbcType=INTEGER}, #{tel,jdbcType=VARCHAR}, 
+      #{contact,jdbcType=VARCHAR}, #{floor,jdbcType=INTEGER}, #{region,jdbcType=VARCHAR}, #{businessDistrictId,jdbcType=INTEGER}, 
+      #{descp,jdbcType=LONGVARCHAR}, #{provinceId,jdbcType=INTEGER}, #{cityIdcityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{qrCodeUrl,jdbcType=VARCHAR}, #{mainPicUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsShop" useGeneratedKeys="true" keyProperty="shopId">
+    insert into as_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="floor != null" >
+        floor,
+      </if>
+      <if test="region != null" >
+        region,
+      </if>
+      <if test="businessDistrictId != null" >
+        business_district_id,
+      </if>
+      <if test="descp != null" >
+        descp,
+      </if>
+      <if test="tradeCategoryId != null" >
+        trade_category_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="contactMail != null" >
+        contact_mail,
+      </if>
+      <if test="countNum != null" >
+        count_num,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="lng != null" >
+        lng,
+      </if>
+      <if test="lat != null" >
+        lat,
+      </if>
+       <if test="provinceId != null" >
+        province_id,
+      </if>
+       <if test="cityId != null" >
+        city_id,
+      </if>
+       <if test="areaId != null" >
+        area_id,
+      </if>
+       <if test="qrCodeUrl != null" >
+        qr_code_url,
+      </if>
+       <if test="mainPicUrl != null" >
+        main_pic_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null" >
+        #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="region != null" >
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDistrictId != null" >
+        #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null" >
+        #{descp,jdbcType=LONGVARCHAR},
+      </if>     
+      <if test="tradeCategoryId != null" >
+        #{tradeCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMail != null" >
+        #{contactMail,jdbcType=VARCHAR},
+      </if>
+      <if test="countNum != null" >
+        #{countNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null" >
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null" >
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="qrCodeUrl != null" >
+        #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicUrl != null" >
+        #{mainPicUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsShop" >
+    update as_shop
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="floor != null" >
+        floor = #{floor,jdbcType=INTEGER},
+      </if>
+      <if test="region != null" >
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDistrictId != null" >
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null" >
+        descp = #{descp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="tradeCategoryId != null" >
+        trade_category_id = #{tradeCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMail != null" >
+        contact_mail = #{contactMail,jdbcType=VARCHAR},
+      </if>
+       <if test="countNum != null" >
+        count_num = #{countNum,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null" >
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null" >
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="qrCodeUrl != null" >
+        qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mainPicUrl != null" >
+        main_pic_url = #{mainPicUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsShop" >
+    update as_shop
+    set name = #{name,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      main_pic_url = #{mainPicUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      store_id = #{storeId,jdbcType=INTEGER},
+      tel = #{tel,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      floor = #{floor,jdbcType=INTEGER},
+      region = #{region,jdbcType=VARCHAR},
+      business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      descp = #{descp,jdbcType=LONGVARCHAR},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER}
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+
+ <!-- <select id="listShopAll" resultMap="BaseRowMap">
+		SELECT
+		as_shop.*
+		FROM
+			as_shop
+		ORDER BY
+		shop_id DESC   
+  </select>-->
+    <!--只获取商户账号状态是正常的而且管理员审核通过的-->
+    <select id="listShopAll" resultMap="BaseRowMap">
+		 select s.* from as_shop s
+		 left join as_shop_owner_info own on s.shop_id = own.shop_id
+		 left join as_user `user` on own.user_id = `user`.user_id
+		 where 1=1 and `user`.`status` = 0 and own.audit_status = 2
+		ORDER BY
+		s.shop_id DESC
+  </select>
+   <select id="listAll" resultMap="BaseRowMap">
+  	select * from as_shop shop 
+  	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+  	JOIN as_user U ON OWNER.user_id = U.user_id
+  	where 1=1 
+  	<if test="shopId != null and shopId != ''" >
+  	AND shop.shop_id=#{shopId}
+  	</if>
+  	<if test="status != null and stauts != ''">
+	and OWNER.status = #{status}
+	</if> 
+	<if test="startTime != null and startTime != '' ">
+	and U.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and U.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="keyWord != null and keyWord != ''">
+	and(user.account LIKE concat(concat('%',#{keyWord}),'%')
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%')) 
+	</if>
+  	order by shop.shop_id desc
+  </select>
+  <select id="listAllYp" resultMap="BaseRowMap">
+  	SELECT
+	*
+	FROM
+	(
+	SELECT
+		shop.*, ct. NAME AS categoryName,
+		count(ifo.screen_info_id) AS screenNum
+	FROM
+		as_shop shop
+	LEFT JOIN as_yp_screen_info ifo ON ifo.shop_id = shop.shop_id
+	LEFT JOIN as_yp_base_category ct ON ct.id = shop.trade_category_id
+	WHERE
+		ct.type = 1
+	GROUP BY
+		shop.shop_id
+		) a1
+	LEFT JOIN (
+	SELECT DISTINCT
+		(shop.shop_id),
+		p.province_name,
+		p.province_id
+	FROM
+		as_shop shop
+	LEFT JOIN as_yp_shop_area a ON a.shop_id = shop.shop_id
+	LEFT JOIN as_province p ON p.province_id = a.province_id
+	) a2 ON a1.shop_id = a2.shop_id
+	where 1=1
+	<if test="startTime != null and startTime != '' ">
+	and a1.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and a1.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="categoryId != null and categoryId != '' ">
+	and a1.trade_category_id = #{categoryId,jdbcType=VARCHAR}
+	</if>
+	<if test="provinceId != null and provinceId != '' ">
+	and a2.province_id = #{provinceId,jdbcType=VARCHAR}
+	</if>
+	<if test="keyword != null and keyword != ''">
+	and(a1.name LIKE concat(concat('%',#{keyword}),'%')) 
+	</if>
+	<if test="shopId != null and shopId != ''">
+	and a1.shop_id = #{shopId,jdbcType=INTEGER}
+	</if>
+	  order by  a1.create_time desc
+	
+  </select>
+<!--   统计总安装屏数 -->
+   <select id="getScreenNum" resultType="Integer">
+    SELECT
+	IFNULL(SUM(screenNum), 0) AS screenNum
+    FROM
+	(
+		SELECT
+			shop.shop_id,
+			shop.trade_category_id,
+			shop.name,
+			shop.create_time,
+			count(ifo.screen_info_id) AS screenNum
+		FROM
+			as_shop shop
+		LEFT JOIN as_yp_screen_info ifo ON ifo.shop_id = shop.shop_id
+		LEFT JOIN as_yp_base_category ct ON ct.id = shop.trade_category_id
+		WHERE
+			ct.type = 1
+		GROUP BY
+		shop.shop_id
+	) a1
+   LEFT JOIN (
+	SELECT DISTINCT
+		(shop.shop_id),
+		p.province_name,
+		p.province_id
+	FROM
+		as_shop shop
+	LEFT JOIN as_yp_shop_area a ON a.shop_id = shop.shop_id
+	LEFT JOIN as_province p ON p.province_id = a.province_id
+    ) a2 ON a1.shop_id = a2.shop_id
+    where 1=1
+	<if test="startTime != null and startTime != '' ">
+	and a1.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and a1.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="categoryId != null and categoryId != '' ">
+	and a1.trade_category_id = #{categoryId,jdbcType=VARCHAR}
+	</if>
+	<if test="provinceId != null and provinceId != '' ">
+	and a2.province_id = #{provinceId,jdbcType=VARCHAR}
+	</if>
+	<if test="keyword != null and keyword != ''">
+	and(a1.name LIKE concat(concat('%',#{keyword}),'%')) 
+	</if>
+	<if test="shopId != null and shopId != ''">
+	and a1.shop_id = #{shopId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  <delete id="deleteByIds" >
+    delete from as_shop
+    where shop_id = #{shopId}
+  </delete>
+  
+  <select id="listAllForOption" resultMap="BaseRowMap">
+  	SELECT
+		*
+	FROM
+		as_shop shop
+	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+	AND `owner`.`status` = 0
+	ORDER BY
+		shop.shop_id DESC
+	</select>
+	<select id="getShopALL" resultMap="BaseResultMap">
+  	SELECT
+		*
+	FROM
+		as_shop shop
+	ORDER BY
+		shop.shop_id DESC
+	</select>
+	
+	<select id="findByShopId" resultMap="BaseResultMap" >
+		select s.shop_id,s.store_id,s.`name`,s.type from as_shop s  where s.shop_id = #{shopId}
+	</select>
+    <!-- 接口查看商场信息-->
+    <select id="findShopInfoByShopId" resultMap="ExBaseMap" parameterType="java.lang.Integer">
+	select shop.*,onw.email,
+	p.province_name as provinceName, 
+	c.city_name as cityName, 
+	ar.area_name as areName,
+	ab.name as tradeCategoryName ,
+	ad.`name` as businesSdistrictName, 
+	ast.`name` as storeName
+	from as_shop  shop
+	LEFT JOIN as_province p on  shop.province_id=p.province_id
+	LEFT JOIN as_city c on shop.city_id=c.city_id
+	LEFT JOIN as_area ar on shop.area_id= ar.area_id
+	LEFT JOIN as_yp_base_category ab on shop.trade_category_id=ab.id
+	LEFT JOIN as_business_district ad on shop.business_district_id=ad.business_district_id
+	LEFT JOIN as_store ast on shop.store_id= ast.store_id
+	LEFT JOIN as_shop_owner_info onw ON onw.shop_Id = shop.shop_id
+	where shop.shop_id = #{shopId}	
+</select>
+    <!--查找澳视商户账号ascmMallManager-->
+    <select id="findByShopName" resultMap="BaseResultMap" >
+		select s.shop_id,s.`name`,s.store_id,s.type from as_shop s left join sys_user u on s.shop_id=u.as_shop_id where u.USERNAME='ascmMallManager'
+	</select>
+
+    <!--获取没有被删除的商户  账号状态是正常的而且管理员审核通过的-->
+	<select id="findByShopAll" resultMap="BaseResultMap" >
+		select s.shop_id,s.store_id, s.name,s.type from as_shop s
+		left join as_shop_owner_info own on s.shop_id = own.shop_id
+  	    left join as_user `user` on own.user_id = `user`.user_id
+        where 1=1  and  `user`.`status` = 0 and own.audit_status = 2
+	</select>
+	
+	<select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_shop WHERE trade_category_id = #{categoryId}
+  	</select>
+  	<select id="isCouponExists" resultType="java.lang.Integer">
+	SELECT
+		IFNULL(COUNT(1),0)
+	FROM
+		as_shop shop
+	WHERE
+	EXISTS (
+		SELECT
+			c.shop_id
+		FROM
+			as_prize_config c
+		JOIN as_yp_base_category ct ON c.category_id = ct.id
+		AND ct.type = 3
+		WHERE
+		shop.shop_id = c.shop_id
+	)
+	AND shop.shop_id = #{shopId}   	
+   </select>
+   <select id="isPrizeExists" resultType="java.lang.Integer">
+	SELECT
+		IFNULL(COUNT(1),0)
+	FROM
+		as_shop shop
+	WHERE
+	EXISTS (
+		SELECT
+			c.shop_id
+		FROM
+			as_prize_config c
+		JOIN as_yp_base_category ct ON c.category_id = ct.id
+		AND ct.type = 4
+		WHERE
+		shop.shop_id = c.shop_id
+	)
+	AND shop.shop_id = #{shopId}  	
+   </select>
+	<!--获取没有合作战略的商户列表  -->
+	<select id="selectByNoAddCooperation"  resultMap="BaseRowMap">
+    select
+    	DISTINCT(s.shop_id),s.`name`,s.address,s.type,s.lat,s.lng
+     from as_shop s
+    left join as_cooperation c on s.shop_id = c.unactive_id
+    left join as_shop_owner_info own on s.shop_id = own.shop_id
+  	left join as_user `user` on own.user_id = `user`.user_id
+    where 1=1  and  `user`.`status` = 0  and  own.audit_status = 2 and   s.shop_id not in
+    (select unactive_id from as_cooperation WHERE active_id = #{shopId}) and s.shop_id not in (#{shopId})
+      <if test="keyWord != null and keyWord != ''">
+        and ( s.name like concat(concat('%', #{keyWord}),'%')
+      		or s.shop_id like concat(concat('%', #{keyWord}),'%')
+      )
+      </if>
+      <if test="provinceId != null and provinceId != ''">
+      	and s.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and s.city_id = #{cityId}
+      </if>
+  </select>
+  <select id="listShopAllInfo" resultMap="BaseRowMap">
+		SELECT
+	    as_shop.*
+		FROM
+			as_shop
+		WHERE
+			type = 2
+		ORDER BY
+	shop_id DESC
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="pd">
+    select 
+    a.*
+    , c.user_name
+    from as_shop a
+    left join as_user c 
+    on a.shop_admin = c.user_id
+    <where>
+      <if test="keyword != null and keyword != ''">
+      	shop_name like concat(concat('%', #{keyword}),'%')
+      </if>
+    </where>
+  </select>
+  <select id="findShops" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop
+    <where>
+      <if test="shopId != null and shopId != '' and shopId !=0">
+      shop_id in(select item_id from as_recommend) and shop_id=#{shopId}
+      </if>
+      <if test="shopId == null or shopId == '' or shopId ==0">
+      shop_id not in(select item_id from as_recommend)
+      </if>
+      <if test="keyword != null and keyword != ''">
+      and shop_name like concat(concat('%', #{keyword}),'%')
+      </if>
+      </where>
+  </select> 
+   <select id="getShop" resultMap="ExBaseMap" >
+	select shop.*,owner.email as email,owner.audit_status as auditStatus from as_shop shop LEFT JOIN  as_shop_owner_info owner on shop.shop_id=owner.shop_id where shop.shop_id = #{shopId}
+   </select> 
+   
+   <select id="getShopSiteUrl" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   SELECT shop.shop_id,`OWNER`.screen_domain_id FROM as_shop shop LEFT JOIN  as_shop_owner_info `OWNER` on shop.shop_id=OWNER.shop_id
+   where shop.shop_id=#{shopId,jdbcType=INTEGER}
+  </select>
+  
+<!--   账号开通数量统计 -->
+  <select id="countShopNum" resultType="java.lang.Integer" >
+    select count(*) from as_shop shop 
+  	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+  	JOIN as_user U ON OWNER.user_id = U.user_id
+  	where 
+  	shop.shop_id=#{shopId}
+  </select>
+  <select id="isAccountExists" resultType="java.lang.Integer">
+  	select count(1) from as_shop where name = #{name}
+  </select>
+  <select id="queryShopList" resultMap="BaseRowMap" parameterType="pd">
+  	SELECT
+		*,OWNER.status as ownerStatus,user.account,`user`.create_time
+	FROM
+		as_shop shop
+	JOIN as_shop_owner_info OWNER ON shop.shop_id = OWNER .shop_id
+	JOIN as_user user ON OWNER.user_id = user.user_id
+	where 
+	1=1
+	<if test="status != null and stauts != ''">
+	and OWNER.status = #{status}
+	</if> 
+	<if test="startTime != null and startTime != '' ">
+	and USER.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and USER.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="keyWord != null and keyWord != ''">
+	and(user.account LIKE concat(concat('%',#{keyWord}),'%')
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%')) 
+	</if>
+	order by user.user_id desc
+  </select>
+
+    <!--修改商场后更新商户是商场的信息-->
+    <update id="updateShopByStoreId" parameterType="Map" >
+        update as_shop
+        set name = #{name,jdbcType=VARCHAR},
+          business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+          address = #{address,jdbcType=VARCHAR},
+          lng = #{lng,jdbcType=VARCHAR},
+          lat = #{lat,jdbcType=VARCHAR}
+        where store_id = #{storeId,jdbcType=INTEGER} and type = 1
+    </update>
+
+    <!--修改商场后更新商家管理员信息的账号名称-->
+    <update id="updateShopOwnerInfoByStoreId" parameterType="Map" >
+         UPDATE as_shop_owner_info
+            SET `name` = #{name,jdbcType=VARCHAR}
+            WHERE
+                shop_id IN (
+                    SELECT
+                        p.shop_id
+                    FROM
+                        as_shop p
+                    WHERE
+                        p.store_id = #{storeId,jdbcType=INTEGER}
+                    AND p.type = 1
+                )
+    </update>
+
+
+    <select id="shopIdByuserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT shop.shop_id,shop.type FROM as_user u JOIN sys_user ys ON u.sys_user_id = ys.user_id JOIN as_shop shop ON ys.as_shop_id = shop.shop_id WHERE
+    u.user_ID = #{userId}
+    </select>
+    <select id="isMerchantAccountExists" resultType="java.lang.Integer">
+  	select count(1) from as_shop where name = #{name} <![CDATA[ and shop_id<>#{shopId} ]]>
+  </select>
+</mapper>

@@ -1,0 +1,17 @@
+package com.aoshi.dao;
+
+import com.aoshi.domain.AsOwnActivityRelate;
+
+public interface AsOwnActivityRelateMapper {
+    int deleteByPrimaryKey(Integer ownActivityRelateId);
+
+    int insert(AsOwnActivityRelate record);
+
+    int insertSelective(AsOwnActivityRelate record);
+
+    AsOwnActivityRelate selectByPrimaryKey(Integer ownActivityRelateId);
+
+    int updateByPrimaryKeySelective(AsOwnActivityRelate record);
+
+    int updateByPrimaryKey(AsOwnActivityRelate record);
+}

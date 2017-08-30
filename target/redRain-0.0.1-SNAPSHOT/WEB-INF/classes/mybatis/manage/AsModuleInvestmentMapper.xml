@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsModuleInvestmentMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsModuleInvestment" >
+    <id column="module_investment_id" property="moduleInvestmentId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="DOUBLE" />
+    <result column="shop_type" property="shopType" jdbcType="VARCHAR" />
+    <result column="rent" property="rent" jdbcType="DOUBLE" />
+    <result column="business_module_id" property="businessModuleId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    module_investment_id, address, size, shop_type, rent, business_module_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_module_investment
+    where module_investment_id = #{moduleInvestmentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_module_investment
+    where module_investment_id = #{moduleInvestmentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsModuleInvestment" >
+    insert into as_module_investment (module_investment_id, address, size, 
+      shop_type, rent, business_module_id
+      )
+    values (#{moduleInvestmentId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, 
+      #{shopType,jdbcType=VARCHAR}, #{rent,jdbcType=DOUBLE}, #{businessModuleId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsModuleInvestment" useGeneratedKeys="true" keyProperty="moduleInvestmentId">
+    insert into as_module_investment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="moduleInvestmentId != null" >
+        module_investment_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="shopType != null" >
+        shop_type,
+      </if>
+      <if test="rent != null" >
+        rent,
+      </if>
+      <if test="businessModuleId != null" >
+        business_module_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="moduleInvestmentId != null" >
+        #{moduleInvestmentId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="shopType != null" >
+        #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="rent != null" >
+        #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="businessModuleId != null" >
+        #{businessModuleId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsModuleInvestment" >
+    update as_module_investment
+    <set >
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=DOUBLE},
+      </if>
+      <if test="shopType != null" >
+        shop_type = #{shopType,jdbcType=VARCHAR},
+      </if>
+      <if test="rent != null" >
+        rent = #{rent,jdbcType=DOUBLE},
+      </if>
+      <if test="businessModuleId != null" >
+        business_module_id = #{businessModuleId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where module_investment_id = #{moduleInvestmentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsModuleInvestment" >
+    update as_module_investment
+    set address = #{address,jdbcType=VARCHAR},
+      size = #{size,jdbcType=DOUBLE},
+      shop_type = #{shopType,jdbcType=VARCHAR},
+      rent = #{rent,jdbcType=DOUBLE},
+      business_module_id = #{businessModuleId,jdbcType=INTEGER}
+    where module_investment_id = #{moduleInvestmentId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<title>填写信息</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/fill_in_info.css">
+	<link rel="stylesheet" type="text/css" href="css/common.css">
+</head>
+<body>
+	<div id="app">
+		<div class="indicate_box">
+			<div class="indicate">
+				<div class="between market_step">
+					<div class="step_box towards_right current">
+						<div class="step">
+							1
+						</div>
+						<span>填写商家个人信息</span>
+					</div>
+					<div class="step_box towards_right">
+						<div class="step">
+							2
+						</div>
+						<span>填写商户信息</span>
+					</div>
+					<div class="step_box towards_right">
+						<div class="step">
+							3
+						</div>
+						<span>请等待审核结果</span>
+					</div>
+					<div class="step_box">
+						<div class="step">
+							4
+						</div>
+						<span>恭喜您，入驻成功</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- 商家个人信息 -->
+		<div id="individual_info" class="fill_in_info">
+			<div class="fill_in personal_info">
+
+				<script type="text/html" id="personal_info">
+					<div class="info_box">
+						<h2>填写商家个人信息</h2>
+						<div class="proposer_info">
+							<div class="info_name">
+								<span class="must star">申请人姓名:</span>
+								<input type="text" class="field" name="" id="sqrxm" value="{{applicant}}" />
+							</div>
+							<div class="info_type">
+								<span class="must star">证件类型:</span>
+								<select class="sqr_select">
+								  <option value="false">请选择证件类型</option>
+
+								  <option value="1" 
+								  {{if applicantCertificateType == 1}} selected="selected"{{/if}}
+								  >居民身份证</option>
+								  
+								  <option value="2" 
+								  {{if applicantCertificateType == 2}} selected="selected"{{/if}}
+								  >港澳通行证</option>
+								  
+								  <option value="3" 
+								  {{if applicantCertificateType == 3}} selected="selected"{{/if}}
+								  >驾驶证</option>
+
+								</select>
+							</div>
+							<div class="info_number">
+								<span class="must star">证件号:</span>
+								<input type="text" class="field" name="" id="zjh" value="{{applicantCertificateNum}}" />
+							</div>
+						</div>
+
+						<div class="mt20 proposer_info">
+							<div class="info_faren_name">
+								<span class="must star">法人姓名:</span>
+								<input type="text" class="field" name="" id="frxm" value="{{corporation}}" />
+							</div>
+							<div class="info_faren_type">
+								<span class="must star">法人证件类型:</span>
+								<select class="fr_select">
+								  <option value="false">请选择证件类型</option>
+								  
+								  <option value="1" 
+								  {{if corporationCertificateType == 1}} selected="selected"{{/if}}
+								  >居民身份证</option>
+								  
+								  <option value="2" 
+								  {{if corporationCertificateType == 2}} selected="selected"{{/if}}
+								  >港澳通行证</option>
+								  
+								  <option value="3" 
+								  {{if corporationCertificateType == 3}} selected="selected"{{/if}}
+								  >驾驶证</option>
+								  
+								</select>
+							</div>
+							<div class="info_faren_number">
+								<span class="must star">法人证件号:</span>
+								<input type="text" class="field" name="" id="frzjh" value="{{corporationCertificateNum}}" />
+							</div>
+						</div>
+					</div>
+
+					<div class="credentials_flex">
+						<!-- 申请人证件照 -->
+						<div class="credentials">
+							<span class="must">申请人证件照</span>
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <input type="file" class="upload" data-flag="1" />
+									    {{if identityFront != "" }}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{identityFront}}" alt="">
+									    {{/if}}
+									</a>
+								</div>
+								<span>证件照正面</span>
+							</div>
+							
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <input type="file" class="upload" data-flag="-1" />
+									    {{if identityBack != ""}}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{identityBack}}" alt="">
+									    {{/if}}
+									</a>
+								</div>
+								<span>证件照反面</span>
+							</div>
+						</div>
+						<!-- 营业执照 -->
+						<div class="credentials">
+							<span>营业执照</span>
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <input type="file" class="upload" data-flag="2" />
+									    {{if businessLicence != ""}}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{businessLicence}}" alt="">
+									    {{/if}}
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- 经营许可证 -->
+						<div class="credentials">
+							<span>经营许可证</span>
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <input type="file" class="upload" data-flag="3" />
+									    {{if businessCertificate != ""}}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{businessCertificate}}" alt="">
+									    {{/if}}
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 下一步 -->
+					<input type="button" name="" value="保存并下一步" id="submit"/>
+				</script>
+
+			</div>
+		</div>
+
+		<!-- 商户信息 -->
+		<div id="seller_info" style="display: none;">
+			<div class="fill_in">
+				<div class="tenant_infon">
+
+					<script type="text/html" id="tenant_infon">
+					{{if asShop == null}}{{/if}}
+					<!-- 店铺需要显示的DOM -->
+					<div class="info_box" id="shop_DOM">
+						<h2>填写商户信息</h2>
+						<div class="proposer_info">
+							<div class="flex">
+								<span class="must star">商户名称:</span>
+								<input type="text" class="field" name="" id="shopName" value="{{asShop.name}}" />
+							</div>
+							<div></div>
+							<div></div>
+						</div>
+
+						<div class="mt20 proposer_info">
+							<div class="info_faren_name">
+								<p>行业类型:</p>
+								<select class="trade_type">
+								  <option value="请选择行业类型">请选择行业类型</option>
+								</select>
+							</div>
+							<div></div>
+							<div></div>
+						</div>
+					</div>
+
+					<!-- 商场需要显示的DOM -->
+					<div class="info_box" id="market_DOM_1">
+						<h2>填写商户信息</h2>
+						<div class="proposer_info">
+							<div class="flex">
+								<span class="must">商户类型:</span>
+								<p class="marker_type">商场</p>
+							</div>
+							<div></div>
+							<div></div>
+						</div>
+
+						<div class="mt20 proposer_info">
+							<div class="info_faren_name">
+								<p>商户名称:</p>
+								<select class="commercialName">
+                                    <option value="请选择商户">请选择商户</option>
+								</select>
+							</div>
+							<div></div>
+							<div></div>
+						</div>
+
+						<div class="mt20 proposer_info">
+							<div class="info_faren_name">
+								<p>类型:</p>
+                                <select id="market_type">
+                                    <option value="请选择行业类型">请选择行业类型</option>
+                                </select>
+							</div>
+							<div></div>
+							<div></div>
+						</div>
+					</div>
+
+
+					<div class="credentials_flex">
+						<!-- 商户logo -->
+						<div class="credentials">
+							<span>商户logo:</span>
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <p>建议尺寸:750*750px</p>
+									    <input type="file" class="upload" data-flag="4"/>
+									    {{if asShop != "" && asShop.logoUrl != ""}}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{asShop.logoUrl}}" alt="">
+									    {{/if}}
+									</a>
+									
+								</div>
+							</div>
+						</div>
+						<!-- 商户背景图 -->
+						<div class="credentials">
+							<span>商户背景图:</span>
+							{{each shopPic}}
+								<div class="seller_background_box">
+									<div class="photograph seller_background">
+										<a href="javascript:;" class="file remove_img">
+										    上传照片
+										    <p>建议尺寸:750*476px</p>
+										    <input type="file" class="upload" data-flag="5-{{$index+1}}" data-shoppicid="{{$value.shopPicId}}"/>
+										    <img class="img_wrap" src="{{$value | imgRoute}}{{$value.picUrl}}" />
+										</a>
+									</div>
+								</div>
+							{{/each}}
+                            {{if shopPic.length == 1}}
+                                <div class="seller_background_box">
+                                    <div class="photograph seller_background">
+                                        <a href="javascript:;" class="file">
+                                            上传照片
+                                            <p>建议尺寸:750*476px</p>
+                                            <input type="file" class="upload" data-flag="5-2"/>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="seller_background_box">
+                                    <div class="photograph seller_background">
+                                        <a href="javascript:;" class="file">
+                                            上传照片
+                                            <p>建议尺寸:750*476px</p>
+                                            <input type="file" class="upload" data-flag="5-3"/>
+                                        </a>
+                                    </div>
+                                </div>
+                            {{/if}}
+                            {{if shopPic.length == 2}}
+                                <div class="seller_background_box">
+                                    <div class="photograph seller_background">
+                                        <a href="javascript:;" class="file">
+                                            上传照片
+                                            <p>建议尺寸:750*476px</p>
+                                            <input type="file" class="upload" data-flag="5-3" />
+                                        </a>
+                                    </div>
+                                </div>
+                            {{/if}}
+							{{if shopPic.length == 0}}
+								<div class="seller_background_box">
+									<div class="photograph seller_background">
+										<a href="javascript:;" class="file">
+										    上传照片
+										    <p>建议尺寸:750*476px</p>
+										    <input type="file" class="upload" data-flag="5-1" />
+										</a>
+									</div>
+								</div>
+								<div class="seller_background_box">
+									<div class="photograph seller_background">
+										<a href="javascript:;" class="file">
+										    上传照片
+										    <p>建议尺寸:750*476px</p>
+										    <input type="file" class="upload" data-flag="5-2" />
+										</a>
+									</div>
+								</div>
+								<div class="seller_background_box">
+									<div class="photograph seller_background">
+										<a href="javascript:;" class="file">
+										    上传照片
+										    <p>建议尺寸:750*476px</p>
+										    <input type="file" class="upload" data-flag="5-3" />
+										</a>
+									</div>
+								</div>
+							{{/if}}
+						</div>
+						<!-- 商户二维码 -->
+						<div class="credentials">
+							<span>商户二维码:</span>
+							<div class="photograph_box">
+								<div class="photograph">
+									<a href="javascript:;" class="file">
+									    上传照片
+									    <p>建议尺寸:750*750px</p>
+									    <input type="file" class="upload" data-flag="6"/>
+									    {{if asShop != "" && asShop.qrCodeUrl != "[object Object]"}}
+									    <img class="img_wrap" src="{{$value | imgRoute}}{{asShop.qrCodeUrl}}" alt="">
+									    {{/if}}
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="info_box" style="margin-left: -175px;">
+						<div>
+							<div class="info_name dib">
+								<span class="must star">联系人:</span>
+								<input type="text" name="" class="contacts field"
+                                       value="{{asShop.contact}}"/>
+							</div>
+							<div class="dib">
+								<span class="must star">联系电话:</span>
+								<input type="text" name="" class="contact_tel field" value="{{asShop.tel}}" />
+							</div>
+							<div class="dib">
+								<span class="must star">联系邮箱:</span>
+								<input type="text" name="" class="contact_mail field" value="{{asShop.email}}" />
+							</div>
+						</div>
+					</div>
+
+					<div class="info_box seller_address mt20" id="market_DOM_2">
+						<div class="proposer_info">
+							<p class="info_faren_name">
+								<span class="replenish pr star">商户地址:</span>
+								<select class="province mar7">
+								  <option value="请选择省份">请选择省份</option>
+								</select>
+								<select class="city mar7">
+								  <option value="请选择城市">请选择城市</option>
+								</select>
+								<select class="area mar7">
+								  <option value="请选择区域">请选择区域</option>
+								</select>
+								<select class="trading_area">
+								  <option value="请选择商圈">请选择商圈</option>
+								</select>
+							<p>
+						</div>
+					</div>
+
+					<div class="info_box mt20" id="market_DOM_3">
+						<div class="proposer_info">
+							<div class="info_name">
+								<span class="replenish pr">商场:</span>
+								<select class="stroe">
+								  <option value="">请选择商场</option>
+								</select>
+							</div>
+							<div>
+								<span class="pr star">所在楼层:</span>
+								<select class="storey">
+								  <option value="请选择楼层">请选择楼层</option>
+								</select>
+							</div>
+							<div></div>
+						</div>
+					</div>
+					</script>
+				    
+
+				</div>
+
+				<div class="shop_address mt20">
+					<span>店铺地址:</span>
+					<!-- 百度地图API -->
+					<div id="l-map" class="dib" style="font-size: 30px;"></div>
+					<div id="searchResultPanel"></div>
+					<div class="not_meaning">
+						<input type="text" name="" class="import_address" id="suggestId" placeholder="这里输入地址" />
+						<input type="text" name="" class="import_number" placeholder="店铺编号，如F2A03铺" />
+					</div>
+				</div>
+
+				<div class="submit_box">
+					<input type="button" name="" value="上一步" id="return_to_top" />
+					<!-- <input type="button" name="" value="保存" id="preserve" /> -->
+					<input type="button" name="" value="提交审核" id="verify" />
+				</div>
+
+			</div>
+		</div>
+
+		<!-- 成功 -->
+		<div id="success" style="display: none;">
+			<div class="success_describe">
+				<i></i>
+				<span>请等待审核结果</span>
+			</div>
+		</div>
+
+		<!-- 不通过 -->
+		<div id="error" style="display: none;">
+			<div class="success_describe">
+				<i></i>
+				<span>审批不通过</span>
+				<ul class="error_describe">
+					<li>
+						<span>审批不通过:</span>
+						<textarea name="" readonly id="reject"></textarea>
+					</li>
+				</ul>
+                <input type="button" name="" value="返回修改" class="return_revise"/>
+			</div>
+		</div>
+
+        <!-- Loading -->
+        <div class="loader">
+            <div class="loader-inner">
+                <div class="loader-line-wrap">
+                    <div class="loader-line"></div>
+                </div>
+                <div class="loader-line-wrap">
+                    <div class="loader-line"></div>
+                </div>
+                <div class="loader-line-wrap">
+                    <div class="loader-line"></div>
+                </div>
+                <div class="loader-line-wrap">
+                    <div class="loader-line"></div>
+                </div>
+                <div class="loader-line-wrap">
+                    <div class="loader-line"></div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+	
+	<!-- 模态框 -->
+	<div id="masklayer"></div>
+	<div id="popup" style="display: none;">
+		<div class="pop_frame"> 
+			<p>提交审核后不可再修改，确定提交？</p>
+		   <div class="confirm_return">
+		   	<a href="javascript:;" class="pop_confirm">确定</a>
+		   	<a href="javascript:;" class="pop_return">返回修改</a>
+		   </div>
+		</div>
+	</div>
+</body>
+</html>
+<!-- <script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script> -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/template-debug.js"></script>
+<script src="js/public-url.js"></script>
+<script src="js/alertPopShow.js"></script>
+<script src="js/fil_in_info.js"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=sEhK5bZY8eWnI8PSOoLj6txpjl6IgMi5"></script>
+<script>
+	// 百度地图API功能
+	function G(id) {
+		return document.getElementById(id);
+	}
+
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom("广州市", 13);     // 初始化地图,设置城市和地图级别。
+	map.enableScrollWheelZoom(); // 启动鼠标滚轮缩放地图
+	map.enableKeyboard();//启动键盘操作地图
+	
+	var ac = new BMap.Autocomplete(    // 建立一个自动完成的对象
+		{"input" : "suggestId"
+		,"location" : map
+	});
+	
+	ac.addEventListener("onhighlight", function(e) {  // 鼠标放在下拉列表上的事件
+	var str = "";
+		var _value = e.fromitem.value;
+		var value = "";
+		if (e.fromitem.index > -1) {
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+		
+		value = "";
+		if (e.toitem.index > -1) {
+			_value = e.toitem.value;
+			value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		}    
+		str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+		G("searchResultPanel").innerHTML = str;
+	});
+
+	var myValue;
+	ac.addEventListener("onconfirm", function(e) {    // 鼠标点击下拉列表后的事件
+
+	var _value = e.item.value;
+		myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+		G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		setPlace();
+	});
+
+	function setPlace(){
+		map.clearOverlays();    // 清除地图上所有覆盖物
+		function myFun(){
+			var pp = local.getResults().getPoi(0).point; // 获取第一个智能搜索的结果
+
+			sessionStorage.setItem('lat', pp.lat);
+			sessionStorage.setItem('lng', pp.lng);
+			console.log(pp)
+			
+			map.centerAndZoom(pp, 18);
+			var marker = new BMap.Marker(pp); // 创建标注
+			map.addOverlay(marker); // 将标注添加到地图中
+//            map.removeOverlay(marker);
+			marker.setAnimation(BMAP_ANIMATION_BOUNCE);// 跳动的动画
+		}
+		var local = new BMap.LocalSearch(map, { // 智能搜索
+		  onSearchComplete: myFun
+		});
+        var myGeo = new BMap.Geocoder();
+        // 将地址解析结果显示在地图上，并调整地图视野
+        console.log(myValue)
+        myGeo.getPoint(myValue, function(point){
+            if (point) {
+                $("#lng").val(point.lng);
+                $("#lat").val(point.lat);
+                local.search(myValue);
+            }
+        });
+	}
+</script>

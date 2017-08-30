@@ -1,0 +1,89 @@
+package com.aoshi.util;
+
+import java.io.IOException;
+import java.util.Properties;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PropertyUtils {
+
+	@Value("${FTP_URL}")
+	private String URL;
+
+	@Value("${FTP_USERNAME}")
+	private String NAME;
+
+	@Value("${FTP_PASS}")
+	private String PASS;
+
+	@Value("${HTTP_URL}")
+	private String HTTPURL;
+	
+	@Value("${LOCALHOST_URL}")
+	private String LOCALHOSTURL;
+
+	private static String FTP_URL;
+
+	private static String FTP_USERNAME;
+
+	private static String FTP_PASS;
+
+	private static String HTTP_URL;
+	
+	private static String LOCALHOST_URL;
+
+	private static String DEFAULT_FIlEURL;
+
+	/*@PostConstruct
+	public void init() {
+		FTP_URL = URL;
+		FTP_USERNAME = NAME;
+		FTP_PASS = PASS;
+		HTTP_URL = HTTPURL;
+	}*/
+
+	static{
+
+        Properties props = new Properties();
+        try {
+            props.load(new ClassPathResource("dbconfig.properties").getInputStream());
+
+            FTP_URL = props.getProperty("FTP_URL");
+            FTP_USERNAME = props.getProperty("FTP_USERNAME");
+            FTP_PASS = props.getProperty("FTP_PASS");
+            HTTP_URL = props.getProperty("HTTP_URL");
+            LOCALHOST_URL = props.getProperty("LOCALHOST_URL");
+			DEFAULT_FIlEURL = props.getProperty("DEFAULT_FIlEURL");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public static String getFTP_URL() {
+		return FTP_URL;
+	}
+
+	public static String getFTP_USERNAME() {
+		return FTP_USERNAME;
+	}
+
+	public static String getFTP_PASS() {
+		return FTP_PASS;
+	}
+
+	public static String getHTTP_URL() {
+		return HTTP_URL;
+	}
+
+	public static String getLOCALHOST_URL() {
+		return LOCALHOST_URL;
+	}
+	public static String getDEFAULT_FIlEURL() {
+		return DEFAULT_FIlEURL;
+	}
+	
+
+}

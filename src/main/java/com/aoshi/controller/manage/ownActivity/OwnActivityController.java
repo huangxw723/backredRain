@@ -1,0 +1,503 @@
+package com.aoshi.controller.manage.ownActivity;
+
+import com.aoshi.controller.base.BaseController;
+import com.aoshi.dao.AsPrizeMapper;
+import com.aoshi.dao.AsShopMapper;
+import com.aoshi.domain.*;
+import com.aoshi.entity.Page;
+import com.aoshi.resolver.ValidatorBreakException;
+import com.aoshi.service.manage.ownActivity.OwnActivityDiscService;
+import com.aoshi.service.manage.ownActivity.OwnActivityService;
+import com.aoshi.service.manage.ownActivity.OwnGiftService;
+import com.aoshi.util.CommonUtils;
+import com.aoshi.util.Conditions;
+import com.aoshi.util.DateUtil;
+import com.aoshi.util.TimeUtil;
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商家自主活动
+ *
+ * @author strong
+ * @version 1.0
+ *          2017年2月20日下午3:40:01
+ */
+@Controller
+@RequestMapping("ownActivity")
+public class OwnActivityController extends BaseController {
+
+    @Autowired
+    private OwnActivityService ownActivityService;
+
+    @Autowired
+    private OwnActivityDiscService OwnActivityDiscService;
+
+    @Autowired
+    private OwnGiftService ownGiftService;
+
+    @Autowired
+    private AsPrizeMapper prizeMapper;
+
+    @Autowired
+    AsShopMapper asShopMapper;
+
+    private static final String OWN_ACTICITY_PAHT = "/manage/ownActivity/";
+    private static final String OWN_BASEURL = "own/";
+
+
+    /**
+     * 查询活动列表
+     */
+    @RequestMapping("listAll")
+    public String queryAll(ModelMap map, Page page, AsOwnActivity asOwnActivity) {
+        //登陆身份 0 系统管理员，1 商家账号
+        int isShop = ownActivityService.query();
+        PageHelper.startPage(page.getCurrentPage(), page.getShowCount());
+        List<AsOwnActivity> list = ownActivityService.queryAll(asOwnActivity, isShop);
+        page.setPage(list);
+        //判断活动状态
+        if (!list.isEmpty() && list.size() > 0) {
+            Long day = TimeUtil.getTime(DateUtil.getTime());
+            for (int i = 0; i < list.size(); i++) {
+                Long statrTime = TimeUtil.getTime(list.get(i).getStartTime());
+                Long endTime = TimeUtil.getTime(list.get(i).getEndTime());
+                //1，已开始；2，未开始；3，已结束
+                if (day >= statrTime & day <= endTime) {
+                    list.get(i).setStatus(1);
+                } else if (day < statrTime) {
+                    list.get(i).setStatus(2);
+                } else if (day > endTime) {
+                    list.get(i).setStatus(3);
+                }
+            }
+        }
+        map.put("isShop", isShop == 0 ? 0 : 1);
+        map.put("list", list);
+        map.put("asOwnActivity", asOwnActivity);
+        map.put("currentPage", page.getCurrentPage());
+        map.put("showCount", page.getShowCount());
+        return OWN_ACTICITY_PAHT + "listAll";
+    }
+
+    /**
+     * 去添加页面
+     */
+    @RequestMapping("down")
+    public String down(ModelMap map) {
+
+        int isShop = ownActivityService.query();
+        if (isShop != 0) {// 获取商铺isShop如果不为0则是商场账号 ，反之则是后台管理员账号
+            AsShop asShop = asShopMapper.findByShopId("" + isShop);
+            map.put("asShop", asShop);
+        } else {
+            List<Conditions> shopAll = asShopMapper.findByShopAll();
+            map.put("shopAll", shopAll);
+        }
+        return OWN_ACTICITY_PAHT + "save";
+    }
+
+    /**
+     * 判断活动开始时间是否与最大结束时间重合
+     *
+     * @return
+     */
+    @RequestMapping("/isExist")
+    @ResponseBody
+    public Object isExist(String startTime, Integer shopId) {
+        //活动是否有时间重复
+        String lastEndTime = ownActivityService.isAccountExists(null, shopId);
+        if (lastEndTime != null) {
+            Long timeDiff = CommonUtils.orderTimeDiff(
+                    CommonUtils.getTimeMils(lastEndTime),
+                    CommonUtils.getTimeMils(startTime));
+            if (timeDiff != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否有活动正在进行中
+     *
+     * @return
+     */
+    @RequestMapping("/isProceed")
+    @ResponseBody
+    public Object isProceed(Integer shopId) {
+        Integer result = ownActivityService.isProceed(shopId);
+        if (result > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 添加
+     */
+    @RequestMapping("save")
+    @ResponseBody
+    public Object save(AsOwnActivity asOwnActivity, String pro, String pcf) {
+        //活动是否有时间重复
+        //登陆身份 0 系统管理员，1 商家账号
+        //  int shopId = ownActivityService.query();
+        String lastEndTime = ownActivityService.isAccountExists(null, asOwnActivity.getShopId());
+        if (lastEndTime != null) {
+            Long timeDiff = CommonUtils.orderTimeDiff(
+                    CommonUtils.getTimeMils(lastEndTime),
+                    CommonUtils.getTimeMils(asOwnActivity.getStartTime()));
+            if (timeDiff != 0) {
+                ValidatorBreakException.NOT_TRUE(false, "活动时间不能与其他活动时间重合哦！");
+            }
+        }
+        ownActivityService.save(asOwnActivity, pro, pcf);
+        return renderSuccess();
+    }
+
+    /**
+     * 显示礼品的选择
+     */
+    @RequestMapping("toGift")
+    public String toGift(ModelMap map, Page page, String keyWord, Integer status, Integer shopId) {
+        PageHelper.startPage(page.getCurrentPage(), page.getShowCount());
+        List<AsPrizeConfig> list = ownGiftService.queryToGift(keyWord, shopId);
+        page.setPage(list);
+        map.put("status", status);
+        map.put("list", list);
+        map.put("keyWord", keyWord);
+        return OWN_ACTICITY_PAHT + "gift";
+    }
+
+
+    /**
+     * 删除
+     */
+    @RequestMapping("/delete")
+    @ResponseBody
+    public Map<String, Object> delete(Integer ownActivityId) {
+        int status = ownActivityService.delete(ownActivityId);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("status", status);
+        return data;
+    }
+
+    /**
+     * 去修改页面
+     */
+    @RequestMapping("toEdit")
+    public String toEdit(ModelMap map, Integer ownActivityId, Integer status) {
+        //登陆身份 0 系统管理员，1 商家账号
+        int isShop = ownActivityService.query();
+        if (isShop != 0) {// 获取商铺isShop如果不为0则是商场账号 ，反之则是后台管理员账号
+            AsShop asShop = asShopMapper.findByShopId("" + isShop);
+            map.put("asShop", asShop);
+        } else {
+            List<Conditions> shopAll = asShopMapper.findByShopAll();
+            map.put("shopAll", shopAll);
+        }
+        AsOwnActivity asOwnActivity = ownActivityService.queryById(ownActivityId);
+        List<AsOwnActivityDisc> asOwnActivityDiscs = OwnActivityDiscService.queryById(ownActivityId);
+        map.put("asOwnActivityDiscs", asOwnActivityDiscs);
+        map.put("asOwnActivity", asOwnActivity);
+        map.put("status", asOwnActivity.getAuditStatus() == 1 ? 1 : status);
+        return OWN_ACTICITY_PAHT + "edit";
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping("edit")
+    @ResponseBody
+    public Object edit(AsOwnActivity asOwnActivity, String pro, String pcf, String discId, Integer count, String delete, Integer status) {
+        //如果不等于空，证明有删除
+        if (!StringUtils.isEmpty(delete)) {
+            deleteByGift(delete);
+        }
+        //status 2 活动未开始 可以编辑时间 判断时间
+        if (status == 2) {
+            if (asOwnActivity.getEndTime().compareTo(asOwnActivity.getStartTime()) < 0) {
+                ValidatorBreakException.NOT_TRUE(false, "活动开始时间不能大于活动结束时间！");
+            }
+            AsOwnActivity oa = ownActivityService.queryById(asOwnActivity.getOwnActivityId());
+            //判断是否修改了时间
+            if (!oa.getStartTime().equals(asOwnActivity.getStartTime()) || !oa.getEndTime().equals(asOwnActivity.getEndTime())) {
+                //活动是否有时间重复
+                //登陆身份 0 系统管理员，1 商家账号
+                //int shopId = ownActivityService.query();
+                String lastEndTime = ownActivityService.isAccountExists(asOwnActivity.getOwnActivityId(), asOwnActivity.getShopId());
+                if (lastEndTime != null) {
+                    Long timeDiff = CommonUtils.orderTimeDiff(
+                            CommonUtils.getTimeMils(lastEndTime),
+                            CommonUtils.getTimeMils(asOwnActivity.getStartTime()));
+                    if (timeDiff != 0) {
+                        ValidatorBreakException.NOT_TRUE(false, "活动时间不能与其他活动时间重合哦！");
+                    }
+                }
+            }
+        }
+        ownActivityService.edit(asOwnActivity, pro, pcf, discId, count);
+        return renderSuccess();
+    }
+
+    /**
+     * 查看活动
+     */
+    @RequestMapping("preview")
+    public String preview(ModelMap map, Integer ownActivityId, Integer status) {
+        toEdit(map, ownActivityId, status);
+        return OWN_ACTICITY_PAHT + "preview";
+    }
+
+    /**
+     * 礼品池删除
+     */
+    public void deleteByGift(String delete) {
+        OwnActivityDiscService.deleteByGift(delete);
+    }
+
+    /**
+     * 活动立即终止 设置结束时间为当前时间
+     */
+    @RequestMapping("off")
+    @ResponseBody
+    public Map<String, Object> editForOff(Integer ownActivityId) {
+        int status = ownActivityService.editForOff(ownActivityId);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("status", status);
+        return data;
+    }
+
+    /**
+     * 驳回理由
+     */
+    @RequestMapping("returnDesc")
+    public String returnDesc(ModelMap map, Integer ownActivityId) {
+        map.put("ownActivity", ownActivityService.queryById(ownActivityId));
+        return OWN_ACTICITY_PAHT + "returnDesc";
+    }
+
+
+    /**
+     * 自助活动链接列表
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping("ownActivityList")
+    public String linkList(ModelMap map, Page page, AsOwnActivity asOwnActivity) {
+        int isShop = ownActivityService.query();
+        PageHelper.startPage(page.getCurrentPage(), page.getShowCount());
+        List<AsOwnActivity> list = ownActivityService.queryOwnActivityLinkList(asOwnActivity, isShop);
+        page.setPage(list);
+        map.put("list", list);
+        map.put("page", page);
+        map.put("asOwnActivity", asOwnActivity);
+        map.put("isShop", isShop);
+        return OWN_BASEURL + "ownActivityList";
+    }
+
+
+    /**
+     * 活动审核列表
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/listAudit")
+    @ResponseBody
+    public Object listAudit() {
+        return ownActivityService.listAudit(this);
+    }
+
+    /**
+     * 批量通过审核
+     *
+     * @param ids
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/updateAuditStatus")
+    @ResponseBody
+    public Object updateAuditStatus(String[] ids) {
+        return ownActivityService.updateAuditStatus(ids, 1);
+    }
+
+    /**
+     * 单个活动审核跳到详情
+     *
+     * @param map
+     * @param ownActivityId
+     * @param status
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/auditStatus")
+    public String auditStatus(ModelMap map, Integer ownActivityId, Integer status) {
+        toEdit(map, ownActivityId, status);
+        map.put("ownActivityId", ownActivityId);
+        return OWN_ACTICITY_PAHT + "auditStatus";
+    }
+
+    /**
+     * 单个活动通过审核
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/updateStatus")
+    public Object updateStatus() {
+        return ownActivityService.updateStatus(this);
+    }
+
+    /**
+     * 自主活动审核历史列表
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/listAuditHistory")
+    public Object listAuditHistory() {
+        return ownActivityService.listAuditHistory(this);
+    }
+
+
+    /**
+     * 获取自主单活动审核 历史  详情信息
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    @RequestMapping("/auditHistoryById")
+    public String auditHistoryById(ModelMap map, Integer ownActivityId, Integer status) {
+        toEdit(map, ownActivityId, status);
+        AsOwnActivity ownActivity = ownActivityService.auditHistoryById(ownActivityId);
+        map.put("ownActivityId", ownActivityId);
+        map.put("activity", ownActivity);
+        return OWN_ACTICITY_PAHT + "auditStatusInfo";
+    }
+
+    /**
+     * 去增加抽奖次数页面
+     * @author chenwz
+     * @param
+     * @return
+     */
+    @RequestMapping("/toAddCount")
+    public Object toAddCount(Integer ownActivityId,Integer shopId,AsUser user) {
+        return ownActivityService.toAddCount(this,ownActivityId,shopId,user);
+    }
+
+    /**
+     * 增加次数历史记录
+     * @author chenwz
+     * @return
+     */
+    @RequestMapping("/addCountHistoryList")
+    public Object addCountHistoryList() {
+        return ownActivityService.addCountHistoryList(this);
+    }
+
+    /**
+     * 增加抽奖次数操作
+     * @return
+     */
+    @RequestMapping("/editCount")
+    @ResponseBody
+    public Object editCount(Integer userId,Integer count,Integer ownActivityId) {
+        return ownActivityService.editCount(userId,count,ownActivityId);
+    }
+
+
+    /**
+     * #####################################自主活动领取兑换记录################################
+     */
+
+    /**
+     * 自主活动领取礼品记录页面
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月6日
+     * @version 1.0
+     */
+    @RequestMapping("/ownActivityReceiveHistory")
+    public Object ownActivityReceiveHistory() {
+        return ownActivityService.receivedHistory(this);
+    }
+
+    /**
+     * 自主活动兑换礼品记录页面
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月6日
+     * @version 1.0
+     */
+    @RequestMapping("/ownActivityExchangeHistory")
+    public Object ownActivityExchangeHistory() {
+        return ownActivityService.exchangeHistory(this);
+    }
+
+    /**
+     * 自主活动兑换页面跳转
+     *
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月18日
+     */
+    @RequestMapping("/toReceive")
+    @ResponseBody
+    public Object receive() {
+        return ownActivityService.receive(this);
+    }
+
+    /**
+     * 自主活动兑换操作
+     *
+     * @return
+     */
+    @RequestMapping("/editReceive")
+    @ResponseBody
+    public int editReceive(String sn) {
+        return ownActivityService.editReceive(sn);
+    }
+
+
+    /**
+     * 礼品详情页面跳转
+     *
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月18日
+     */
+    @RequestMapping("/toPrizeDetail")
+    public String toPrizeDetail(ModelMap map, Integer id) {
+        Conditions asPrize = (Conditions) prizeMapper.getPrizeDetailById(id);
+        map.put("p", asPrize);
+        return OWN_ACTICITY_PAHT + "prizeDetail";
+    }
+
+
+}

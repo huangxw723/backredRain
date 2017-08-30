@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsAccountDynamicMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsAccountDynamic">
+    <id column="account_dynamic_id" jdbcType="INTEGER" property="accountDynamicId" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.aoshi.domain.AsAccountDynamic">
+    <result column="descp" jdbcType="LONGVARCHAR" property="descp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_dynamic_id, money, type, create_time, user_id
+  </sql>
+  <sql id="Blob_Column_List">
+    descp
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_account_dynamic
+    where account_dynamic_id = #{accountDynamicId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_account_dynamic
+    where account_dynamic_id = #{accountDynamicId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsAccountDynamic">
+    insert into as_account_dynamic (account_dynamic_id, money, type, 
+      create_time, user_id, descp
+      )
+    values (#{accountDynamicId,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{type,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{descp,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsAccountDynamic">
+    insert into as_account_dynamic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountDynamicId != null">
+        account_dynamic_id,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="descp != null">
+        descp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountDynamicId != null">
+        #{accountDynamicId,jdbcType=INTEGER},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null">
+        #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsAccountDynamic">
+    update as_account_dynamic
+    <set>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null">
+        descp = #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where account_dynamic_id = #{accountDynamicId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsAccountDynamic">
+    update as_account_dynamic
+    set money = #{money,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      descp = #{descp,jdbcType=LONGVARCHAR}
+    where account_dynamic_id = #{accountDynamicId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsAccountDynamic">
+    update as_account_dynamic
+    set money = #{money,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER}
+    where account_dynamic_id = #{accountDynamicId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

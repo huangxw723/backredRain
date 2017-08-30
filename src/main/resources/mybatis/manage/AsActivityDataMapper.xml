@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityDataMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityData" >
+    <id column="activity_data_id" property="activityDataId" jdbcType="INTEGER" />
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="shop_counts" property="shopCounts" jdbcType="INTEGER" />
+    <result column="person_counts" property="personCounts" jdbcType="INTEGER" />
+    <result column="prize_counts" property="prizeCounts" jdbcType="INTEGER" />
+    <result column="prize_surplus_counts" property="prizeSurplusCounts" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="activityBaseRowMap" type="com.aoshi.domain.AsResultMap">
+    <result column="start_time" property="acstartTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="acendTime" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    activity_data_id, activity_id, shop_counts, person_counts, prize_counts, prize_surplus_counts, 
+    create_time, update_time, name, sn, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_data
+    where activity_data_id = #{activityDataId,jdbcType=INTEGER}
+  </select>
+
+  <select id="getActivityDataInfo" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+    *
+    from as_activity_data
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getActivityData" resultMap="BaseResultMap" parameterType="pd" >
+    select d.shop_counts,d.person_counts,v.activity_name,v.sn,v.start_time,v.end_time
+     from as_activity_data d 
+    LEFT JOIN as_activity v on d.activity_id=v.activity_id
+    where v.activity_id=#{activityId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_data
+    where activity_data_id = #{activityDataId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityData" >
+    insert into as_activity_data (activity_data_id, activity_id, shop_counts, 
+      person_counts, prize_counts, prize_surplus_counts, 
+      create_time, update_time, name, 
+      sn, type)
+    values (#{activityDataId,jdbcType=INTEGER}, #{activityId,jdbcType=INTEGER}, #{shopCounts,jdbcType=INTEGER}, 
+      #{personCounts,jdbcType=INTEGER}, #{prizeCounts,jdbcType=INTEGER}, #{prizeSurplusCounts,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sn,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityData" >
+    insert into as_activity_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityDataId != null" >
+        activity_data_id,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="shopCounts != null" >
+        shop_counts,
+      </if>
+      <if test="personCounts != null" >
+        person_counts,
+      </if>
+      <if test="prizeCounts != null" >
+        prize_counts,
+      </if>
+      <if test="prizeSurplusCounts != null" >
+        prize_surplus_counts,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityDataId != null" >
+        #{activityDataId,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="shopCounts != null" >
+        #{shopCounts,jdbcType=INTEGER},
+      </if>
+      <if test="personCounts != null" >
+        #{personCounts,jdbcType=INTEGER},
+      </if>
+      <if test="prizeCounts != null" >
+        #{prizeCounts,jdbcType=INTEGER},
+      </if>
+      <if test="prizeSurplusCounts != null" >
+        #{prizeSurplusCounts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityData" >
+    update as_activity_data
+    <set >
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="shopCounts != null" >
+        shop_counts = #{shopCounts,jdbcType=INTEGER},
+      </if>
+      <if test="personCounts != null" >
+        person_counts = #{personCounts,jdbcType=INTEGER},
+      </if>
+      <if test="prizeCounts != null" >
+        prize_counts = #{prizeCounts,jdbcType=INTEGER},
+      </if>
+      <if test="prizeSurplusCounts != null" >
+        prize_surplus_counts = #{prizeSurplusCounts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where activity_data_id = #{activityDataId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityData" >
+    update as_activity_data
+    set activity_id = #{activityId,jdbcType=INTEGER},
+      shop_counts = #{shopCounts,jdbcType=INTEGER},
+      person_counts = #{personCounts,jdbcType=INTEGER},
+      prize_counts = #{prizeCounts,jdbcType=INTEGER},
+      prize_surplus_counts = #{prizeSurplusCounts,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where activity_data_id = #{activityDataId,jdbcType=INTEGER}
+  </update>
+  <select id="listHistory" resultMap="BaseRowMap">
+  	select data.* from as_activity_data data 
+  	join as_activity activity on data.activity_id = activity.activity_id
+  	where activity.status = 2
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+  			activity.activity_name like CONCAT('%',#{keyWord},'%') 
+			or activity.sn like CONCAT('%',#{keyWord},'%')
+  		)
+  	</if>
+  	order by data.activity_data_id desc
+  </select>
+</mapper>

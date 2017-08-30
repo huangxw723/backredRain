@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsTemplateFixedMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsTemplateFixed" >
+    <id column="template_fixed_id" property="templateFixedId" jdbcType="INTEGER" />
+    <result column="background_image" property="backgroundImage" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    template_fixed_id, background_image, url, sort
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_template_fixed
+    where template_fixed_id = #{templateFixedId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_template_fixed
+    where template_fixed_id = #{templateFixedId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsTemplateFixed" >
+    insert into as_template_fixed (template_fixed_id, background_image, 
+      url, sort)
+    values (#{templateFixedId,jdbcType=INTEGER}, #{backgroundImage,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsTemplateFixed" >
+    insert into as_template_fixed
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templateFixedId != null" >
+        template_fixed_id,
+      </if>
+      <if test="backgroundImage != null" >
+        background_image,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templateFixedId != null" >
+        #{templateFixedId,jdbcType=INTEGER},
+      </if>
+      <if test="backgroundImage != null" >
+        #{backgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsTemplateFixed" >
+    update as_template_fixed
+    <set >
+      <if test="backgroundImage != null" >
+        background_image = #{backgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where template_fixed_id = #{templateFixedId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsTemplateFixed" >
+    update as_template_fixed
+    set background_image = #{backgroundImage,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER}
+    where template_fixed_id = #{templateFixedId,jdbcType=INTEGER}
+  </update>
+</mapper>

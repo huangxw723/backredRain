@@ -1,0 +1,17 @@
+package com.aoshi.dao;
+
+import com.aoshi.domain.AsOwnerUserRelation;
+
+public interface AsOwnerUserRelationMapper {
+    int deleteByPrimaryKey(Integer ownerUserRelationId);
+
+    int insert(AsOwnerUserRelation record);
+
+    int insertSelective(AsOwnerUserRelation record);
+
+    AsOwnerUserRelation selectByPrimaryKey(Integer ownerUserRelationId);
+
+    int updateByPrimaryKeySelective(AsOwnerUserRelation record);
+
+    int updateByPrimaryKey(AsOwnerUserRelation record);
+}

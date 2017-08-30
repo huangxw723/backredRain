@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsWalletMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsWallet" >
+    <id column="wallet_id" property="walletId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="payment_password" property="paymentPassword" jdbcType="VARCHAR" />
+    <result column="integration" property="integration" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    wallet_id, user_id, money, create_time, update_time, payment_password, integration
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_wallet
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_wallet
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsWallet" >
+    insert into as_wallet (wallet_id, user_id, money, 
+      create_time, update_time, payment_password, 
+      integration)
+    values (#{walletId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{paymentPassword,jdbcType=VARCHAR}, 
+      #{integration,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsWallet" useGeneratedKeys="true" keyProperty="walletId">
+    insert into as_wallet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        wallet_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="paymentPassword != null" >
+        payment_password,
+      </if>
+      <if test="integration != null" >
+        integration,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="walletId != null" >
+        #{walletId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPassword != null" >
+        #{paymentPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="integration != null" >
+        #{integration,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsWallet" >
+    update as_wallet
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPassword != null" >
+        payment_password = #{paymentPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="integration != null" >
+        integration = #{integration,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsWallet" >
+    update as_wallet
+    set user_id = #{userId,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      payment_password = #{paymentPassword,jdbcType=VARCHAR},
+      integration = #{integration,jdbcType=DECIMAL}
+    where wallet_id = #{walletId,jdbcType=INTEGER}
+  </update>
+  <select id="findByUserIdWithLock" resultMap="BaseResultMap">
+  	select * from as_wallet where user_id = #{userId} for update
+  </select>
+
+  <select id="findByUserId" resultMap="BaseResultMap">
+  	select w.* from as_wallet w JOIN as_user u ON u.user_id = w.user_id  where w.user_id = #{userId}
+  </select>
+
+    <!-- 我的积分 -->
+    <select id="getIntegration" resultType="java.lang.Integer">
+        SELECT IFNULL(SUM(integration),0)
+        from as_wallet
+        where user_id = #{userId}
+    </select>
+
+</mapper>

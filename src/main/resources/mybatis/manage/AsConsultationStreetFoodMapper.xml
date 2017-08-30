@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsConsultationStreetFoodMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationStreetFood" >
+    <id column="consultation_street_food_id" property="consultationStreetFoodId" jdbcType="INTEGER" />
+    <result column="consultation_shop_id" property="consultationShopId" jdbcType="INTEGER" />
+    <result column="food_img" property="foodImg" jdbcType="VARCHAR" />
+    <result column="food_name" property="foodName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsConsultationStreetFood" extends="BaseResultMap" >
+    <result column="food_content" property="foodContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    consultation_street_food_id, consultation_shop_id, food_img, food_name
+  </sql>
+  <sql id="Blob_Column_List" >
+    food_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_consultation_street_food
+    where consultation_street_food_id = #{consultationStreetFoodId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_consultation_street_food
+    where consultation_street_food_id = #{consultationStreetFoodId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationStreetFood" keyProperty="consultationStreetFoodId" useGeneratedKeys="true" >
+    insert into as_consultation_street_food (consultation_street_food_id, consultation_shop_id, 
+      food_img, food_name, food_content
+      )
+    values (#{consultationStreetFoodId,jdbcType=INTEGER}, #{consultationShopId,jdbcType=INTEGER}, 
+      #{foodImg,jdbcType=VARCHAR}, #{foodName,jdbcType=VARCHAR}, #{foodContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationStreetFood" keyProperty="consultationStreetFoodId" useGeneratedKeys="true" >
+    insert into as_consultation_street_food
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="consultationStreetFoodId != null" >
+        consultation_street_food_id,
+      </if>
+      <if test="consultationShopId != null" >
+        consultation_shop_id,
+      </if>
+      <if test="foodImg != null" >
+        food_img,
+      </if>
+      <if test="foodName != null" >
+        food_name,
+      </if>
+      <if test="foodContent != null" >
+        food_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="consultationStreetFoodId != null" >
+        #{consultationStreetFoodId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationShopId != null" >
+        #{consultationShopId,jdbcType=INTEGER},
+      </if>
+      <if test="foodImg != null" >
+        #{foodImg,jdbcType=VARCHAR},
+      </if>
+      <if test="foodName != null" >
+        #{foodName,jdbcType=VARCHAR},
+      </if>
+      <if test="foodContent != null" >
+        #{foodContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationStreetFood" >
+    update as_consultation_street_food
+    <set >
+      <if test="consultationShopId != null" >
+        consultation_shop_id = #{consultationShopId,jdbcType=INTEGER},
+      </if>
+      <if test="foodImg != null" >
+        food_img = #{foodImg,jdbcType=VARCHAR},
+      </if>
+      <if test="foodName != null" >
+        food_name = #{foodName,jdbcType=VARCHAR},
+      </if>
+      <if test="foodContent != null" >
+        food_content = #{foodContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where consultation_street_food_id = #{consultationStreetFoodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsConsultationStreetFood" >
+    update as_consultation_street_food
+    set consultation_shop_id = #{consultationShopId,jdbcType=INTEGER},
+      food_img = #{foodImg,jdbcType=VARCHAR},
+      food_name = #{foodName,jdbcType=VARCHAR},
+      food_content = #{foodContent,jdbcType=LONGVARCHAR}
+    where consultation_street_food_id = #{consultationStreetFoodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationStreetFood" >
+    update as_consultation_street_food
+    set consultation_shop_id = #{consultationShopId,jdbcType=INTEGER},
+      food_img = #{foodImg,jdbcType=VARCHAR},
+      food_name = #{foodName,jdbcType=VARCHAR}
+    where consultation_street_food_id = #{consultationStreetFoodId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findByShopId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_consultation_street_food
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectInId">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" /> from as_consultation_street_food where consultation_street_food_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </select>
+  <delete id="deleteByConsultationShopId" parameterType="java.lang.Integer" >
+    delete from as_consultation_street_food
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </delete>
+  <update id="deleteByIds">
+    delete from as_consultation_street_food where consultation_shop_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  
+</mapper>

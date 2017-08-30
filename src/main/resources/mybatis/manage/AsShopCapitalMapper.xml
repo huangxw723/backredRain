@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsShopCapitalMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsShopCapital" >
+    <id column="shop_capital_id" property="shopCapitalId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="capital_amount" property="capitalAmount" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="shop_bank_id" property="shopBankId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    shop_capital_id, shop_id, order_id, capital_amount, status, shop_bank_id, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop_capital
+    where shop_capital_id = #{shopCapitalId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_shop_capital
+    where shop_capital_id = #{shopCapitalId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsShopCapital" >
+    insert into as_shop_capital (shop_capital_id, shop_id, order_id, 
+      capital_amount, status, shop_bank_id, 
+      create_time, update_time)
+    values (#{shopCapitalId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, 
+      #{capitalAmount,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{shopBankId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsShopCapital" >
+    insert into as_shop_capital
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopCapitalId != null" >
+        shop_capital_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="capitalAmount != null" >
+        capital_amount,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="shopBankId != null" >
+        shop_bank_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopCapitalId != null" >
+        #{shopCapitalId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="capitalAmount != null" >
+        #{capitalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopBankId != null" >
+        #{shopBankId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsShopCapital" >
+    update as_shop_capital
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="capitalAmount != null" >
+        capital_amount = #{capitalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopBankId != null" >
+        shop_bank_id = #{shopBankId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shop_capital_id = #{shopCapitalId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsShopCapital" >
+    update as_shop_capital
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      capital_amount = #{capitalAmount,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      shop_bank_id = #{shopBankId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where shop_capital_id = #{shopCapitalId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询所有 -->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    capital.* , shop.shop_name
+    from as_shop_capital capital join as_shop shop on capital.shop_id = shop.shop_id
+    where 1 = 1
+    <if test="keyWord != null and keyWord != ''">
+    	and capital.order_id = #{keyWord,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null and status != ''">
+    	and capital.status = #{status,jdbcType=INTEGER}
+    </if>
+    order by capital.update_time , capital.shop_capital_id desc 
+  </select>
+  
+  <update id="updateCapitalStatus">
+  
+    update as_shop_capital
+    set
+      status = #{status,jdbcType=INTEGER}
+    where 
+    status = #{srcStatus,jdbcType=INTEGER} 
+    and shop_capital_id in
+    <foreach item="item" index="index" collection="ids" 
+                         open="(" separator="," close=")">
+                        #{item,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+  
+  <select id="findByOrderId" resultMap="BaseResultMap">
+  
+  select
+  <include refid="Base_Column_List"/>
+  from as_shop_capital where order_id = #{orderId}
+  </select>
+</mapper>

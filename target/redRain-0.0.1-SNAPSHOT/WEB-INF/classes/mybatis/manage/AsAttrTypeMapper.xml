@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsAttrTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsAttrType" >
+    <id column="attr_type_id" property="attrTypeId" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  	<collection property="attributes" column="attr_type_id" resultMap="attributeMap" />
+  </resultMap>
+ 	
+ 	<resultMap id="attributeMap" type="com.aoshi.vo.AsAttributeVo" >
+	    <id column="attribute_id" property="attributeId" jdbcType="INTEGER" />
+	    <result column="attr_type_id" property="attrTypeId" jdbcType="INTEGER" />
+	    <result column="attr_name" property="attrName" jdbcType="VARCHAR" />
+	    <result column="attr_input_type" property="attrInputType" jdbcType="INTEGER" />
+	    <result column="attr_type" property="attrType" jdbcType="INTEGER" />
+	    <result column="attr_values" property="attrValues" jdbcType="LONGVARCHAR" />
+	    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    attr_type_id, type_name, is_delete, sort_order, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_attr_type
+    where attr_type_id = #{attrTypeId,jdbcType=INTEGER}
+  </select>
+ <!-- 属性列表 分页 -->
+  <select id="selectByAttr" resultMap="BaseResultMap" parameterType="pd" >
+   select 
+    <include refid="Base_Column_List" />
+    from as_attr_type where 1=1 and is_delete = 0 
+      <if test="keyword != null and keyword != ''">
+      	and type_name like concat(concat('%', #{keyword}),'%')
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_attr_type
+    where attr_type_id = #{attrTypeId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.aoshi.domain.AsAttrType" useGeneratedKeys="true" keyProperty="attrTypeId" >
+    insert into as_attr_type (type_name, is_delete, 
+      sort_order, create_time)
+    values (#{typeName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER}, 
+      #{sortOrder,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsAttrType" >
+    insert into as_attr_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attrTypeId != null" >
+        attr_type_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attrTypeId != null" >
+        #{attrTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsAttrType" >
+    update as_attr_type
+    <set >
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where attr_type_id = #{attrTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsAttrType" >
+    update as_attr_type
+    set type_name = #{typeName,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      sort_order = #{sortOrder,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where attr_type_id = #{attrTypeId,jdbcType=INTEGER}
+  </update>
+  
+ <!--批量修改删除状态 0 未删除，1已删  -->  
+  <update id="updateByPrimaryKeys"  parameterType="java.lang.Integer">
+  	update as_attr_type
+    set is_delete = 1 where attr_type_id in 
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+     #{item}
+    </foreach>
+  </update>
+  
+  <!-- 查找列表 -->
+  <select id="findAll" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	 from as_attr_type and is_delete = 0
+  </select>
+  <select id="findAttrValue" resultMap="BaseResultMap">
+  	select * 
+  	from as_attr_type type join as_attribute val 
+  	on type.attr_type_id = val.attr_type_id 
+  	
+  </select>
+ 	
+</mapper>

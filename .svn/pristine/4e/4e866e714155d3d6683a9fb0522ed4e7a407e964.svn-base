@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsImageSourceMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsImageSource" >
+    <id column="image_source_id" property="imageSourceId" jdbcType="INTEGER" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="image_name" property="imageName" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="template_type_id" property="templateTypeId" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    image_source_id, image_url, image_name, width, height, create_time, template_type_id, 
+    creator
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_image_source
+    where image_source_id = #{imageSourceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_image_source
+    where image_source_id = #{imageSourceId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsImageSource" >
+    insert into as_image_source (image_source_id, image_url, image_name, 
+      width, height, create_time, 
+      template_type_id, creator)
+    values (#{imageSourceId,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, #{imageName,jdbcType=VARCHAR}, 
+      #{width,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{templateTypeId,jdbcType=INTEGER}, #{creator,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsImageSource" >
+    insert into as_image_source
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="imageSourceId != null" >
+        image_source_id,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="imageName != null" >
+        image_name,
+      </if>
+      <if test="width != null" >
+        width,
+      </if>
+      <if test="height != null" >
+        height,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="templateTypeId != null" >
+        template_type_id,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="imageSourceId != null" >
+        #{imageSourceId,jdbcType=INTEGER},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null" >
+        #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="templateTypeId != null" >
+        #{templateTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsImageSource" >
+    update as_image_source
+    <set >
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageName != null" >
+        image_name = #{imageName,jdbcType=VARCHAR},
+      </if>
+      <if test="width != null" >
+        width = #{width,jdbcType=INTEGER},
+      </if>
+      <if test="height != null" >
+        height = #{height,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="templateTypeId != null" >
+        template_type_id = #{templateTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where image_source_id = #{imageSourceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsImageSource" >
+    update as_image_source
+    set image_url = #{imageUrl,jdbcType=VARCHAR},
+      image_name = #{imageName,jdbcType=VARCHAR},
+      width = #{width,jdbcType=INTEGER},
+      height = #{height,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      template_type_id = #{templateTypeId,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=VARCHAR}
+    where image_source_id = #{imageSourceId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByAttr" parameterType="com.aoshi.domain.AsImageSource" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+  	from as_image_source where 1=1 
+  	<if test="templateTypeId != null">
+  		and template_type_id = #{templateTypeId}
+  	</if>
+  	<if test="imageName != null and imageName != ''">
+  		and image_name like CONCAT(CONCAT('%',#{imageName}),'%')
+  	</if>
+  	<if test="creator != null">
+  		and creator = #{creator}
+  	</if>
+  	 order by create_time desc
+  </select>
+</mapper>

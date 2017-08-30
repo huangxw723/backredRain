@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsTemplateTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsTemplateType" >
+    <id column="template_type_id" property="templateTypeId" jdbcType="INTEGER" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    template_type_id, type_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_template_type
+    where template_type_id = #{templateTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_template_type
+    where template_type_id = #{templateTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsTemplateType" >
+    insert into as_template_type (template_type_id, type_name)
+    values (#{templateTypeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsTemplateType" >
+    insert into as_template_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="templateTypeId != null" >
+        template_type_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="templateTypeId != null" >
+        #{templateTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsTemplateType" >
+    update as_template_type
+    <set >
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where template_type_id = #{templateTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsTemplateType" >
+    update as_template_type
+    set type_name = #{typeName,jdbcType=VARCHAR}
+    where template_type_id = #{templateTypeId,jdbcType=INTEGER}
+  </update>
+</mapper>

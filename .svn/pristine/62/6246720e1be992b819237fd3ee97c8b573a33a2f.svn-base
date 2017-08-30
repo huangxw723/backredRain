@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOwnActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOwnActivity" >
+    <id column="own_activity_id" property="ownActivityId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="activity_link" property="activityLink" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="per_count" property="perCount" jdbcType="INTEGER" />
+    <result column="people_num" property="peopleNum" jdbcType="INTEGER" />
+    <result column="count_num" property="countNum" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_time" property="auditTime" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="WithName" type="com.aoshi.domain.AsOwnActivity" extends="BaseResultMap" >
+    <result column="shopName" property="shopName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    own_activity_id, shop_id, activity_name, activity_link, start_time, end_time, per_count, 
+    people_num, count_num, create_time,audit_status,audit_time,reason
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_own_activity
+    where own_activity_id = #{ownActivityId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_own_activity
+    where own_activity_id = #{ownActivityId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOwnActivity" useGeneratedKeys="true" keyProperty="ownActivityId" >
+    insert into as_own_activity (own_activity_id, shop_id, activity_name, 
+      activity_link, start_time, end_time, 
+      per_count, people_num, count_num, 
+      create_time,audit_status,reason)
+    values (#{ownActivityId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{activityName,jdbcType=VARCHAR}, 
+      #{activityLink,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, 
+      #{perCount,jdbcType=INTEGER}, #{peopleNum,jdbcType=INTEGER}, #{countNum,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR},#{auditStatus,jdbcType=INTEGER},#{auditTime,jdbcType=VARCHAR},#{reason,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOwnActivity" useGeneratedKeys="true" keyProperty="ownActivityId" >
+    insert into as_own_activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ownActivityId != null" >
+        own_activity_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="activityName != null" >
+        activity_name,
+      </if>
+      <if test="activityLink != null" >
+        activity_link,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="perCount != null" >
+        per_count,
+      </if>
+      <if test="peopleNum != null" >
+        people_num,
+      </if>
+      <if test="countNum != null" >
+        count_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ownActivityId != null" >
+        #{ownActivityId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="activityName != null" >
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLink != null" >
+        #{activityLink,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="perCount != null" >
+        #{perCount,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNum != null" >
+        #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="countNum != null" >
+        #{countNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOwnActivity" >
+    update as_own_activity
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="activityName != null" >
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="activityLink != null" >
+        activity_link = #{activityLink,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="perCount != null" >
+        per_count = #{perCount,jdbcType=INTEGER},
+      </if>
+      <if test="peopleNum != null" >
+        people_num = #{peopleNum,jdbcType=INTEGER},
+      </if>
+      <if test="countNum != null" >
+        count_num = #{countNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+        <if test="auditStatus != null" >
+       audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+       audit_time = #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+       reason = #{reason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where own_activity_id = #{ownActivityId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOwnActivity" >
+    update as_own_activity
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      activity_name = #{activityName,jdbcType=VARCHAR},
+      activity_link = #{activityLink,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      per_count = #{perCount,jdbcType=INTEGER},
+      people_num = #{peopleNum,jdbcType=INTEGER},
+      count_num = #{countNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR}
+    where own_activity_id = #{ownActivityId,jdbcType=INTEGER}
+  </update>
+
+<select id="queryAll" parameterType="Map" resultMap="WithName">
+   SELECT a.*,s.name as shopName FROM as_own_activity a LEFT JOIN as_shop s ON a.shop_id = s.shop_id where 1=1
+          <if test="shopId != 0">
+		    AND a.shop_id = #{shopId}
+		 </if>
+  		<if test="startTime != null and startTime != ''">
+		 	AND a.start_time <![CDATA[>=]]> #{startTime}
+		 </if>
+		 <if test="endTime != null  and endTime != ''">
+		 	 AND a.end_time <![CDATA[<=]]> #{endTime}
+		 </if> 
+		 
+		 <if test="activityName != null and activityName != '' and shopId != 0">
+           AND a.activity_name LIKE concat(concat('%',#{activityName}),'%')
+  		</if>
+        <if test="activityName != null and activityName != '' and shopId == 0">
+          AND (
+           a.activity_name LIKE concat(concat('%',#{activityName}),'%')
+           OR s.name LIKE concat(concat('%',#{activityName}),'%')
+           )
+  		</if>
+        <if test="status eq 0  ">
+          AND a.audit_status = 0
+        </if>
+        <if test="status eq 4 ">
+          AND a.audit_status = 2
+        </if>
+        <if test="status eq 1  ">
+          AND a.start_time <![CDATA[>]]> now() AND a.audit_status = 1
+        </if>
+        <if test="status eq 2  ">
+          AND a.end_time <![CDATA[>=]]> now() AND a.start_time <![CDATA[<=]]> now() AND a.audit_status = 1
+        </if>
+        <if test="status eq 3  ">
+          AND a.end_time <![CDATA[<]]> now() AND a.audit_status = 1
+        </if>
+
+  		ORDER BY a.create_time DESC
+  </select>
+  
+  <delete id="delete" parameterType="java.lang.Integer">
+  		DELETE FROM as_own_activity WHERE own_activity_id=#{ownActivityId}
+  </delete>
+  
+  <select id="queryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		SELECT * FROM as_own_activity WHERE own_activity_id = #{ownActivityId}
+  </select>
+  
+  <select id="queryStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		SELECT a.* FROM as_own_activity a LEFT JOIN as_own_activity_disc d ON d.own_activity_id = a.own_activity_id  WHERE d.prize_config_id = #{prizeConfigId}
+  </select>
+  
+  <select id="queryOwnActivityLinkList" parameterType="Map" resultMap="WithName">
+    SELECT a.*,b.name as shopName FROM as_own_activity a
+    LEFT JOIN as_shop b ON a.shop_id=b.shop_id
+    where 1=1  AND a.audit_status=1
+
+    <if test="shopId != 0">
+      AND a.shop_id = #{shopId}
+    </if>
+    <if test="startTime != null and startTime != ''">
+      AND a.start_time <![CDATA[>=]]> #{startTime}
+    </if>
+    <if test="endTime != null  and endTime != ''">
+      AND a.end_time <![CDATA[<=]]> #{endTime}
+    </if>
+    <if test="activityName != null and activityName != '' and shopId != 0">
+      and  (a.activity_name like '%${activityName}%' )
+    </if>
+    <if test="activityName != null  and activityName != '' and shopId == 0">
+      and  (a.activity_name like '%${activityName}%' or b.name like '%${activityName}%')
+    </if>
+    order by a.own_activity_id desc
+  </select>
+
+  <select id="isAccountExists" resultType="java.lang.String" >
+    SELECT
+    max(end_time) AS startTime
+    FROM
+     as_own_activity
+     WHERE audit_status in (0,1)
+    <if test="ownActivityId != null and ownActivityId != ''">
+      AND own_activity_id <![CDATA[<>]]> #{ownActivityId}
+    </if>
+    <if test="shopId != 0">
+      AND shop_id = #{shopId}
+    </if>
+  </select>
+
+  <select id="isProceed" resultType="java.lang.Integer" >
+    SELECT COUNT(*) FROM as_own_activity WHERE   end_time <![CDATA[>]]> now() AND start_time <![CDATA[<]]> now() AND audit_status IN (0,1)
+    <if test="shopId != 0">
+      AND shop_id = #{shopId}
+    </if>
+  </select>
+  
+  <!--自主活动审核列表  -->
+   <select id="listAudit" resultMap="BaseRowMap">
+  	select a.* , shop.name shopName from as_own_activity a 
+  	left join as_shop shop on a.shop_id = shop.shop_id 
+  	where 1=1 
+     and a.audit_status=0
+  	<if test="keyWord != null and keyWord != ''">
+      and (
+        a.activity_name LIKE concat(concat('%',#{keyWord}),'%')
+        or shop.name LIKE concat(concat('%',#{keyWord}),'%')
+        or a.own_activity_id LIKE concat(concat('%',#{keyWord}),'%')
+      )
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	a.shop_id = #{shopId} 
+  	</if>
+  	order by a.own_activity_id desc
+  </select>
+  <!--自主活动审核历史列表  -->
+   <select id="listAuditHistory" resultMap="BaseRowMap">
+  	select a.* , shop.name shopName from as_own_activity a 
+  	left join as_shop shop on a.shop_id = shop.shop_id 
+  	where 1=1 
+     and a.audit_status in (1,2) 
+  	<if test="keyWord != null and keyWord != ''">
+      and (
+      a.activity_name LIKE concat(concat('%',#{keyWord}),'%')
+      or shop.name LIKE concat(concat('%',#{keyWord}),'%')
+      or a.own_activity_id LIKE concat(concat('%',#{keyWord}),'%')
+      )
+  	</if>
+  	<if test="auditStatus != null and auditStatus != ''" >
+      and a.audit_status = #{auditStatus,jdbcType=INTEGER}
+    </if>
+    <if test="shopId != 'null' and shopId != ''">
+  		and	a.shop_id = #{shopId} 
+  	</if>
+  	 
+  	order by a.own_activity_id desc
+  </select>
+
+
+  
+</mapper>

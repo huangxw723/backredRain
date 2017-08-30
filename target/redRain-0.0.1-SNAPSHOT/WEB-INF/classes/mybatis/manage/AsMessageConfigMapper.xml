@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsMessageConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsMessageConfig" >
+    <id column="message_config_id" property="messageConfigId" jdbcType="INTEGER" />
+    <result column="trade_message_open" property="tradeMessageOpen" jdbcType="INTEGER" />
+    <result column="shop_message_open" property="shopMessageOpen" jdbcType="INTEGER" />
+    <result column="express_message_open" property="expressMessageOpen" jdbcType="INTEGER" />
+    <result column="disturb_start_time" property="disturbStartTime" jdbcType="VARCHAR" />
+    <result column="disturb_end_time" property="disturbEndTime" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    message_config_id, trade_message_open, shop_message_open, express_message_open, disturb_start_time, 
+    disturb_end_time, user_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_message_config
+    where message_config_id = #{messageConfigId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_message_config
+    where message_config_id = #{messageConfigId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsMessageConfig" >
+    insert into as_message_config (message_config_id, trade_message_open, 
+      shop_message_open, express_message_open, disturb_start_time, 
+      disturb_end_time, user_id, create_time, 
+      update_time)
+    values (#{messageConfigId,jdbcType=INTEGER}, #{tradeMessageOpen,jdbcType=INTEGER}, 
+      #{shopMessageOpen,jdbcType=INTEGER}, #{expressMessageOpen,jdbcType=INTEGER}, #{disturbStartTime,jdbcType=VARCHAR}, 
+      #{disturbEndTime,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsMessageConfig" >
+    insert into as_message_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageConfigId != null" >
+        message_config_id,
+      </if>
+      <if test="tradeMessageOpen != null" >
+        trade_message_open,
+      </if>
+      <if test="shopMessageOpen != null" >
+        shop_message_open,
+      </if>
+      <if test="expressMessageOpen != null" >
+        express_message_open,
+      </if>
+      <if test="disturbStartTime != null" >
+        disturb_start_time,
+      </if>
+      <if test="disturbEndTime != null" >
+        disturb_end_time,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageConfigId != null" >
+        #{messageConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeMessageOpen != null" >
+        #{tradeMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="shopMessageOpen != null" >
+        #{shopMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="expressMessageOpen != null" >
+        #{expressMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="disturbStartTime != null" >
+        #{disturbStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="disturbEndTime != null" >
+        #{disturbEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsMessageConfig" >
+    update as_message_config
+    <set >
+      <if test="tradeMessageOpen != null" >
+        trade_message_open = #{tradeMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="shopMessageOpen != null" >
+        shop_message_open = #{shopMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="expressMessageOpen != null" >
+        express_message_open = #{expressMessageOpen,jdbcType=INTEGER},
+      </if>
+      <if test="disturbStartTime != null" >
+        disturb_start_time = #{disturbStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="disturbEndTime != null" >
+        disturb_end_time = #{disturbEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where message_config_id = #{messageConfigId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsMessageConfig" >
+    update as_message_config
+    set trade_message_open = #{tradeMessageOpen,jdbcType=INTEGER},
+      shop_message_open = #{shopMessageOpen,jdbcType=INTEGER},
+      express_message_open = #{expressMessageOpen,jdbcType=INTEGER},
+      disturb_start_time = #{disturbStartTime,jdbcType=VARCHAR},
+      disturb_end_time = #{disturbEndTime,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where message_config_id = #{messageConfigId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findByUserId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_message_config
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+</mapper>

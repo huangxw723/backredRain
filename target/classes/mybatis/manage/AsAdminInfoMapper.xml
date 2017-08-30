@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsAdminInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsAdminInfo" >
+    <id column="admin_info_id" property="adminInfoId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="admin_phone" property="adminPhone" jdbcType="VARCHAR" />
+    <result column="admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_rights" property="roleRights" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    admin_info_id, status, admin_phone, admin_name, role_id, role_rights, user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_admin_info
+    where admin_info_id = #{adminInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_admin_info
+    where admin_info_id = #{adminInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsAdminInfo" >
+    insert into as_admin_info (admin_info_id, status, admin_phone, 
+      admin_name, role_id, role_rights, 
+      user_id, create_time)
+    values (#{adminInfoId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{adminPhone,jdbcType=VARCHAR}, 
+      #{adminName,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{roleRights,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsAdminInfo" >
+    insert into as_admin_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminInfoId != null" >
+        admin_info_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone,
+      </if>
+      <if test="adminName != null" >
+        admin_name,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="roleRights != null" >
+        role_rights,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminInfoId != null" >
+        #{adminInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adminPhone != null" >
+        #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminName != null" >
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleRights != null" >
+        #{roleRights,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsAdminInfo" >
+    update as_admin_info
+    <set >
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="adminPhone != null" >
+        admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adminName != null" >
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleRights != null" >
+        role_rights = #{roleRights,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where admin_info_id = #{adminInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsAdminInfo" >
+    update as_admin_info
+    set status = #{status,jdbcType=INTEGER},
+      admin_phone = #{adminPhone,jdbcType=VARCHAR},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=VARCHAR},
+      role_rights = #{roleRights,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where admin_info_id = #{adminInfoId,jdbcType=INTEGER}
+  </update>
+  <select id="findByUserId" resultMap="BaseResultMap">
+  	select 
+  		*
+  	from
+  		as_admin_info
+  	where user_id = #{userId}
+  </select>
+</mapper>

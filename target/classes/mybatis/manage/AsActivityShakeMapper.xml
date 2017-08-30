@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityShakeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityShake" >
+    <id column="activity_shake_id" property="activityShakeId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="probability" property="probability" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_shake_id, store_id, name, probability, create_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_shake
+    where activity_shake_id = #{activityShakeId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="fingByStoreId" resultMap="BaseRowMap"  >
+    select 
+ 	activity_shake_id,store_id, name, probability
+    from as_activity_shake
+    where name is not null and probability != 0  and store_id = #{storeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_shake
+    where activity_shake_id = #{activityShakeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityShake" >
+    insert into as_activity_shake (activity_shake_id, store_id, name, 
+      probability, create_time)
+    values (#{activityShakeId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{probability,jdbcType=DECIMAL}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityShake" >
+    insert into as_activity_shake
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityShakeId != null" >
+        activity_shake_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="probability != null" >
+        probability,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityShakeId != null" >
+        #{activityShakeId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="probability != null" >
+        #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityShake" >
+    update as_activity_shake
+    <set >
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="probability != null" >
+        probability = #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where activity_shake_id = #{activityShakeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityShake" >
+    update as_activity_shake
+    set store_id = #{storeId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      probability = #{probability,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where activity_shake_id = #{activityShakeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap"  >
+    select
+        *
+    from as_activity_shake
+  </select>
+</mapper>

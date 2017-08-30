@@ -1,0 +1,157 @@
+package com.aoshi.dao;
+
+import com.aoshi.domain.AsUser;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.omg.PortableInterceptor.INACTIVE;
+
+import java.util.List;
+import java.util.Map;
+
+public interface AsUserMapper extends AsBaseMapper {
+
+
+    int isAccountExists(Object conditions);
+
+    /**
+     * 检查会员账号是否已经存在
+     *
+     * @param account
+     * @return
+     */
+    int accountMemberIsExist(String account);
+
+    /**
+     * 根据后台用户表ID反查账号表记录
+     *
+     * @param conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年9月5日
+     */
+    Object findBySysUserId(Object conditions);
+
+    AsUser getBySysUserId(String sysUserId);
+    
+    /**
+     * 根据帐号和类型
+     *
+     * @param Conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年11月17日
+     */
+    Object findByAccountAndType(Object Conditions);
+
+    AsUser getByAccountAndType(String account);
+    
+    @Select("select count(*) from as_user where account = #{account}")
+    int countByAccount(@Param("account") Object condition);
+
+    /**
+     * 更新用户删除状态
+     *
+     * @param Conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年9月5日
+     */
+    int deleteByUserId(Object Conditions);
+
+    /**
+     * 批量删除
+     *
+     * @param Conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年9月22日
+     */
+    int deleteByUserIds(Object Conditions);
+
+    AsUser getUserByUserId(int userId);
+
+    /**
+     * 根据shopID删除所有账号表记录
+     *
+     * @param ArrayDataIds
+     * @return
+     * @author yangyanchao
+     * @date 2016年9月5日
+     */
+    int deleteAll(String[] ArrayDataIds);
+
+    /**
+     * 帐号管理 店铺帐号列表 条件查询 - 统计
+     *
+     * @param conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年10月31日
+     */
+    List<Object> getUserWhitConditions(Object conditions);
+
+    /**
+     * 业主店铺管理列表 条件查询
+     *
+     * @param conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年10月31日
+     */
+    List<Object> getShopAccountOwnerList(Object conditions);
+
+
+    List<Object> getUserWhitConditionsOnUse(Object conditions);
+
+    /**
+     * 帐号管理 后台管理员列表
+     *
+     * @param conditions
+     * @return
+     * @author yangyanchao
+     * @date 2016年11月2日
+     */
+    List<Object> getAdminUserWhitConditions(Object conditions);
+
+    Object selectByShopId(Object record);
+
+    List<Object> getCommonUserList(Object conditions);
+
+    /**
+     * 帐号管理 店铺帐号列表 条件查询 - 统计
+     *
+     * @param conditions
+     * @return
+     * @author huangxw
+     * @date 2017年03月03日
+     */
+    List<Object> getStaffUserWhitConditions(Object conditions);
+
+    List<Object> getStaffListAll(Object conditions);
+    
+    /**
+     * 用户权限
+     * @author luhuajiang
+     * @param map
+     * @return
+     */
+	List<Map<String, Object>> getAdminUser(Map<String, ?> map);
+	
+	@Select(value="select * from as_user where account = #{account} and status=0 limit 1")
+	AsUser checkAccountExist(String account);
+
+   
+    int isAccountExistsCheck(Object conditions);
+
+    @Select(value="select * from as_user where user_id = #{userId} and as_user.status = 0")
+    AsUser findUserBySysUserId(Integer userId);
+
+    /**
+     * 账号查询用户Id
+     * @param account
+     * @return
+     * @author chenwz
+     */
+    @Select("select user_id from as_user where account=#{account} and type=0 and status=0")
+    AsUser queryByAccount(String account);
+}

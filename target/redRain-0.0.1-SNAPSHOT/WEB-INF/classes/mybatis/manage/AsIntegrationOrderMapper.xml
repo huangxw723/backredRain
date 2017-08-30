@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsIntegrationOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsIntegrationOrder" >
+    <id column="integration_order_id" property="integrationOrderId" jdbcType="INTEGER" />
+    <result column="order_money" property="orderMoney" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="is_comment" property="isComment" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integration_order_id, order_money, create_time, update_time, order_id, order_status, 
+    is_comment, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_integration_order
+    where integration_order_id = #{integrationOrderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_integration_order
+    where integration_order_id = #{integrationOrderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsIntegrationOrder" >
+    insert into as_integration_order (integration_order_id, order_money, create_time, 
+      update_time, order_id, order_status, 
+      is_comment, is_delete)
+    values (#{integrationOrderId,jdbcType=INTEGER}, #{orderMoney,jdbcType=DECIMAL}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER}, #{orderStatus,jdbcType=INTEGER}, 
+      #{isComment,jdbcType=INTEGER}, #{isDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsIntegrationOrder" >
+    insert into as_integration_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="integrationOrderId != null" >
+        integration_order_id,
+      </if>
+      <if test="orderMoney != null" >
+        order_money,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="isComment != null" >
+        is_comment,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="integrationOrderId != null" >
+        #{integrationOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderMoney != null" >
+        #{orderMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsIntegrationOrder" >
+    update as_integration_order
+    <set >
+      <if test="orderMoney != null" >
+        order_money = #{orderMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        is_comment = #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where integration_order_id = #{integrationOrderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsIntegrationOrder" >
+    update as_integration_order
+    set order_money = #{orderMoney,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=INTEGER},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      is_comment = #{isComment,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER}
+    where integration_order_id = #{integrationOrderId,jdbcType=INTEGER}
+  </update>
+</mapper>

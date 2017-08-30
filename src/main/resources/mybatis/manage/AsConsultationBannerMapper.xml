@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsConsultationBannerMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationBanner" >
+    <id column="consultation_banner_id" property="consultationBannerId" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="consultation_id" property="consultationId" jdbcType="INTEGER" />
+    <result column="bannner_img" property="bannnerImg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    consultation_banner_id, type_id, consultation_id, bannner_img
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_banner
+    where consultation_banner_id = #{consultationBannerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_consultation_banner
+    where consultation_banner_id = #{consultationBannerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationBanner" >
+    insert into as_consultation_banner (consultation_banner_id, type_id, consultation_id, 
+      bannner_img)
+    values (#{consultationBannerId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{consultationId,jdbcType=INTEGER}, 
+      #{bannnerImg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationBanner" >
+    insert into as_consultation_banner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="consultationBannerId != null" >
+        consultation_banner_id,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="consultationId != null" >
+        consultation_id,
+      </if>
+      <if test="bannnerImg != null" >
+        bannner_img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="consultationBannerId != null" >
+        #{consultationBannerId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationId != null" >
+        #{consultationId,jdbcType=INTEGER},
+      </if>
+      <if test="bannnerImg != null" >
+        #{bannnerImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationBanner" >
+    update as_consultation_banner
+    <set >
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationId != null" >
+        consultation_id = #{consultationId,jdbcType=INTEGER},
+      </if>
+      <if test="bannnerImg != null" >
+        bannner_img = #{bannnerImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consultation_banner_id = #{consultationBannerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationBanner" >
+    update as_consultation_banner
+    set type_id = #{typeId,jdbcType=INTEGER},
+      consultation_id = #{consultationId,jdbcType=INTEGER},
+      bannner_img = #{bannnerImg,jdbcType=VARCHAR}
+    where consultation_banner_id = #{consultationBannerId,jdbcType=INTEGER}
+  </update>
+</mapper>

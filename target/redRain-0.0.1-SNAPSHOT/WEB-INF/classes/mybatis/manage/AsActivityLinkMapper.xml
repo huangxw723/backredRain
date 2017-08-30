@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityLinkMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityLink" >
+    <id column="activity_link_id" property="activityLinkId" jdbcType="INTEGER" />
+    <result column="link_name" property="linkName" jdbcType="VARCHAR" />
+    <result column="link_type" property="linkType" jdbcType="INTEGER" />
+    <result column="range_type" property="rangeType" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="per_count" property="perCount" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="WithName" type="com.aoshi.domain.AsActivityLink" extends="BaseResultMap" >
+    <result column="cityName" property="cityName" jdbcType="VARCHAR" />
+    <result column="disName" property="disName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_link_id, link_name, link_type, range_type, item_id, link, per_count, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_link
+    where activity_link_id = #{activityLinkId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_link
+    where activity_link_id = #{activityLinkId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityLink" >
+    insert into as_activity_link (activity_link_id, link_name, link_type, 
+      range_type, item_id, link, 
+      per_count, create_time)
+    values (#{activityLinkId,jdbcType=INTEGER}, #{linkName,jdbcType=VARCHAR}, #{linkType,jdbcType=INTEGER}, 
+      #{rangeType,jdbcType=INTEGER}, #{itemId,jdbcType=INTEGER}, #{link,jdbcType=VARCHAR}, 
+      #{perCount,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityLink" >
+    insert into as_activity_link
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityLinkId != null" >
+        activity_link_id,
+      </if>
+      <if test="linkName != null" >
+        link_name,
+      </if>
+      <if test="linkType != null" >
+        link_type,
+      </if>
+      <if test="rangeType != null" >
+        range_type,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+      <if test="perCount != null" >
+        per_count,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityLinkId != null" >
+        #{activityLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="linkName != null" >
+        #{linkName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkType != null" >
+        #{linkType,jdbcType=INTEGER},
+      </if>
+      <if test="rangeType != null" >
+        #{rangeType,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="perCount != null" >
+        #{perCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityLink" >
+    update as_activity_link
+    <set >
+      <if test="linkName != null" >
+        link_name = #{linkName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkType != null" >
+        link_type = #{linkType,jdbcType=INTEGER},
+      </if>
+      <if test="rangeType != null" >
+        range_type = #{rangeType,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="link != null" >
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="perCount != null" >
+        per_count = #{perCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where activity_link_id = #{activityLinkId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityLink" >
+    update as_activity_link
+    set link_name = #{linkName,jdbcType=VARCHAR},
+      link_type = #{linkType,jdbcType=INTEGER},
+      range_type = #{rangeType,jdbcType=INTEGER},
+      item_id = #{itemId,jdbcType=INTEGER},
+      link = #{link,jdbcType=VARCHAR},
+      per_count = #{perCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where activity_link_id = #{activityLinkId,jdbcType=INTEGER}
+  </update>
+  <select id="queryList" parameterType="java.util.List" resultMap="WithName">
+    SELECT * FROM as_activity_link a
+    where a.link_type=1
+    <if test="rangeType != null">
+      and a.range_type = #{rangeType,jdbcType=INTEGER}
+    </if>
+    <if test="itemId != null">
+      and a.item_id = #{itemId,jdbcType=INTEGER}
+    </if>
+    <if test="linkName != null">
+      and a.link_name like CONCAT(CONCAT('%',#{linkName}),'%')
+    </if>
+    order by a.activity_link_id desc
+  </select>
+
+  <select id="couponList" parameterType="java.util.List" resultMap="WithName">
+    SELECT * FROM as_activity_link a
+    where a.link_type=2
+    <if test="rangeType != null">
+      and a.range_type = #{rangeType,jdbcType=INTEGER}
+    </if>
+    <if test="itemId != null">
+      and a.item_id = #{itemId,jdbcType=INTEGER}
+    </if>
+    <if test="linkName != null">
+      and a.link_name like CONCAT(CONCAT('%',#{linkName}),'%')
+    </if>
+    order by a.activity_link_id desc
+  </select>
+  <update id="deleteByIds">
+    delete from as_activity_link where activity_link_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="queryByTypeAnditemId" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+    select count(1)
+    from as_activity_link
+    where 1=1
+    <if test="itemId != null" >
+      and item_id = #{itemId,jdbcType=INTEGER}
+    </if>
+    <if test="typeId != null" >
+      and range_type = #{typeId,jdbcType=INTEGER}
+    </if>
+    <if test="linkType != null" >
+      and link_type = #{linkType,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

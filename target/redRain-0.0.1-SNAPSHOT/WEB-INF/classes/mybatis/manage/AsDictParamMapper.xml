@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsDictParamMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsDictParam" >
+    <id column="dict_param_id" property="dictParamId" jdbcType="INTEGER" />
+    <result column="dict_code" property="dictCode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsDictParam" extends="BaseResultMap" >
+    <result column="dict_value" property="dictValue" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dict_param_id, dict_code, remark, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    dict_value
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_dict_param
+    where dict_param_id = #{dictParamId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_dict_param
+    where dict_param_id = #{dictParamId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.aoshi.domain.AsDictParam" >
+    insert into as_dict_param (dict_param_id, dict_code, remark, 
+      create_time, dict_value)
+    values (#{dictParamId,jdbcType=INTEGER}, #{dictCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{dictValue,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsDictParam" useGeneratedKeys="true" keyProperty="dictParamId">
+    insert into as_dict_param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dictParamId != null" >
+        dict_param_id,
+      </if>
+      <if test="dictCode != null" >
+        dict_code,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dictValue != null" >
+        dict_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dictParamId != null" >
+        #{dictParamId,jdbcType=INTEGER},
+      </if>
+      <if test="dictCode != null" >
+        #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        #{dictValue,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsDictParam" >
+    update as_dict_param
+    <set >
+      <if test="dictCode != null" >
+        dict_code = #{dictCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null" >
+        dict_value = #{dictValue,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where dict_param_id = #{dictParamId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsDictParam" >
+    update as_dict_param
+    set dict_code = #{dictCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=LONGVARCHAR}
+    where dict_param_id = #{dictParamId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsDictParam" >
+    update as_dict_param
+    set dict_code = #{dictCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where dict_param_id = #{dictParamId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查找指定配置 -->
+  <select id="findByKeyCode" resultType="java.lang.String" >
+    select dict_value from as_dict_param
+    where 
+    dict_code = #{dictCode}
+  </select>
+  
+    <!-- 查找指定配置 -->
+  <select id="findAllByKeyCode" resultMap="ResultMapWithBLOBs">
+    select *
+    from as_dict_param
+    where 
+    dict_code = #{dictCode}
+  </select>
+  
+  
+  <select id="queryList" parameterType="com.aoshi.domain.AsDictParam" resultMap="ResultMapWithBLOBs">
+	select *
+    from as_dict_param
+    where 
+    dict_code = #{dictCode}
+  </select>
+
+
+  <!--修改兑换金额比后，更新积分商品的积分值-->
+  <update id="updateSalesPrice" parameterType="java.lang.Integer">
+      UPDATE as_goods set sales_price = (market_price * #{moneyPointValue})
+  </update>
+
+  
+</mapper>

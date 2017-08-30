@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsProductMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsProduct" >
+    <id column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="product_sn" property="productSn" jdbcType="VARCHAR" />
+    <result column="product_store" property="productStore" jdbcType="INTEGER" />
+    <result column="product_price" property="productPrice" jdbcType="DECIMAL" />
+    <result column="goods_attr" property="goodsAttr" jdbcType="LONGVARCHAR" />
+    <result column="attr_name" property="attrName" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    product_id, goods_id, product_sn, product_store, product_price,goods_attr, attr_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsProduct" >
+    insert into as_product (product_id, goods_id, product_sn, 
+      product_store, product_price, goods_attr, 
+      attr_name)
+    values (#{productId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{productSn,jdbcType=VARCHAR}, 
+      #{productStore,jdbcType=INTEGER}, #{productPrice,jdbcType=DECIMAL}, #{goodsAttr,jdbcType=LONGVARCHAR}, 
+      #{attrName,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsProduct" useGeneratedKeys="true" keyProperty="productId">
+    insert into as_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="productSn != null" >
+        product_sn,
+      </if>
+      <if test="productStore != null" >
+        product_store,
+      </if>
+      <if test="productPrice != null" >
+        product_price,
+      </if>
+      <if test="goodsAttr != null" >
+        goods_attr,
+      </if>
+      <if test="attrName != null" >
+        attr_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="productSn != null" >
+        #{productSn,jdbcType=VARCHAR},
+      </if>
+      <if test="productStore != null" >
+        #{productStore,jdbcType=INTEGER},
+      </if>
+      <if test="productPrice != null" >
+        #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsAttr != null" >
+        #{goodsAttr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attrName != null" >
+        #{attrName,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsProduct" >
+    update as_product
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="productSn != null" >
+        product_sn = #{productSn,jdbcType=VARCHAR},
+      </if>
+      <if test="productStore != null" >
+        product_store = #{productStore,jdbcType=INTEGER},
+      </if>
+      <if test="productPrice != null" >
+        product_price = #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsAttr != null" >
+        goods_attr = #{goodsAttr,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="attrName != null" >
+        attr_name = #{attrName,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsProduct" >
+    update as_product
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      product_sn = #{productSn,jdbcType=VARCHAR},
+      product_store = #{productStore,jdbcType=INTEGER},
+      product_price = #{productPrice,jdbcType=DECIMAL},
+      goods_attr = #{goodsAttr,jdbcType=LONGVARCHAR},
+      attr_name = #{attrName,jdbcType=LONGVARCHAR}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

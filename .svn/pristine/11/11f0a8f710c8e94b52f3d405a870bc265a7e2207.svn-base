@@ -1,0 +1,33 @@
+package com.aoshi.domain;
+
+public class AsOwnerUserRelation {
+    private Integer ownerUserRelationId;
+
+    private Integer shopOwnerInfoId;
+
+    private Integer userId;
+
+    public Integer getOwnerUserRelationId() {
+        return ownerUserRelationId;
+    }
+
+    public void setOwnerUserRelationId(Integer ownerUserRelationId) {
+        this.ownerUserRelationId = ownerUserRelationId;
+    }
+
+    public Integer getShopOwnerInfoId() {
+        return shopOwnerInfoId;
+    }
+
+    public void setShopOwnerInfoId(Integer shopOwnerInfoId) {
+        this.shopOwnerInfoId = shopOwnerInfoId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+}

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsModuleShopMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsModuleShop" >
+    <id column="module_shop_id" property="moduleShopId" jdbcType="INTEGER" />
+    <result column="shop_image" property="shopImage" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="navigation_id" property="navigationId" jdbcType="VARCHAR" />
+    <result column="business_module_id" property="businessModuleId" jdbcType="INTEGER" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    module_shop_id, shop_image, img_url, shop_logo, shop_name, location,
+    navigation_id, business_module_id, major
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_module_shop
+    where module_shop_id = #{moduleShopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_module_shop
+    where module_shop_id = #{moduleShopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsModuleShop" >
+    insert into as_module_shop (module_shop_id, shop_image, img_url, 
+      shop_logo, shop_name,
+      location, navigation_id, business_module_id, 
+      major)
+    values (#{moduleShopId,jdbcType=INTEGER}, #{shopImage,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{shopLogo,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{navigationId,jdbcType=VARCHAR}, #{businessModuleId,jdbcType=INTEGER}, 
+      #{major,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsModuleShop" >
+    insert into as_module_shop
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="moduleShopId != null" >
+        module_shop_id,
+      </if>
+      <if test="shopImage != null" >
+        shop_image,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="navigationId != null" >
+        navigation_id,
+      </if>
+      <if test="businessModuleId != null" >
+        business_module_id,
+      </if>
+      <if test="major != null" >
+        major,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="moduleShopId != null" >
+        #{moduleShopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopImage != null" >
+        #{shopImage,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="navigationId != null" >
+        #{navigationId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessModuleId != null" >
+        #{businessModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsModuleShop" >
+    update as_module_shop
+    <set >
+      <if test="shopImage != null" >
+        shop_image = #{shopImage,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="navigationId != null" >
+        navigation_id = #{navigationId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessModuleId != null" >
+        business_module_id = #{businessModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where module_shop_id = #{moduleShopId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsModuleShop" >
+    update as_module_shop
+    set shop_image = #{shopImage,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      navigation_id = #{navigationId,jdbcType=VARCHAR},
+      business_module_id = #{businessModuleId,jdbcType=INTEGER},
+      major = #{major,jdbcType=VARCHAR}
+    where module_shop_id = #{moduleShopId,jdbcType=INTEGER}
+  </update>
+</mapper>

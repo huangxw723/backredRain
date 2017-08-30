@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpRecordVisitMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpRecordVisit" >
+    <id column="record_visit_id" property="recordVisitId" jdbcType="INTEGER" />
+    <result column="visit_count" property="visitCount" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="screen_domain_id" property="screenDomainId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    record_visit_id, visit_count, shop_id, screen_domain_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_record_visit
+    where record_visit_id = #{recordVisitId,jdbcType=INTEGER}
+  </select>
+  <select id="listRecordy" resultType="String"  >
+    SELECT
+	v.visit_count
+	FROM
+	as_yp_record_visit v
+	JOIN as_shop shop ON v.shop_id = shop.shop_id
+	JOIN as_yp_screen_domain domain ON v.screen_domain_id = domain.screen_domain_id
+	where 
+	1=1
+    <if test="startTime != null and startTime != '' ">
+	and v.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and v.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="shopId != null and shopId !=''" >
+    and v.shop_id = #{shopId,jdbcType=INTEGER}
+    </if>
+    <if test="domainId != null and domainId !=''" >
+    and v.screen_domain_id = #{domainId}
+    </if>
+  </select>
+  <select id="listRecordx" resultType="String"  >
+    SELECT
+	v.create_time
+	FROM
+	as_yp_record_visit v
+	JOIN as_shop shop ON v.shop_id = shop.shop_id
+	JOIN as_yp_screen_domain domain ON v.screen_domain_id = domain.screen_domain_id
+	where 
+	1=1
+    <if test="startTime != null and startTime != '' ">
+	and v.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and v.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="shopId != null and shopId !=''" >
+    and v.shop_id = #{shopId,jdbcType=INTEGER}
+    </if>
+    <if test="domainId != null and domainId !=''" >
+    and v.screen_domain_id = #{domainId}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_record_visit
+    where record_visit_id = #{recordVisitId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpRecordVisit" >
+    insert into as_yp_record_visit (record_visit_id, visit_count, shop_id, 
+      screen_domain_id, create_time)
+    values (#{recordVisitId,jdbcType=INTEGER}, #{visitCount,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{screenDomainId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpRecordVisit" useGeneratedKeys="true" keyProperty="recordVisitId">
+    insert into as_yp_record_visit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordVisitId != null" >
+        record_visit_id,
+      </if>
+      <if test="visitCount != null" >
+        visit_count,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordVisitId != null" >
+        #{recordVisitId,jdbcType=INTEGER},
+      </if>
+      <if test="visitCount != null" >
+        #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="screenDomainId != null" >
+        #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpRecordVisit" >
+    update as_yp_record_visit
+    <set >
+      <if test="visitCount != null" >
+        visit_count = #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where record_visit_id = #{recordVisitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpRecordVisit" >
+    update as_yp_record_visit
+    set visit_count = #{visitCount,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where record_visit_id = #{recordVisitId,jdbcType=INTEGER}
+  </update>
+</mapper>

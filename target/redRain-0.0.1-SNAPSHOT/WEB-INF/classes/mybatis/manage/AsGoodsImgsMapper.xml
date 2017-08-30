@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsGoodsImgsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsGoodsImgs" >
+    <id column="goods_imgs_id" property="goodsImgsId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="img_width" property="imgWidth" jdbcType="INTEGER" />
+    <result column="img_height" property="imgHeight" jdbcType="INTEGER" />
+    <result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR" />
+    <result column="thumb_width" property="thumbWidth" jdbcType="INTEGER" />
+    <result column="thumb_height" property="thumbHeight" jdbcType="INTEGER" />
+    <result column="goods_attr_id" property="goodsAttrId" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    goods_imgs_id, goods_id, img_url, img_width, img_height, thumb_url, thumb_width, 
+    thumb_height, goods_attr_id, sort_order
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_goods_imgs
+    where goods_imgs_id = #{goodsImgsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_goods_imgs
+    where goods_imgs_id = #{goodsImgsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsGoodsImgs" >
+    insert into as_goods_imgs (goods_imgs_id, goods_id, img_url, 
+      img_width, img_height, thumb_url, 
+      thumb_width, thumb_height, goods_attr_id, 
+      sort_order)
+    values (#{goodsImgsId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{imgWidth,jdbcType=INTEGER}, #{imgHeight,jdbcType=INTEGER}, #{thumbUrl,jdbcType=VARCHAR}, 
+      #{thumbWidth,jdbcType=INTEGER}, #{thumbHeight,jdbcType=INTEGER}, #{goodsAttrId,jdbcType=INTEGER}, 
+      #{sortOrder,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsGoodsImgs" >
+    insert into as_goods_imgs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsImgsId != null" >
+        goods_imgs_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="imgWidth != null" >
+        img_width,
+      </if>
+      <if test="imgHeight != null" >
+        img_height,
+      </if>
+      <if test="thumbUrl != null" >
+        thumb_url,
+      </if>
+      <if test="thumbWidth != null" >
+        thumb_width,
+      </if>
+      <if test="thumbHeight != null" >
+        thumb_height,
+      </if>
+      <if test="goodsAttrId != null" >
+        goods_attr_id,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsImgsId != null" >
+        #{goodsImgsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgWidth != null" >
+        #{imgWidth,jdbcType=INTEGER},
+      </if>
+      <if test="imgHeight != null" >
+        #{imgHeight,jdbcType=INTEGER},
+      </if>
+      <if test="thumbUrl != null" >
+        #{thumbUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbWidth != null" >
+        #{thumbWidth,jdbcType=INTEGER},
+      </if>
+      <if test="thumbHeight != null" >
+        #{thumbHeight,jdbcType=INTEGER},
+      </if>
+      <if test="goodsAttrId != null" >
+        #{goodsAttrId,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsGoodsImgs" >
+    update as_goods_imgs
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgWidth != null" >
+        img_width = #{imgWidth,jdbcType=INTEGER},
+      </if>
+      <if test="imgHeight != null" >
+        img_height = #{imgHeight,jdbcType=INTEGER},
+      </if>
+      <if test="thumbUrl != null" >
+        thumb_url = #{thumbUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbWidth != null" >
+        thumb_width = #{thumbWidth,jdbcType=INTEGER},
+      </if>
+      <if test="thumbHeight != null" >
+        thumb_height = #{thumbHeight,jdbcType=INTEGER},
+      </if>
+      <if test="goodsAttrId != null" >
+        goods_attr_id = #{goodsAttrId,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+    </set>
+    where goods_imgs_id = #{goodsImgsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsGoodsImgs" >
+    update as_goods_imgs
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      img_width = #{imgWidth,jdbcType=INTEGER},
+      img_height = #{imgHeight,jdbcType=INTEGER},
+      thumb_url = #{thumbUrl,jdbcType=VARCHAR},
+      thumb_width = #{thumbWidth,jdbcType=INTEGER},
+      thumb_height = #{thumbHeight,jdbcType=INTEGER},
+      goods_attr_id = #{goodsAttrId,jdbcType=INTEGER},
+      sort_order = #{sortOrder,jdbcType=INTEGER}
+    where goods_imgs_id = #{goodsImgsId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteGoodsImgAlls" parameterType="java.lang.Integer" >
+    delete from as_goods_imgs
+    where 1=1 and goods_attr_id is null and  goods_imgs_id in
+    <foreach item="id" index="index" collection="array" open="(" separator="," close=")">
+     #{id}
+    </foreach>
+  </delete>
+  
+  <select id="selectThumbByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+	SELECT i.*,a.attr_value as colour
+	FROM
+	as_goods_imgs i
+	LEFT JOIN as_goods_attr a ON
+	i.goods_attr_id=a.goods_attr_id
+	WHERE 1=1 and i.img_url is  null and
+	i.goods_id = #{goodsId}
+  	
+  </select>
+  
+</mapper>

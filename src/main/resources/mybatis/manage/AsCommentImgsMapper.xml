@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCommentImgsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCommentImgs" >
+    <id column="comment_imgs_id" property="commentImgsId" jdbcType="INTEGER" />
+    <result column="comment_id" property="commentId" jdbcType="INTEGER" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="img_width" property="imgWidth" jdbcType="INTEGER" />
+    <result column="img_height" property="imgHeight" jdbcType="INTEGER" />
+    <result column="thumb_url" property="thumbUrl" jdbcType="VARCHAR" />
+    <result column="thumb_width" property="thumbWidth" jdbcType="INTEGER" />
+    <result column="thumb_height" property="thumbHeight" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    comment_imgs_id, comment_id, img_url, img_width, img_height, thumb_url, thumb_width, 
+    thumb_height
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_comment_imgs
+    where comment_imgs_id = #{commentImgsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_comment_imgs
+    where comment_imgs_id = #{commentImgsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCommentImgs" >
+    insert into as_comment_imgs (comment_imgs_id, comment_id, img_url, 
+      img_width, img_height, thumb_url, 
+      thumb_width, thumb_height)
+    values (#{commentImgsId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{imgWidth,jdbcType=INTEGER}, #{imgHeight,jdbcType=INTEGER}, #{thumbUrl,jdbcType=VARCHAR}, 
+      #{thumbWidth,jdbcType=INTEGER}, #{thumbHeight,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCommentImgs" >
+    insert into as_comment_imgs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="commentImgsId != null" >
+        comment_imgs_id,
+      </if>
+      <if test="commentId != null" >
+        comment_id,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="imgWidth != null" >
+        img_width,
+      </if>
+      <if test="imgHeight != null" >
+        img_height,
+      </if>
+      <if test="thumbUrl != null" >
+        thumb_url,
+      </if>
+      <if test="thumbWidth != null" >
+        thumb_width,
+      </if>
+      <if test="thumbHeight != null" >
+        thumb_height,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="commentImgsId != null" >
+        #{commentImgsId,jdbcType=INTEGER},
+      </if>
+      <if test="commentId != null" >
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgWidth != null" >
+        #{imgWidth,jdbcType=INTEGER},
+      </if>
+      <if test="imgHeight != null" >
+        #{imgHeight,jdbcType=INTEGER},
+      </if>
+      <if test="thumbUrl != null" >
+        #{thumbUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbWidth != null" >
+        #{thumbWidth,jdbcType=INTEGER},
+      </if>
+      <if test="thumbHeight != null" >
+        #{thumbHeight,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCommentImgs" >
+    update as_comment_imgs
+    <set >
+      <if test="commentId != null" >
+        comment_id = #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgWidth != null" >
+        img_width = #{imgWidth,jdbcType=INTEGER},
+      </if>
+      <if test="imgHeight != null" >
+        img_height = #{imgHeight,jdbcType=INTEGER},
+      </if>
+      <if test="thumbUrl != null" >
+        thumb_url = #{thumbUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbWidth != null" >
+        thumb_width = #{thumbWidth,jdbcType=INTEGER},
+      </if>
+      <if test="thumbHeight != null" >
+        thumb_height = #{thumbHeight,jdbcType=INTEGER},
+      </if>
+    </set>
+    where comment_imgs_id = #{commentImgsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCommentImgs" >
+    update as_comment_imgs
+    set comment_id = #{commentId,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      img_width = #{imgWidth,jdbcType=INTEGER},
+      img_height = #{imgHeight,jdbcType=INTEGER},
+      thumb_url = #{thumbUrl,jdbcType=VARCHAR},
+      thumb_width = #{thumbWidth,jdbcType=INTEGER},
+      thumb_height = #{thumbHeight,jdbcType=INTEGER}
+    where comment_imgs_id = #{commentImgsId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsDifferIndustryMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsDifferIndustry" >
+    <id column="differ_industry_id" property="differIndustryId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    differ_industry_id, shop_id, category_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_differ_industry
+    where differ_industry_id = #{differIndustryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_differ_industry
+    where differ_industry_id = #{differIndustryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsDifferIndustry" >
+    insert into as_differ_industry (differ_industry_id, shop_id, category_id
+      )
+    values (#{differIndustryId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsDifferIndustry" >
+    insert into as_differ_industry
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="differIndustryId != null" >
+        differ_industry_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="differIndustryId != null" >
+        #{differIndustryId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsDifferIndustry" >
+    update as_differ_industry
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where differ_industry_id = #{differIndustryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsDifferIndustry" >
+    update as_differ_industry
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER}
+    where differ_industry_id = #{differIndustryId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getDifferIndustryListByShopId" resultMap="BaseResultMap">
+  	 SELECT * FROM as_differ_industry WHERE shop_id = #{shopId} 
+  </select>
+  
+  <delete id="deleteByShopIdAndCategoryId" parameterType="java.lang.Integer" >
+    delete from as_differ_industry
+    where shop_id = #{shopId,jdbcType=INTEGER} and category_id = #{categoryId,jdbcType=INTEGER}
+  </delete>
+
+  <select id="selectByShopIdAndCategoryId" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM as_differ_industry WHERE shop_id = #{shopId,jdbcType=INTEGER} AND category_id = #{categoryId,jdbcType=INTEGER}
+  </select>
+
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPopularTagsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPopularTags" >
+    <id column="popular_tags_id" property="popularTagsId" jdbcType="INTEGER" />
+    <result column="tags_name" property="tagsName" jdbcType="VARCHAR" />
+    <result column="tags_type" property="tagsType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    popular_tags_id, tags_name, tags_type, status, sort_order, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_popular_tags
+    where popular_tags_id = #{popularTagsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_popular_tags
+    where popular_tags_id = #{popularTagsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPopularTags" >
+    insert into as_popular_tags (popular_tags_id, tags_name, tags_type, 
+      status, sort_order, create_time
+      )
+    values (#{popularTagsId,jdbcType=INTEGER}, #{tagsName,jdbcType=VARCHAR}, #{tagsType,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{sortOrder,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPopularTags" >
+    insert into as_popular_tags
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="popularTagsId != null" >
+        popular_tags_id,
+      </if>
+      <if test="tagsName != null" >
+        tags_name,
+      </if>
+      <if test="tagsType != null" >
+        tags_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="popularTagsId != null" >
+        #{popularTagsId,jdbcType=INTEGER},
+      </if>
+      <if test="tagsName != null" >
+        #{tagsName,jdbcType=VARCHAR},
+      </if>
+      <if test="tagsType != null" >
+        #{tagsType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPopularTags" >
+    update as_popular_tags
+    <set >
+      <if test="tagsName != null" >
+        tags_name = #{tagsName,jdbcType=VARCHAR},
+      </if>
+      <if test="tagsType != null" >
+        tags_type = #{tagsType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where popular_tags_id = #{popularTagsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPopularTags" >
+    update as_popular_tags
+    set tags_name = #{tagsName,jdbcType=VARCHAR},
+      tags_type = #{tagsType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      sort_order = #{sortOrder,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where popular_tags_id = #{popularTagsId,jdbcType=INTEGER}
+  </update>
+   <select id="listAll" resultMap="BaseRowMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_popular_tags
+    where 1=1
+    <if test="keyWord != null and keyWord != ''">          
+        and tags_name LIKE concat(concat('%',#{keyWord}),'%')        
+    </if>
+    <if test="tagsType !=null and tagsType !=''">
+        and tags_type=#{tagsType}
+    </if>
+    <if test="status !=null and status !=''">
+        and status=#{status}
+    </if>
+        order by create_time desc
+  </select>
+</mapper>

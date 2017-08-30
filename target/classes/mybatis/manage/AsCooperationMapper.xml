@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCooperationMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCooperation" >
+    <id column="cooperation_id" property="cooperationId" jdbcType="INTEGER" />
+    <result column="active_id" property="activeId" jdbcType="INTEGER" />
+    <result column="unactive_id" property="unactiveId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cooperation_id, active_id, unactive_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_cooperation
+    where cooperation_id = #{cooperationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_cooperation
+    where cooperation_id = #{cooperationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCooperation" useGeneratedKeys="true" keyProperty="cooperationId" >
+    insert into as_cooperation (cooperation_id, active_id, unactive_id
+      )
+    values (#{cooperationId,jdbcType=INTEGER}, #{activeId,jdbcType=INTEGER}, #{unactiveId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCooperation" useGeneratedKeys="true" keyProperty="cooperationId" >
+    insert into as_cooperation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cooperationId != null" >
+        cooperation_id,
+      </if>
+      <if test="activeId != null" >
+        active_id,
+      </if>
+      <if test="unactiveId != null" >
+        unactive_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cooperationId != null" >
+        #{cooperationId,jdbcType=INTEGER},
+      </if>
+      <if test="activeId != null" >
+        #{activeId,jdbcType=INTEGER},
+      </if>
+      <if test="unactiveId != null" >
+        #{unactiveId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCooperation" >
+    update as_cooperation
+    <set >
+      <if test="activeId != null" >
+        active_id = #{activeId,jdbcType=INTEGER},
+      </if>
+      <if test="unactiveId != null" >
+        unactive_id = #{unactiveId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cooperation_id = #{cooperationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCooperation" >
+    update as_cooperation
+    set active_id = #{activeId,jdbcType=INTEGER},
+      unactive_id = #{unactiveId,jdbcType=INTEGER}
+    where cooperation_id = #{cooperationId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByPrimaryKeys" parameterType="java.lang.String" >
+    delete from as_cooperation
+    where cooperation_id in
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <resultMap extends="BaseResultMap" id="storeResultMap" type="com.aoshi.domain.AsCooperation">
+    <association property="store" javaType="com.aoshi.domain.AsStore">
+      <id column="store_id" property="storeId" jdbcType="INTEGER" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR"  />
+      <result column="lng" property="lng" jdbcType="VARCHAR"  />
+    <result column="lat" property="lat" jdbcType="VARCHAR"  />
+    </association>
+  </resultMap>
+  
+  
+
+  <select id="selectByCooperation" resultMap="storeResultMap" parameterType="pd" >
+    select 
+    	*
+    from as_store s
+    left join as_cooperation c on s.store_id = c.unactive_id 
+    left join as_business_district d on s.business_district_id = d.business_district_id
+    where  c.active_id = #{storeId} 
+    <if test="keyWord != null and keyWord != ''">
+      and ( s.name like concat(concat('%', #{keyWord}),'%')
+      		or s.store_id like concat(concat('%', #{keyWord}),'%')
+      )
+    </if>
+    <if test="provinceId != null and provinceId != ''">
+      	and d.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and d.city_id = #{cityId}
+      </if>
+
+  </select>
+  
+  <resultMap extends="BaseResultMap" id="shopResultMap" type="com.aoshi.domain.AsCooperation">
+    <association property="shop" javaType="com.aoshi.domain.AsShop">
+      <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="address" property="address" jdbcType="VARCHAR"  />
+      <result column="type" property="type" jdbcType="VARCHAR"  />
+      <result column="lng" property="lng" jdbcType="VARCHAR"  />
+      <result column="lat" property="lat" jdbcType="VARCHAR"  />
+    </association>
+  </resultMap>
+
+  <resultMap extends="shopResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+
+  <!--获取已经合作战略的商户  -->
+  <select id="selectShopByCooperation" resultMap="BaseRowMap"  >
+    select 
+    	*
+    from as_shop s
+    left join as_cooperation c on s.shop_id = c.unactive_id 
+    left join as_shop_owner_info own on s.shop_id = own.shop_id 
+  	left join as_user `user` on own.user_id = `user`.user_id
+    where 1=1 and  `user`.`status` = 0 and  c.active_id = #{shopId} 
+    <if test="keyWord != null and keyWord != ''">
+      and ( s.name like concat(concat('%', #{keyWord}),'%')
+      		or s.shop_id like concat(concat('%', #{keyWord}),'%')
+      )
+    </if>
+    <if test="provinceId != null and provinceId != ''">
+      	and s.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and s.city_id = #{cityId}
+      </if>
+  </select>
+
+</mapper>

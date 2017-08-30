@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpUserTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpUserTemplate" >
+    <id column="user_template_id" property="userTemplateId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="template_id" property="templateId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_home" property="isHome" jdbcType="INTEGER" />
+    <result column="parent_user_module_id" property="parentUserModuleId" jdbcType="INTEGER" />
+    <result column="parent_user_template_id" property="parentUserTemplateId" jdbcType="INTEGER" />
+    <result column="root_user_template_id" property="rootUserTemplateId" jdbcType="INTEGER" />
+    <result column="is_business" property="isBusiness" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="preview" property="preview" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_template_id, name, template_id, user_id, status, is_home, parent_user_module_id, 
+    parent_user_template_id, root_user_template_id, is_business, create_time, path, preview
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_user_template
+    where user_template_id = #{userTemplateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_user_template
+    where user_template_id = #{userTemplateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpUserTemplate" >
+    insert into as_yp_user_template (user_template_id, name, template_id, 
+      user_id, status, is_home, 
+      parent_user_module_id, parent_user_template_id, 
+      root_user_template_id, is_business, create_time, 
+      path, preview)
+    values (#{userTemplateId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{templateId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{isHome,jdbcType=INTEGER}, 
+      #{parentUserModuleId,jdbcType=INTEGER}, #{parentUserTemplateId,jdbcType=INTEGER}, 
+      #{rootUserTemplateId,jdbcType=INTEGER}, #{isBusiness,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{path,jdbcType=VARCHAR}, #{preview,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpUserTemplate" useGeneratedKeys="true" keyProperty="userTemplateId">
+    insert into as_yp_user_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userTemplateId != null" >
+        user_template_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isHome != null" >
+        is_home,
+      </if>
+      <if test="parentUserModuleId != null" >
+        parent_user_module_id,
+      </if>
+      <if test="parentUserTemplateId != null" >
+        parent_user_template_id,
+      </if>
+      <if test="rootUserTemplateId != null" >
+        root_user_template_id,
+      </if>
+      <if test="isBusiness != null" >
+        is_business,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="preview != null" >
+        preview,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userTemplateId != null" >
+        #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isHome != null" >
+        #{isHome,jdbcType=INTEGER},
+      </if>
+      <if test="parentUserModuleId != null" >
+        #{parentUserModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="parentUserTemplateId != null" >
+        #{parentUserTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="rootUserTemplateId != null" >
+        #{rootUserTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="isBusiness != null" >
+        #{isBusiness,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="preview != null" >
+        #{preview,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpUserTemplate" >
+    update as_yp_user_template
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        template_id = #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isHome != null" >
+        is_home = #{isHome,jdbcType=INTEGER},
+      </if>
+      <if test="parentUserModuleId != null" >
+        parent_user_module_id = #{parentUserModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="parentUserTemplateId != null" >
+        parent_user_template_id = #{parentUserTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="rootUserTemplateId != null" >
+        root_user_template_id = #{rootUserTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="isBusiness != null" >
+        is_business = #{isBusiness,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="preview != null" >
+        preview = #{preview,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_template_id = #{userTemplateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpUserTemplate" >
+    update as_yp_user_template
+    set name = #{name,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      is_home = #{isHome,jdbcType=INTEGER},
+      parent_user_module_id = #{parentUserModuleId,jdbcType=INTEGER},
+      parent_user_template_id = #{parentUserTemplateId,jdbcType=INTEGER},
+      root_user_template_id = #{rootUserTemplateId,jdbcType=INTEGER},
+      is_business = #{isBusiness,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      preview = #{preview,jdbcType=VARCHAR}
+    where user_template_id = #{userTemplateId,jdbcType=INTEGER}
+  </update>
+  <select id="getUserTemplateByPrimaryKey" parameterType="com.aoshi.domain.AsYpUserTemplate" resultMap="BaseResultMap">
+  	select * from as_yp_user_template 
+  	where user_template_id = #{userTemplateId}
+  </select>
+  <select id="selectByParentUserTemplateId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	SELECT
+		*
+	FROM
+		as_yp_user_template t left
+	JOIN as_yp_user_module m ON t.parent_user_module_id = m.user_module_id
+	WHERE
+		parent_user_template_id = #{ParentUserTemplateId} 
+		ORDER BY m.position asc
+ </select>
+</mapper>

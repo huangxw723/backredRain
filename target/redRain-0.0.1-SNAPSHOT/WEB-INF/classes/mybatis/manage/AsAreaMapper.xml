@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsArea" >
+    <id column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <association property="province" javaType="com.aoshi.domain.AsProvince">
+      <id column="province_id" property="provinceId" jdbcType="INTEGER" />
+      <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    </association>
+    <association property="city" javaType="com.aoshi.domain.AsCity">
+      <id column="city_id" property="cityId" jdbcType="INTEGER" />
+      <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    area_id, area_name, province_id, city_id
+  </sql>
+  <select id="selectByAttr" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+    area_id, area_name, a.province_id, a.city_id, province_name, city_name
+    from as_area a
+    left join as_province b on a.province_id = b.province_id
+    left join as_city c on a.city_id = c.city_id
+    <where>
+      <if test="keyWord != null and keyWord != ''">
+      	area_name like concat(concat('%', #{keyWord}),'%')
+      </if>
+      <if test="provinceId != null and provinceId != ''">
+      	and a.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and a.city_id = #{cityId}
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_area
+    where area_id = #{areaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_area
+    where area_id = #{areaId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.lang.String" >
+    delete from as_area
+    where area_id in
+      <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsArea" useGeneratedKeys="true" keyProperty="areaId" >
+    insert into as_area (area_name, province_id, 
+      city_id)
+    values (#{areaName,jdbcType=VARCHAR}, #{provinceId,jdbcType=INTEGER}, 
+      #{cityId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsArea" >
+    insert into as_area
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="areaName != null" >
+        area_name,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsArea" >
+    update as_area
+    <set >
+      <if test="areaName != null" >
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where area_id = #{areaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsArea" >
+    update as_area
+    set area_name = #{areaName,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER}
+    where area_id = #{areaId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

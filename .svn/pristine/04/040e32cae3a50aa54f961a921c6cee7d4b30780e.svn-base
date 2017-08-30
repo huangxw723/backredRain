@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityCode" >
+    <id column="activity_code_id" property="activityCodeId" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="prize_id" property="prizeId" jdbcType="INTEGER" />
+    <result column="interval" property="interval" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_code_id, code, status, create_time, user_id, prize_id, interval
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_code
+    where activity_code_id = #{activityCodeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_code
+    where activity_code_id = #{activityCodeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityCode" >
+    insert into as_activity_code (activity_code_id, code, status, 
+      create_time, user_id, prize_id, 
+      interval)
+    values (#{activityCodeId,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{prizeId,jdbcType=INTEGER}, 
+      #{interval,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityCode" >
+    insert into as_activity_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityCodeId != null" >
+        activity_code_id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="prizeId != null" >
+        prize_id,
+      </if>
+      <if test="interval != null" >
+        interval,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityCodeId != null" >
+        #{activityCodeId,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeId != null" >
+        #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="interval != null" >
+        #{interval,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityCode" >
+    update as_activity_code
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeId != null" >
+        prize_id = #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="interval != null" >
+        interval = #{interval,jdbcType=INTEGER},
+      </if>
+    </set>
+    where activity_code_id = #{activityCodeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityCode" >
+    update as_activity_code
+    set code = #{code,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      prize_id = #{prizeId,jdbcType=INTEGER},
+      interval = #{interval,jdbcType=INTEGER}
+    where activity_code_id = #{activityCodeId,jdbcType=INTEGER}
+  </update>
+</mapper>

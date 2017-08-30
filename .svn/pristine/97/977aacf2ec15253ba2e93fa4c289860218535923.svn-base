@@ -1,0 +1,188 @@
+package com.aoshi.controller.manage.yp;
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.aoshi.common.asenum.UploadPathEnum;
+import com.aoshi.controller.base.BaseController;
+import com.aoshi.service.manage.yp.MessageService;
+import com.aoshi.util.Const;
+import com.aoshi.util.FtpConManager;
+import com.aoshi.util.PageData;
+import com.aoshi.util.PropertyUtils;
+
+/**
+ * 后台 [消息] 路由
+ * 
+ * @author yangyanchao
+ * @date 2016年10月18日
+ */
+@Controller
+@RequestMapping("/yp/admin/message")
+public class MessageController extends BaseController {
+
+	@Autowired
+	private MessageService messageService;
+
+	/**
+	 * 页面跳转控制
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年10月18日
+	 * @return
+	 */
+	@RequestMapping("/page")
+	public Object page() {
+		
+		return messageService.page(this);
+	}
+
+	/**
+	 * 转换图片
+	 */
+	@RequestMapping(value = "/convertImg")
+	public void convertImg(
+			@RequestParam(value = "upload", required = false) MultipartFile file,
+			HttpServletResponse response) {
+		logBefore(logger, "上传图片");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = this.getPageData();
+		response.setContentType("text/html;charset=utf-8");
+		response.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		try {
+			out = response.getWriter();
+			String fileName = file.getOriginalFilename();
+			String callback = pd.getString("CKEditorFuncNum");
+			String imgUrl = "";
+			String message = "";
+			if (StringUtils.endsWithIgnoreCase(fileName, ".jpg")
+					|| StringUtils.endsWithIgnoreCase(fileName, ".jpeg")
+					|| StringUtils.endsWithIgnoreCase(fileName, ".png")) {
+				byte[] bytes = file.getBytes();
+				BufferedImage img = ImageIO
+						.read(new ByteArrayInputStream(bytes));
+				if (img.getHeight() > 1024 || img.getWidth() > 1024) {
+					message = "图片尺寸超过限制（1024 × 1024）";
+				} else if (file.getSize() > 1024 * 1024 * 2) {
+					message = "图片大小超过限制（2MB）";
+				} else {
+					int width = img.getWidth();
+					int height = img.getHeight();
+					BufferedImage image = new BufferedImage(width, height,
+							BufferedImage.TYPE_INT_RGB);
+					Graphics g = image.createGraphics();
+					g.drawImage(img, 0, 0, width, height, null);
+					g.dispose();
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(image,
+							fileName.substring(fileName.indexOf(".") + 1), baos);
+					byte[] afterBytes = baos.toByteArray();
+					String ftpDir = UploadPathEnum.USERS.getPath();
+					String ftpFile = this.get32UUID() + ".jpg";
+					FtpConManager ftpConManager = FtpConManager.getInstance();
+					ftpConManager.login(PropertyUtils.getFTP_URL(),
+							PropertyUtils.getFTP_USERNAME(),
+							PropertyUtils.getFTP_PASS());
+					/*
+					 * ftpConManager.uploadFileByInputStream( new
+					 * ByteArrayInputStream(afterBytes), Const.FILEPATHIMGDIR +
+					 * ftpDir, ftpFile);
+					 */
+					ftpConManager.uploadFileByInputStream(
+							file.getInputStream(),
+							Const.FILEPATHIMGDIR + ftpDir, ftpFile);
+					imgUrl = PropertyUtils.getHTTP_URL() + ftpDir + "/"
+							+ ftpFile;
+				}
+			} else {
+				message = "文件格式不正确（必须为.jpg|.jpeg|.png文件）";
+			}
+			out.println("<script type='text/javascript'>");
+			out.println("window.parent.CKEDITOR.tools.callFunction(" + callback
+					+ ",'" + imgUrl + "','" + message + "')");
+			out.println("</script>");
+			out.flush();
+			mv.addObject("pd", pd);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+	}
+
+	/**
+	 * 编辑消息
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年10月18日
+	 * @param c
+	 * @return
+	 */
+	@RequestMapping("/opera")
+	@ResponseBody
+	public Object opera() {
+		return messageService.opera(this);
+	}
+
+	/**
+	 * 查询所有消息 后台管理员的菜单权限
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年10月24日
+	 * @return
+	 */
+	@RequestMapping("/getAllMessageList")
+	public Object getAllMessageList() {
+		return messageService.getAllMessageList(this);
+	}
+
+	/**
+	 * 查询所有消息 所有用户可以使用
+	 *
+	 * @author yangyanchao
+	 * @date 2016年10月24日
+	 * @return
+	 */
+	@RequestMapping("/getAllMessageListAll")
+	public Object getAllMessageListAll() {
+		return messageService.getAllMessageListAll(this);
+	}
+
+	/**
+	 * 获取服务器地址
+	 *
+	 * @author tgb 创建时间：2017年2月6日
+	 * @version 1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/getServerHost")
+	@ResponseBody
+	public Object getServerHost(HttpServletRequest request) {
+
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName()
+				+ ":" + request.getServerPort() + path + "/";
+		return basePath;
+	}
+
+}

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrize" >
+    <id column="prize_id" property="prizeId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="prize_name" property="prizeName" jdbcType="VARCHAR" />
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+    <result column="inactive_time" property="inactiveTime" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsPrize" extends="BaseResultMap" >
+    <result column="prize_descp" property="prizeDescp" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap type="com.aoshi.domain.AsPrize" id="InfoResultMapWhithCategory" extends="ResultMapWithBLOBs">
+    <association property="category" column="category_id" resultMap="com.aoshi.dao.AsYpBaseCategoryMapper.BaseResultMap" notNullColumn="id" />
+    <association property="shop" column="shop_id" resultMap="com.aoshi.dao.AsShopMapper.BaseResultMap"/>
+  </resultMap>
+   <resultMap extends="ResultMapWithBLOBs" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_id, store_id, shop_id, category_id, activity_type, status, prize_name, logo, 
+    start_time, end_time, active_time, inactive_time, sn, type, prize_config_id, price
+  </sql>
+  <sql id="Blob_Column_List" >
+    prize_descp
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_prize
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrize" >
+    insert into as_prize (prize_id, store_id, shop_id, 
+      category_id, activity_type, status, 
+      prize_name, logo, start_time, 
+      end_time, active_time, inactive_time, 
+      sn, type, prize_config_id, 
+      price, prize_descp)
+    values (#{prizeId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{categoryId,jdbcType=INTEGER}, #{activityType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{prizeName,jdbcType=VARCHAR}, #{logo,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{activeTime,jdbcType=VARCHAR}, #{inactiveTime,jdbcType=VARCHAR}, 
+      #{sn,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{prizeDescp,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrize" >
+    insert into as_prize
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeId != null" >
+        prize_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="activityType != null" >
+        activity_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="prizeName != null" >
+        prize_name,
+      </if>
+      <if test="logo != null" >
+        logo,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="prizeDescp != null" >
+        prize_descp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeId != null" >
+        #{prizeId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="activityType != null" >
+        #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="prizeName != null" >
+        #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeDescp != null" >
+        #{prizeDescp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrize" >
+    update as_prize
+    <set >
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="prizeName != null" >
+        prize_name = #{prizeName,jdbcType=VARCHAR},
+      </if>
+      <if test="logo != null" >
+        logo = #{logo,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeDescp != null" >
+        prize_descp = #{prizeDescp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsPrize" >
+    update as_prize
+    set store_id = #{storeId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      prize_name = #{prizeName,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      active_time = #{activeTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      prize_descp = #{prizeDescp,jdbcType=LONGVARCHAR}
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrize" >
+    update as_prize
+    set store_id = #{storeId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      prize_name = #{prizeName,jdbcType=VARCHAR},
+      logo = #{logo,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      active_time = #{activeTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL}
+    where prize_id = #{prizeId,jdbcType=INTEGER}
+  </update>
+  <select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_prize WHERE category_id = #{categoryId}
+  </select>
+  
+  <select id="getExchangeCountList" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  		SELECT prize_config_id, COUNT(*) exchangeCount  FROM as_prize GROUP BY prize_config_id,activity_type,`status` HAVING activity_type = #{activityType} AND `status`=1
+  </select>
+  
+  <select id="findBySn" parameterType="java.lang.String" resultMap="InfoResultMapWhithCategory">
+  	select 
+  		*
+  	from 
+  		as_prize prize
+  	left join as_yp_base_category bc
+  	on prize.category_id = bc.id
+  	left join as_shop shop on prize.shop_id = shop.shop_id
+  	where  prize.sn=#{sn} 	and  prize.activity_type = #{activityType}
+  </select>
+  <select id="listAll" resultMap="BaseRowMap">
+  	SELECT
+  	        category_id,
+			account,
+			nickName,
+			prizeId,
+			prizeName,
+			sn,
+			STATUS,
+			prizeDescp,
+			endTime,
+			shopName,
+			prizeTypeName,
+			prizeCategoryId
+   FROM
+	(
+		SELECT
+		    p.category_id,
+			u.account account,
+			u.nick_name nickName,
+			p.prize_id prizeId,
+			p.prize_name prizeName,
+			p.sn sn,
+			p. STATUS STATUS,
+			p.prize_descp prizeDescp,
+			p.end_time endTime,
+			shop. NAME shopName,
+			type. NAME prizeTypeName,
+			prizeCategory.category_id prizeCategoryId
+		FROM
+			as_prize p
+		JOIN as_shop shop ON p.shop_id = shop.shop_id
+		JOIN as_yp_base_category type ON p.category_id = type.id
+		LEFT JOIN as_prize_category prizeCategory ON p.prize_config_id = prizeCategory.prize_config_id
+		JOIN (
+			SELECT
+				record.prize_id,
+				u.account,
+				info.nick_name
+			FROM
+				as_activity_received_record record
+			JOIN as_user u ON record.user_id = u.user_id
+			JOIN as_user_info info ON u.user_id = info.user_id
+			WHERE
+				record.type = 1
+		) u ON U.prize_id = p.prize_id
+	) a
+      WHERE 1=1 AND (prizeTypeName='实物礼品' OR prizeTypeName='代金券' OR prizeTypeName='礼品券' OR prizeTypeName='折扣券' )
+    <if test="keyWord != null and keyWord != ''">
+  		and (
+   		account LIKE concat(concat('%',#{keyWord}),'%') 
+		or shopName LIKE concat(concat('%',#{keyWord}),'%')
+		or prizeName LIKE concat(concat('%',#{keyWord}),'%') 
+		or sn LIKE concat(concat('%',#{keyWord}),'%')
+ 		or nickName LIKE concat(concat('%',#{keyWord}),'%') 
+		)
+  	</if>
+  	<if test="endTime != null and endTime !=''">
+  	    and endTime <![CDATA[<]]> #{endTime}
+  	</if>
+  	<if test="status eq 4">
+  	    and status in (0,1,3)
+  	</if>
+  	<if test="status eq 0">
+  	    and status=0
+  	</if>	
+  	<if test="status eq 1">
+  	    and status=1
+  	</if>
+  	<if test="status eq 3">
+  	    and status=3
+  	</if>
+  	<if test="status eq 2">
+  	    and endTime <![CDATA[<=]]> now()
+  	</if>
+  	<if test="categoryId !=null and categoryId !=''">
+  	   and category_id=#{categoryId}
+  	</if>
+    ORDER BY prizeId DESC
+  </select>
+
+  <update id="updateTimeByConfigId" parameterType="Map" >
+      update as_prize
+      set
+        start_time = #{startTime,jdbcType=VARCHAR},
+        end_time = #{endTime,jdbcType=VARCHAR},
+        active_time = #{activeTime,jdbcType=VARCHAR},
+        inactive_time = #{inactiveTime,jdbcType=VARCHAR}
+      where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

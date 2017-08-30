@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCapitalMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCapital" >
+    <id column="capital_id" property="capitalId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="service_charge" property="serviceCharge" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="bank_bind_id" property="bankBindId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="descp" property="descp" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="bank_cardholder" property="bankCardholder" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="admin_id" property="adminId" jdbcType="INTEGER" />
+    <result column="trade_sn" property="tradeSn" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    capital_id, user_id, money, service_charge, create_time, status, bank_bind_id, update_time, 
+    descp, bank_account, bank_cardholder, bank_name, admin_id, trade_sn
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_capital
+    where capital_id = #{capitalId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_capital
+    where capital_id = #{capitalId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCapital" >
+    insert into as_capital (capital_id, user_id, money, 
+      service_charge, create_time, status, 
+      bank_bind_id, update_time, descp, 
+      bank_account, bank_cardholder, bank_name, 
+      admin_id, trade_sn)
+    values (#{capitalId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, 
+      #{serviceCharge,jdbcType=DECIMAL}, #{createTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{bankBindId,jdbcType=INTEGER}, #{updateTime,jdbcType=VARCHAR}, #{descp,jdbcType=VARCHAR}, 
+      #{bankAccount,jdbcType=VARCHAR}, #{bankCardholder,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{adminId,jdbcType=INTEGER}, #{tradeSn,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCapital" useGeneratedKeys="true" keyProperty="capitalId">
+    insert into as_capital
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="capitalId != null" >
+        capital_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="serviceCharge != null" >
+        service_charge,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bankBindId != null" >
+        bank_bind_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="descp != null" >
+        descp,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="bankCardholder != null" >
+        bank_cardholder,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="adminId != null" >
+        admin_id,
+      </if>
+      <if test="tradeSn != null" >
+        trade_sn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="capitalId != null" >
+        #{capitalId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceCharge != null" >
+        #{serviceCharge,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bankBindId != null" >
+        #{bankBindId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        #{descp,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCardholder != null" >
+        #{bankCardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminId != null" >
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeSn != null" >
+        #{tradeSn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCapital" >
+    update as_capital
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceCharge != null" >
+        service_charge = #{serviceCharge,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="bankBindId != null" >
+        bank_bind_id = #{bankBindId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        descp = #{descp,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCardholder != null" >
+        bank_cardholder = #{bankCardholder,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="adminId != null" >
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeSn != null" >
+        trade_sn = #{tradeSn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where capital_id = #{capitalId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCapital" >
+    update as_capital
+    set user_id = #{userId,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      service_charge = #{serviceCharge,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      bank_bind_id = #{bankBindId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      descp = #{descp,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      bank_cardholder = #{bankCardholder,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      trade_sn = #{tradeSn,jdbcType=VARCHAR}
+    where capital_id = #{capitalId,jdbcType=INTEGER}
+  </update>
+  <!--提现管理列表-->
+  <select id="listAll" resultMap="BaseRowMap">
+  	select capital.*,user.account,bank.card_type cardType,bank.bank_name bankBindName,bank.bank_account bankBindAccount,bank.bank_cardholder bankBindCardholder
+  	from as_capital capital 
+  	JOIN as_user user ON capital.user_id = user.user_id
+  	JOIN as_bank_bind bank ON capital.bank_bind_id = bank.bank_bind_id
+  	where 1=1
+
+  	<if test="keyWord != null and keyWord != ''">
+  		and ( user.account like CONCAT('%',#{keyWord},'%')
+  			or capital.trade_sn like CONCAT('%',#{keyWord},'%')
+  			or capital.capital_id like CONCAT('%',#{keyWord},'%')
+  		) 
+  	</if>
+  	<if test="status != null and status != '' ">
+      and capital.status = #{status}
+    </if>
+  	ORDER BY  capital.capital_id desc
+  </select>
+
+  <!--获取会员账号的提现记录-->
+  <select id="listAllMemberCapitals" resultMap="BaseRowMap">
+  select c.*,u.account,w.money remainingMoney,b.card_type cardType,b.bank_name bankBindName,b.bank_account bankBindAccount,b.bank_cardholder bankBindCardholder
+  from as_capital c
+  JOIN as_user u ON c.user_id = u.user_id
+  JOIN as_wallet w ON c.user_id = w.user_id
+  JOIN as_bank_bind b ON c.bank_bind_id = b.bank_bind_id
+  where 1=1
+  <if test="userId != null and userId != '' ">
+    and c.user_id = #{userId}
+  </if>
+
+  <if test="status != null and status != '' ">
+    and c.status = #{status}
+  </if>
+  ORDER BY  c.capital_id desc
+</select>
+  
+  <select id="getCapital" resultMap="BaseRowMap">
+  	select capital.*,user.account,bank.card_type,bank.bank_name bankBindName,bank.bank_account bankBindAccount,bank.bank_cardholder bankBindCardholder
+  	from as_capital capital 
+  	JOIN as_user user ON capital.user_id = user.user_id
+  	JOIN as_bank_bind bank ON capital.bank_bind_id = bank.bank_bind_id
+  	where 1=1
+    and capital_id=#{capitalId} 
+  </select>
+
+    <!--查询提现记录(锁)-->
+    <select id="selectByPrimaryKeyWithLock" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from as_capital
+        where capital_id = #{capitalId,jdbcType=INTEGER} for update
+    </select>
+
+    <!--获取用户指定状态提现记录-->
+    <select id="getCapitalByStatusWithScheduler" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from as_capital
+        where status = #{status} for update
+    </select>
+
+    <!--在定时任务中更新申请-->
+    <update id="updateStatusWithScheduler">
+        update as_capital
+        set status = #{status}
+        where capital_id = #{capitalId} and status = 1
+    </update>
+
+  <!--统计用户当天提现次数-->
+  <select id="countCapitalByDay" resultType="java.lang.Integer">
+    SELECT
+    count(*)
+    FROM
+    as_capital
+    WHERE
+    user_id = #{userId}
+    AND date(create_time) = date(now())
+  </select>
+
+
+</mapper>

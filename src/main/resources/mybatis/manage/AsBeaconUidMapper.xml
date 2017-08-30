@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBeaconUidMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBeaconUid" >
+    <id column="beacon_uid_id" property="beaconUidId" jdbcType="INTEGER" />
+    <result column="beacon_uid_uuid" property="beaconUidUuid" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    beacon_uid_id, beacon_uid_uuid, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_beacon_uid
+    where beacon_uid_id = #{beaconUidId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_beacon_uid
+    where beacon_uid_id = #{beaconUidId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBeaconUid" >
+    insert into as_beacon_uid (beacon_uid_id, beacon_uid_uuid, create_time
+      )
+    values (#{beaconUidId,jdbcType=INTEGER}, #{beaconUidUuid,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBeaconUid" >
+    insert into as_beacon_uid
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beaconUidId != null" >
+        beacon_uid_id,
+      </if>
+      <if test="beaconUidUuid != null" >
+        beacon_uid_uuid,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beaconUidId != null" >
+        #{beaconUidId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconUidUuid != null" >
+        #{beaconUidUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBeaconUid" >
+    update as_beacon_uid
+    <set >
+      <if test="beaconUidUuid != null" >
+        beacon_uid_uuid = #{beaconUidUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where beacon_uid_id = #{beaconUidId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBeaconUid" >
+    update as_beacon_uid
+    set beacon_uid_uuid = #{beaconUidUuid,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where beacon_uid_id = #{beaconUidId,jdbcType=INTEGER}
+  </update>
+   <delete id="deleteByIds">
+    delete from as_beacon_uid where beacon_uid_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </delete>
+</mapper>

@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUserMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUser" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="sys_user_id" property="sysUserId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+   <result column="shopType" property="shopType" jdbcType="INTEGER" />
+   <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+   <result column="flag" property="flag" jdbcType="INTEGER" />
+   <result column="userStatus" property="userStatus" jdbcType="INTEGER" />
+   <result column="invite_code" property="inviteCode" jdbcType="INTEGER" />
+   <result column="my_invite" property="myInvite" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    user_id, password, account, create_time, status, type, sys_user_id
+  </sql>
+  <select id="selectByShopId" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from as_user where status = 1 and shop_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <!-- 批量删除用户 -->
+  <delete id="deleteAll" parameterType="String" flushCache="false">
+	delete from as_user
+	where 
+	user_id in
+   <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+              #{item}
+   </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUser" >
+    insert into as_user (user_id, password, account, 
+      create_time, status, type, 
+      sys_user_id)
+    values (#{userId,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{sysUserId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="userId">
+    insert into as_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="sysUserId != null" >
+        sys_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sysUserId != null" >
+        #{sysUserId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUser" >
+    update as_user
+    <set >
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sysUserId != null" >
+        sys_user_id = #{sysUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUser" >
+    update as_user
+    set password = #{password,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      sys_user_id = #{sysUserId,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="isAccountExists" resultType="java.lang.Integer" >
+  	select count(*) from as_user where account = #{account} and status = 0 and type=#{type}
+  </select>
+   <select id="isAccountExistsCheck" resultType="java.lang.Integer" >
+   SELECT
+	   count(1)
+	FROM
+	   SYS_user YS
+	JOIN AS_USER U ON U.sys_user_id = YS.USER_ID
+	WHERE
+	   U. STATUS = 0
+	   AND U.type = #{type}
+   <if test="phone != null" >
+      AND  YS.PHONE = #{phone}
+     </if>
+   <if test="account != null" >
+      AND  U.account = #{account}
+   </if>
+<!--   	select count(*) from as_user where account = #{account} and status = 0 and type=#{type} -->
+  </select>
+
+	<select id="accountMemberIsExist" resultType="java.lang.Integer">
+  	  	select count(*) from as_user where account = #{account} and status = 0 and type = 0
+  </select>
+  
+  <select id="findBySysUserId" resultMap="BaseRowMap">
+  	select * from as_user where sys_user_id = #{sysUserId} and as_user.status = 0
+  </select>
+
+	<select id="getBySysUserId" resultMap="BaseResultMap">
+  	select * from as_user where sys_user_id = #{sysUserId} and status = 0
+  </select>
+  
+  <select id="findByUserId" resultMap="BaseRowMap">
+  	select * from as_user where user_id = #{userId} and status = 0
+  </select>
+  
+  <select id="findByAccountAndType" resultMap="BaseRowMap">
+  	select * from as_user where account = #{account} and type = #{type} and status = 0
+  </select>
+
+	<select id="getByAccountAndType" resultMap="BaseResultMap">
+  	select * from as_user where account = #{account} and type = 2 and status = 0
+  </select>
+  
+  <select id="getUserByUserId" resultMap="BaseResultMap">
+  	select * from as_user where user_id = #{userId} and status = 0
+  </select>
+  
+  <update id="deleteByUserId">
+  	update as_user set status = 1 where user_id = #{userId}
+  </update>
+  
+  <update id="deleteByUserIds">
+  	update as_user set status = 1 where user_id in 
+  	<foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+      #{id}  
+    </foreach>  
+  </update>
+  
+  <!-- 废弃 -->
+  <select id="getUserListByType" resultMap="BaseRowMap">
+  	SELECT
+		*
+	FROM
+		as_user
+	WHERE
+		type IN 
+	<foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+      #{id}  
+    </foreach> 
+	AND STATUS = 0
+	ORDER BY
+		type asc,user_id DESC
+  </select>
+
+	<!-- 废弃 -->
+  <select id="countUserByType" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		as_user
+	WHERE
+		type IN 
+	<foreach item="id" collection="ids" separator="," open="(" close=")" index="">
+      #{id}  
+    </foreach> 
+	AND STATUS = 0
+	ORDER BY
+		type asc,user_id DESC
+  </select>
+	<!--运营 商户管理列表-->
+  <select id="getUserWhitConditions" resultMap="BaseRowMap">
+		SELECT
+		    shop.shop_id,
+			USER .user_id,
+			USER .status as userStatus,
+			OWNER . STATUS,
+			USER .type,
+			USER .account,
+			USER .create_time AS createTime,
+			shop. NAME AS shopName,
+	  		store. NAME AS storeName,
+			shop. type AS shopType,
+			OWNER . NAME,
+	 		OWNER.audit_status auditStatus,
+			CASE YL.ROLE_NAME WHEN '澳视商户管理员' THEN 1
+            ELSE 0 END flag
+		FROM
+			as_shop_owner_info OWNER
+		JOIN as_shop shop ON OWNER .shop_id = shop.shop_id
+		LEFT JOIN as_store  store ON store .store_id = shop.store_id
+		JOIN (
+		SELECT
+			*
+		FROM
+			as_user
+		WHERE
+		1=1
+		<if test="status != null and status != '' and status == 2">
+		  AND	status = 1
+		</if>
+	    ) USER ON OWNER .user_id = USER .user_id
+		JOIN sys_user sy ON sy.USER_ID = USER .sys_user_id
+        JOIN sys_role yl ON yl.ROLE_ID = sy.ROLE_ID
+		WHERE
+			user.status in (0,1)
+			AND USER .type = 1
+		<if test="status != null and status != '' and status != 2">
+
+			AND	owner.status = #{status}
+			AND user.status <![CDATA[<>]]>1
+		</if>
+		  <if test="type != null and type != '' ">
+			  AND	shop.type = #{type}
+		  </if>
+		<if test="startTime != null and startTime != ''">
+			AND  `user`.create_time <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND `user`.create_time <![CDATA[<=]]> #{endTime}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND (
+			`user`.account LIKE concat(concat('%',#{keyWord}),'%')
+			OR shop . NAME LIKE concat(concat('%',#{keyWord}),'%')
+			)
+		</if>
+		<if test="shopId != null and shopId != ''">
+			AND shop.shop_id = #{shopId}
+		</if>	
+		<if test="status != null and status != ''and status == 2">
+			AND USER.status = 1
+		</if>		
+			ORDER BY
+				user_id DESC
+  </select>
+
+	<!--业主 店铺管理列表-->
+	<select id="getShopAccountOwnerList" resultMap="BaseRowMap">
+		SELECT
+		shop.shop_id,
+		USER .user_id,
+		USER .status as userStatus,
+		OWNER . STATUS,
+		USER .type,
+		USER .account,
+		USER .create_time AS createTime,
+		shop. NAME AS shopName,
+		store. NAME AS storeName,
+		shop. type AS shopType,
+		OWNER . NAME,
+		OWNER.audit_status auditStatus,
+		CASE YL.ROLE_NAME WHEN '澳视商户管理员' THEN 1
+		ELSE 0 END flag
+		FROM
+		as_shop_owner_info OWNER
+		JOIN as_shop shop ON OWNER .shop_id = shop.shop_id
+		LEFT JOIN as_store  store ON store .store_id = shop.store_id
+		JOIN (
+		SELECT
+		*
+		FROM
+		as_user
+		WHERE
+		1=1
+		<if test="status != null and status != '' and status == 2">
+			AND	status = 1
+		</if>
+		) USER ON OWNER .user_id = USER .user_id
+		JOIN sys_user sy ON sy.USER_ID = USER .sys_user_id
+		JOIN sys_role yl ON yl.ROLE_ID = sy.ROLE_ID
+		WHERE
+		user.status in (0,1)
+		AND USER .type = 1
+		<if test="status != null and status != '' and status != 2">
+
+			AND	owner.status = #{status}
+			AND user.status <![CDATA[<>]]>1
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND `user`.create_time <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND `user`.create_time <![CDATA[<=]]> #{endTime}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND (
+			`user`.account LIKE concat(concat('%',#{keyWord}),'%')
+			OR shop . NAME LIKE concat(concat('%',#{keyWord}),'%')
+			)
+		</if>
+		<if test="type != null and type != '' ">
+			AND	shop.type = #{type}
+		</if>
+		<if test="storeId != null and storeId != ''">
+			AND shop.store_id = #{storeId}
+		</if>
+		<if test="status != null and status != ''and status == 2">
+			AND USER.status = 1
+		</if>
+		ORDER BY
+		user_id DESC
+	</select>
+<!--   员工列表 -->
+  <select id="getStaffUserWhitConditions" resultMap="BaseRowMap">
+			SELECT
+			    shop.shop_id,
+				USER .user_id,
+				staff. STATUS,
+				USER .type,
+				USER .account,
+				USER .create_time AS createTime,
+				shop. NAME AS shopName,
+				shop. type AS shopType,
+				staff. NAME
+			FROM
+				as_shop_staff_info staff
+			JOIN as_shop shop ON staff.shop_id = shop.shop_id
+			JOIN as_user USER ON staff.user_id = USER .user_id
+			WHERE
+				user.status = 0
+			AND USER .type = 2
+		<if test="status != null and status != ''">
+			AND	staff.status = #{status}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND `user`.create_time <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND `user`.create_time <![CDATA[<=]]> #{endTime}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND  `user`.account LIKE concat(concat('%',#{keyWord}),'%')
+		</if>
+		<if test="shopId != null and shopId != ''">
+			AND shop.shop_id = #{shopId}
+		</if>
+			ORDER BY
+				user_id DESC
+  </select>
+  
+  	<select id="getAdminUserWhitConditions" resultMap="BaseRowMap">
+  		SELECT
+			user.type, user.user_id,user.account,user.create_time, admin.admin_name AS adminName,
+			admin.admin_phone AS adminPhone,admin.status
+		FROM
+			as_user USER
+		JOIN as_admin_info admin ON USER .user_id = admin.user_id 
+		WHERE
+			`user`. STATUS = 0
+		<if test="status != null and status != ''">
+			AND	admin.status = #{status}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND (
+				`user`.account LIKE concat(concat('%',#{keyWord}),'%')
+				OR admin. admin_name LIKE concat(concat('%',#{keyWord}),'%')
+			)
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND `user`.create_time <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND `user`.create_time <![CDATA[<=]]> #{endTime}
+		</if>
+		<if test="type != null and type != ''">
+			AND user.type=#{type}
+		</if>
+		ORDER BY
+				user.user_id DESC
+  	</select>
+	
+	<!--普通会员用户列表-->
+  	<select id="getCommonUserList" resultMap="BaseRowMap">
+  		SELECT
+			u.user_id,u.account,u.create_time,i.nick_name  nickName,
+			i.source source,i.client_type clientType,a.province_id provinceId,
+			a.city_id cityId,a.area_id areaId,a.address address,
+			w.integration integration,w.money money,invite_code,my_invite
+		FROM
+			as_user u
+		JOIN as_user_info i ON u.user_id = i.user_id
+		JOIN as_wallet w ON u.user_id = w.user_id
+		LEFT JOIN (SELECT user_id,province_id,city_id,area_id,address,is_default FROM as_user_address WHERE is_default = 1) a ON u.user_id = a.user_id
+		WHERE
+			1=1 AND u.status = 0 AND u.type = 0
+		<if test="account != null and account != ''">
+			AND   u.account LIKE concat(concat('%',#{account}),'%')
+		</if>
+		<if test="nickName != null and nickName != ''">
+			AND  i.nick_name LIKE concat(concat('%',#{nickName}),'%')
+		</if>
+		<if test="inviteRefId != null and inviteRefId != ''">
+			AND
+			(
+				SELECT
+				account AS 'zhanhao'
+				FROM
+				as_user
+				WHERE
+				user_id = (
+					(
+						SELECT
+						user_id
+						FROM
+						as_user_info
+						WHERE
+						my_invite = i.invite_code
+					)
+				)
+			)
+			LIKE concat(concat('%',#{inviteRefId}),'%')
+		</if>
+		<if test="address != null and address != ''">
+			AND  a.address LIKE concat(concat('%',#{address}),'%')
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND u.create_time <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="clientType != null and clientType != ''">
+			AND i.client_type = #{clientType}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND u.create_time <![CDATA[<=]]> #{endTime}
+		</if>
+		ORDER BY 
+			u.user_id desc
+  	</select>
+ 	<!--   员工列表 -->
+  <select id="getStaffListAll" resultMap="BaseRowMap">
+			SELECT
+			    shop.shop_id,
+				USER .user_id,
+				staff. STATUS,
+				USER .type,
+				USER .account,
+				USER .create_time AS createTime,
+				shop. NAME AS shopName,
+				shop. type AS shopType,
+				staff. NAME
+			FROM
+				as_shop_staff_info staff
+			JOIN as_shop shop ON staff.shop_id = shop.shop_id
+			JOIN as_user USER ON staff.user_id = USER .user_id
+			WHERE
+				user.status = 0
+			AND USER .type = 2
+			AND shop.shop_id = #{shopId}
+			ORDER BY
+				user_id DESC
+  </select>
+	<select id="getUserWhitConditionsOnUse" resultMap="BaseRowMap">
+		SELECT
+		shop.shop_id,
+		USER .user_id,
+		OWNER . STATUS,
+		USER .type,
+		USER .account,
+		USER .create_time AS createTime,
+		shop. NAME AS shopName,
+		shop. type AS shopType,
+		OWNER . NAME
+		FROM
+		as_shop_owner_info OWNER
+		JOIN as_shop shop ON OWNER .shop_id = shop.shop_id
+		JOIN as_user USER ON OWNER .user_id = USER .user_id
+		WHERE
+		user.status = 0
+		AND USER .type = 1
+		AND shop.type=2
+		AND OWNER.status=0
+		UNION
+		SELECT
+		shop.shop_id,
+		USER .user_id,
+		staff. STATUS,
+		USER .type,
+		USER .account,
+		USER .create_time AS createTime,
+		shop. NAME AS shopName,
+		shop. type AS shopType,
+		staff. NAME
+		FROM
+		as_shop_staff_info staff
+		JOIN as_shop shop ON staff.shop_id = shop.shop_id
+		JOIN as_user USER ON staff.user_id = USER .user_id
+		WHERE
+		user.status = 0
+		AND USER .type = 1
+		AND shop.type=2
+		AND staff.status = 0
+		ORDER BY
+		user_id DESC
+	</select>
+	
+	<select id="getAdminUser" parameterType="java.util.Map" resultMap="BaseRowMap">
+		SELECT
+			user.type, user.user_id,user.account,user.create_time, admin.admin_name AS adminName,
+			admin.admin_phone AS adminPhone,admin.status,
+			g.GROUP_NAME as groupName 
+		FROM
+			as_user user
+		JOIN as_admin_info admin ON USER .user_id = admin.user_id 
+		
+		join sys_user sys on USER.sys_user_id = sys.USER_ID 
+		left join sys_group g on sys.GROUP_ID = g.GROUP_ID 
+		WHERE
+			`user`. STATUS = 0 
+		AND user.`type` in(3,4) 
+		<if test="status != null and status != ''">
+			AND	admin.status = #{status}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			AND (
+				`user`.account LIKE concat(concat('%',#{keyWord}),'%')
+				OR admin. admin_name LIKE concat(concat('%',#{keyWord}),'%')
+			)
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND date(`user`.create_time) <![CDATA[>=]]> #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date(`user`.create_time) <![CDATA[<=]]> #{endTime}
+		</if>
+		<if test="users != null">
+			AND user.sys_user_id in 
+			<foreach collection="users" item="user" open="(" separator="," close=")">
+				#{user.userId}
+			</foreach>
+		</if>
+		order by user.create_time desc
+	</select>
+</mapper>

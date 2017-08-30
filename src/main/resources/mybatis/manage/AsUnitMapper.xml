@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUnitMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUnit" >
+    <id column="unit_id" property="unitId" jdbcType="INTEGER" />
+    <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    unit_id, unit_name, is_delete
+  </sql>
+   
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_unit
+    where unit_id = #{unitId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_unit
+    where unit_id = #{unitId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUnit" useGeneratedKeys="true" keyProperty="unitId" >
+    insert into as_unit (unit_id, unit_name, is_delete)
+    values (#{unitId,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR}, #{isDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsUnit" >
+    insert into as_unit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="unitId != null" >
+        unit_id,
+      </if>
+      <if test="unitName != null" >
+        unit_name,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="unitId != null" >
+        #{unitId,jdbcType=INTEGER},
+      </if>
+      <if test="unitName != null" >
+        #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUnit" >
+    update as_unit
+    <set >
+      <if test="unitName != null" >
+        unit_name = #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+    </set>
+    where unit_id = #{unitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUnit" >
+    update as_unit
+    set unit_name = #{unitName,jdbcType=VARCHAR},
+    is_delete = #{isDelete,jdbcType=INTEGER},
+    where unit_id = #{unitId,jdbcType=INTEGER}
+  </update>
+  <!--修改状态 0 未删，1已删  -->
+  <update id="updateByPrimaryKeys" parameterType="java.lang.Integer">
+  	update as_unit set is_delete = 1
+  	where unit_id in
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+     #{item}
+    </foreach>
+  </update>
+ 
+  <!-- 查找单元列表 -->
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT
+  	<include refid="Base_Column_List" />
+  	 from as_unit where  is_delete = 0 
+  </select>
+  <!--单位列表  -->
+  <select id="listAll" resultMap="BaseRowMap">
+  	 select 
+     <include refid="Base_Column_List" />
+    from as_unit where 1=1 and is_delete = 0 
+      <if test="keyword != null and keyword != ''">
+       and unit_name like concat(concat('%', #{keyword}),'%')
+      </if>
+  </select>
+  
+</mapper>

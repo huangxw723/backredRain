@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsConsultationNavigationMapper" >
+    <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationNavigation" >
+        <id column="as_consultation_navigation_id" property="asConsultationNavigationId" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+        <result column="city_id" property="cityId" jdbcType="INTEGER" />
+        <result column="area_id" property="areaId" jdbcType="INTEGER" />
+        <result column="business_district_id" property="businessDistrictId" jdbcType="INTEGER" />
+        <result column="logo" property="logo" jdbcType="VARCHAR" />
+        <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+        <result column="site" property="site" jdbcType="VARCHAR" />
+        <result column="lng" property="lng" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="BrandWithName" type="com.aoshi.domain.AsConsultationNavigation" extends="BaseResultMap" >
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        as_consultation_navigation_id, name, province_id, city_id, area_id, business_district_id,
+        logo, category_id, site, lng, lat, address, type
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from as_consultation_navigation
+        where as_consultation_navigation_id = #{asConsultationNavigationId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from as_consultation_navigation
+        where as_consultation_navigation_id = #{asConsultationNavigationId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.aoshi.domain.AsConsultationNavigation" >
+        insert into as_consultation_navigation (as_consultation_navigation_id, name,
+        province_id, city_id, area_id,
+        business_district_id, logo, category_id,
+        site, lng, lat, address,
+        type)
+        values (#{asConsultationNavigationId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER},
+        #{businessDistrictId,jdbcType=INTEGER}, #{logo,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER},
+        #{site,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+        #{type,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationNavigation" >
+        insert into as_consultation_navigation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="asConsultationNavigationId != null" >
+                as_consultation_navigation_id,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="provinceId != null" >
+                province_id,
+            </if>
+            <if test="cityId != null" >
+                city_id,
+            </if>
+            <if test="areaId != null" >
+                area_id,
+            </if>
+            <if test="businessDistrictId != null" >
+                business_district_id,
+            </if>
+            <if test="logo != null" >
+                logo,
+            </if>
+            <if test="categoryId != null" >
+                category_id,
+            </if>
+            <if test="site != null" >
+                site,
+            </if>
+            <if test="lng != null" >
+                lng,
+            </if>
+            <if test="lat != null" >
+                lat,
+            </if>
+            <if test="address != null" >
+                address,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="asConsultationNavigationId != null" >
+                #{asConsultationNavigationId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null" >
+                #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null" >
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null" >
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="businessDistrictId != null" >
+                #{businessDistrictId,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null" >
+                #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null" >
+                #{categoryId,jdbcType=INTEGER},
+            </if>
+            <if test="site != null" >
+                #{site,jdbcType=VARCHAR},
+            </if>
+            <if test="lng != null" >
+                #{lng,jdbcType=VARCHAR},
+            </if>
+            <if test="lat != null" >
+                #{lat,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationNavigation" >
+        update as_consultation_navigation
+        <set >
+            <if test="name != null" >
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null" >
+                province_id = #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null" >
+                city_id = #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="areaId != null" >
+                area_id = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="businessDistrictId != null" >
+                business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null" >
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="categoryId != null" >
+                category_id = #{categoryId,jdbcType=INTEGER},
+            </if>
+            <if test="site != null" >
+                site = #{site,jdbcType=VARCHAR},
+            </if>
+            <if test="lng != null" >
+                lng = #{lng,jdbcType=VARCHAR},
+            </if>
+            <if test="lat != null" >
+                lat = #{lat,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null" >
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where as_consultation_navigation_id = #{asConsultationNavigationId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationNavigation" >
+        update as_consultation_navigation
+        set name = #{name,jdbcType=VARCHAR},
+        province_id = #{provinceId,jdbcType=INTEGER},
+        city_id = #{cityId,jdbcType=INTEGER},
+        area_id = #{areaId,jdbcType=INTEGER},
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+        logo = #{logo,jdbcType=VARCHAR},
+        category_id = #{categoryId,jdbcType=INTEGER},
+        site = #{site,jdbcType=VARCHAR},
+        lng = #{lng,jdbcType=VARCHAR},
+        lat = #{lat,jdbcType=VARCHAR},
+        address = #{address,jdbcType=VARCHAR},
+        type = #{type,jdbcType=VARCHAR}
+        where as_consultation_navigation_id = #{asConsultationNavigationId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllStore" parameterType="java.util.List" resultMap="BrandWithName">
+        SELECT a.* ,b.name as categoryName
+        FROM as_consultation_navigation a  LEFT JOIN as_yp_base_category b ON a.category_id =b.`id`
+        where a.type=1
+        order by a.as_consultation_navigation_id desc
+    </select>
+
+    <select id="selectAllShop" parameterType="java.util.List" resultMap="BrandWithName">
+        SELECT a.* ,b.name as categoryName
+        FROM as_consultation_navigation a  LEFT JOIN as_yp_base_category b ON a.category_id =b.`id`
+        where a.type=0
+        order by a.as_consultation_navigation_id desc
+    </select>
+</mapper>

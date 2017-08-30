@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeConfig" >
+    <id column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="activity_shake_id" property="activityShakeId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="is_jackpot" property="isJackpot" jdbcType="INTEGER" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="back_url" property="backUrl" jdbcType="VARCHAR" />
+    <result column="counts" property="counts" jdbcType="INTEGER" />
+    <result column="surplus_counts" property="surplusCounts" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+    <result column="inactive_time" property="inactiveTime" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="audit_time" property="auditTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsPrizeConfig" extends="BaseResultMap" >
+    <result column="descp" property="descp" jdbcType="LONGVARCHAR" />
+    <result column="reason" property="reason" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap extends="ResultMapWithBLOBs" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+    <resultMap id="WithName" type="com.aoshi.domain.AsPrizeConfig" extends="BaseResultMap" >
+        <result column="categoryName" property="categoryName" jdbcType="VARCHAR" />
+        <result column="shakeName" property="shakeName" jdbcType="VARCHAR" />
+        <result column="probability" property="probability" jdbcType="VARCHAR" />
+    </resultMap>
+  <sql id="Base_Column_List" >
+    prize_config_id, category_id, activity_shake_id, name, is_jackpot, logo_url, back_url, 
+    counts, surplus_counts, start_time, end_time, active_time, inactive_time, shop_id, 
+    store_id, sn, price, activity_type, status, audit_status, create_time, audit_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    descp, reason
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_prize_config
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize_config
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrizeConfig"  keyColumn="prize_config_id" keyProperty="prizeConfigId">
+    insert into as_prize_config (prize_config_id, category_id, activity_shake_id, 
+      name, is_jackpot, logo_url, 
+      back_url, counts, surplus_counts, 
+      start_time, end_time, active_time, 
+      inactive_time, shop_id, store_id, 
+      sn, price, activity_type, 
+      status, audit_status, create_time, 
+      audit_time, descp, reason
+      )
+    values (#{prizeConfigId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{activityShakeId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{isJackpot,jdbcType=INTEGER}, #{logoUrl,jdbcType=VARCHAR}, 
+      #{backUrl,jdbcType=VARCHAR}, #{counts,jdbcType=INTEGER}, #{surplusCounts,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{activeTime,jdbcType=VARCHAR}, 
+      #{inactiveTime,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, 
+      #{sn,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{activityType,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{auditStatus,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=VARCHAR}, #{descp,jdbcType=LONGVARCHAR}, #{reason,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrizeConfig"  keyColumn="prize_config_id" keyProperty="prizeConfigId">
+    insert into as_prize_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="activityShakeId != null" >
+        activity_shake_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="isJackpot != null" >
+        is_jackpot,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="backUrl != null" >
+        back_url,
+      </if>
+      <if test="counts != null" >
+        counts,
+      </if>
+      <if test="surplusCounts != null" >
+        surplus_counts,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="activityType != null" >
+        activity_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="descp != null" >
+        descp,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="activityShakeId != null" >
+        #{activityShakeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isJackpot != null" >
+        #{isJackpot,jdbcType=INTEGER},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="backUrl != null" >
+        #{backUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="counts != null" >
+        #{counts,jdbcType=INTEGER},
+      </if>
+      <if test="surplusCounts != null" >
+        #{surplusCounts,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="activityType != null" >
+        #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        #{descp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrizeConfig" >
+    update as_prize_config
+    <set >
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="activityShakeId != null" >
+        activity_shake_id = #{activityShakeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isJackpot != null" >
+        is_jackpot = #{isJackpot,jdbcType=INTEGER},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="backUrl != null" >
+        back_url = #{backUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="counts != null" >
+        counts = #{counts,jdbcType=INTEGER},
+      </if>
+      <if test="surplusCounts != null" >
+        surplus_counts = #{surplusCounts,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        descp = #{descp,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsPrizeConfig" >
+    update as_prize_config
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      activity_shake_id = #{activityShakeId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      is_jackpot = #{isJackpot,jdbcType=INTEGER},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      back_url = #{backUrl,jdbcType=VARCHAR},
+      counts = #{counts,jdbcType=INTEGER},
+      surplus_counts = #{surplusCounts,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      active_time = #{activeTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      sn = #{sn,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=VARCHAR},
+      descp = #{descp,jdbcType=LONGVARCHAR},
+      reason = #{reason,jdbcType=LONGVARCHAR}
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrizeConfig" >
+    update as_prize_config
+    set category_id = #{categoryId,jdbcType=INTEGER},
+      activity_shake_id = #{activityShakeId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      is_jackpot = #{isJackpot,jdbcType=INTEGER},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      back_url = #{backUrl,jdbcType=VARCHAR},
+      counts = #{counts,jdbcType=INTEGER},
+      surplus_counts = #{surplusCounts,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      active_time = #{activeTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      sn = #{sn,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      audit_time = #{auditTime,jdbcType=VARCHAR}
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </update>
+   <select id="findById" resultMap="BaseRowMap">
+    select
+    <include refid="Base_Column_List" /> 
+     ,
+    <include refid="Blob_Column_List" />
+	  	from as_prize_config 
+    	where prize_config_id = #{prizeConfigId,jdbcType=INTEGER} 
+  </select>
+   <select id="findByIdWithCoupons" resultMap="BaseRowMap">
+   		select 
+		  	config.prize_config_id ,config.name,config.category_id,config.activity_type,config.counts,config.descp,
+		  	config.audit_status,config.surplus_counts,config.start_time,config.end_time,config.status, config.price,
+		  	config.back_url,config.logo_url,config.is_jackpot,config.activity_shake_id,config.active_time,config.inactive_time,
+		  	shop.name shopName ,shop.shop_id shopId, type.name prizeTypeName , store.name storeName,store.store_id storeId,
+		  	prizeCategory.category_id prizeCategoryId from 
+		  	as_prize_config config 
+		  	left join as_shop shop on config.shop_id = shop.shop_id 
+		  	left join as_yp_base_category type on config.category_id = type.id
+		  	left join as_prize_category prizeCategory on config.prize_config_id = prizeCategory.prize_config_id
+		  	left join as_store store on store.store_id = shop.store_id
+	  	where config.prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+	</select>  	
+  <select id="listAll" resultMap="BaseRowMap">
+  	select 
+  			config.prize_config_id,config.name,config.category_id,config.activity_type,config.counts,config.active_time,config.inactive_time,
+  			config.surplus_counts,config.start_time,config.end_time,config.status,config.audit_status,config.reason,config.sn,
+		  	shop.name shopName , type.name prizeTypeName , store.name storeName from as_prize_config config 
+		  	join as_shop shop on config.shop_id = shop.shop_id
+		  	join as_yp_base_category type on config.category_id = type.id
+		  	left join as_store store on store.store_id = shop.store_id
+	where 1 = 1
+	and config.activity_type = 1 and  config.is_jackpot = #{isJackpot}
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="provinceId != null and provinceId != ''">
+      	and shop.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and shop.city_id = #{cityId}
+      </if>
+      <if test="areaId != null and areaId != ''">
+      	and shop.area_id = #{areaId}
+      </if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	</if>
+  	<if test="status == null  or status == '' ">
+  		and ( (config.status IN (1, 2) and config.end_time <![CDATA[>=]]> now() and config.surplus_counts <![CDATA[>]]> 0
+              and type.name <![CDATA[<>]]>'积分')
+        or (config.status = 0 and config.audit_status in (0,2))
+        or (config.status IN (1, 2) and type.name = '积分' and config.surplus_counts > 0 )
+        )
+  	</if>
+  	<if test="status eq 1 or status eq 2 ">
+  		and (
+          (config.status = #{status} and config.end_time <![CDATA[>=]]> now() and config.surplus_counts <![CDATA[>]]> 0
+            and type.name <![CDATA[<>]]>'积分')
+          or (config.status = #{status} and type.name = '积分' and config.surplus_counts > 0 )
+        )
+  	</if>
+  	<if test="status eq 3  ">
+  		and config.audit_status = 0 and config.status = 0
+  	</if>
+  	<if test="status eq 4  ">
+  		and config.audit_status = 2 and config.status = 0
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="shakeListAll" resultMap="BaseRowMap">
+  	select 
+  			config.prize_config_id,config.name,config.category_id,config.activity_type,config.counts,config.active_time,config.inactive_time,
+  			config.surplus_counts,config.start_time,config.end_time,config.status,config.audit_status,config.reason,config.sn,
+		  	shop.name shopName , type.name prizeTypeName , store.name storeName from as_prize_config config 
+		  	join as_shop shop on config.shop_id = shop.shop_id
+		  	join as_yp_base_category type on config.category_id = type.id
+		  	left join as_store store on store.store_id = shop.store_id
+	where 1 = 1
+	and config.activity_type = 2 and  config.is_jackpot = #{isJackpot}
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	</if>
+
+      <if test="status == null  or status == '' ">
+          and ( (config.status IN (1, 2) and config.end_time <![CDATA[>=]]> now()
+                and config.surplus_counts <![CDATA[>]]> 0 and type.name ='实物礼品')
+          or(config.status IN (1, 2) and type.name <![CDATA[<>]]>'实物礼品' and config.surplus_counts > 0)
+          or (config.status = 0 and config.audit_status in (0,2)) )
+      </if>
+      <if test="status eq 1 or status eq 2 ">
+          and ( (config.status = #{status} and config.surplus_counts <![CDATA[>]]> 0 and
+              config.end_time <![CDATA[>=]]> now() and type.name ='实物礼品')
+            or (config.status = #{status} and type.name <![CDATA[<>]]>'实物礼品' and config.surplus_counts > 0 )
+          )
+      </if>
+  	<if test="status eq 3  ">
+  		and config.audit_status = 0 and config.status = 0
+  	</if>
+  	<if test="status eq 4  ">
+  		and config.audit_status = 2 and config.status = 0
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="couponsListAll" resultMap="BaseRowMap">
+  	select 
+	  	config.prize_config_id ,config.name,config.category_id,config.activity_type,config.counts,config.active_time,config.inactive_time,
+  		config.surplus_counts,config.start_time,config.end_time,config.status,config.audit_status,config.sn,
+	  	shop.name shopName , type.name prizeTypeName , store.name storeName,prizeCategory.category_id prizeCategoryId from 
+	  	as_prize_config config
+	  	join as_shop shop on config.shop_id = shop.shop_id
+	  	join as_yp_base_category type on config.category_id = type.id
+	  	join as_prize_category prizeCategory on config.prize_config_id = prizeCategory.prize_config_id
+	  	left join as_store store on store.store_id = shop.store_id
+  	where 1 = 1
+  		and config.activity_type = 3 
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="provinceId != null and provinceId != ''">
+      	and shop.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and shop.city_id = #{cityId}
+      </if>
+      <if test="areaId != null and areaId != ''">
+      	and shop.area_id = #{areaId}
+      </if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	</if>
+      <if test="status == null  or status == '' ">
+          and ( (config.status IN (1, 2) and config.end_time <![CDATA[>=]]> now() and config.surplus_counts <![CDATA[>]]> 0)
+          or (config.status = 0 and config.audit_status in (0,2)) )
+      </if>
+      <if test="status eq 1 or status eq 2 ">
+          and config.status = #{status} and config.end_time <![CDATA[>=]]> now() and config.surplus_counts <![CDATA[>]]> 0
+      </if>
+  	<if test="status eq 3  ">
+  		and config.audit_status = 0 and config.status = 0
+  	</if>
+  	<if test="status eq 4  ">
+  		and config.audit_status = 2 and config.status = 0
+  	</if>
+  	<if test="couponTagId != null and couponTagId != ''">
+  		and prizeCategory.category_id = #{couponTagId}
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="listHistory" resultMap="BaseRowMap">
+  	select 
+			config.prize_config_id ,config.name,config.category_id,config.activity_type,config.counts,
+  			config.surplus_counts,config.start_time,config.end_time,config.status,config.sn,config.active_time,config.inactive_time,
+		  	shop.name shopName , type.name prizeTypeName , store.name storeName from as_prize_config config 
+		  	join as_shop shop on config.shop_id = shop.shop_id
+		  	join as_yp_base_category type on config.category_id = type.id
+		  	left join as_store store on store.store_id = shop.store_id
+  	where 1 = 1 
+  	and  config.activity_type = 1 and  config.is_jackpot = #{isJackpot}
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="provinceId != null and provinceId != ''">
+      	and shop.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and shop.city_id = #{cityId}
+      </if>
+      <if test="areaId != null and areaId != ''">
+      	and shop.area_id = #{areaId}
+      </if>
+  	  <if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	  </if>
+      <if test="status == null  or status == '' ">
+          and ( (config.status IN (1, 2) and config.end_time <![CDATA[<]]> now() and config.end_time <![CDATA[<>]]> '') or (config.status IN (1, 2) and config.surplus_counts <![CDATA[=]]> 0)
+          or config.status in (3,4,5) )
+      </if>
+      <if test="status eq 3 ">
+          and (config.status = 3 or (config.status IN (1, 2)  and config.surplus_counts <![CDATA[=]]> 0))
+      </if>
+      <if test="status eq 4 ">
+          and (config.status = 4 or (config.status IN (1, 2)  and config.end_time <![CDATA[<]]> now() and config.end_time <![CDATA[<>]]> ''))
+      </if>
+      <if test="status eq 5 ">
+  		and config.status = 5
+  	  </if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="shakeListHistory" resultMap="BaseRowMap">
+  	select 
+			config.prize_config_id ,config.name,config.category_id,config.activity_type,config.counts,
+  			config.surplus_counts,config.start_time,config.end_time,config.status,config.sn,config.active_time,config.inactive_time,
+		  	shop.name shopName , type.name prizeTypeName , store.name storeName from as_prize_config config 
+		  	join as_shop shop on config.shop_id = shop.shop_id
+		  	join as_yp_base_category type on config.category_id = type.id
+		  	left join as_store store on store.store_id = shop.store_id
+  	where 1 = 1 
+  	 and config.activity_type = 2 and  config.is_jackpot = #{isJackpot}
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	</if>
+      <if test="status == null  or status == '' ">
+          and ( (config.status IN (1, 2)  and config.end_time <![CDATA[<]]> now() and config.end_time <![CDATA[<>]]> '' ) or (config.status IN (1, 2) and config.surplus_counts <![CDATA[=]]> 0)
+          or config.status in (3,4,5) )
+      </if>
+      <if test="status eq 3 ">
+          and (config.status = 3 or (config.status IN (1, 2)  and config.surplus_counts <![CDATA[=]]> 0))
+      </if>
+      <if test="status eq 4 ">
+          and (config.status = 4 or (config.status IN (1, 2)  and config.end_time <![CDATA[<]]> now() and config.end_time <![CDATA[<>]]> ''))
+      </if>
+      <if test="status eq 5 ">
+          and config.status = 5
+      </if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="couponsListHistory" resultMap="BaseRowMap">
+  	select 
+	  	config.prize_config_id ,config.name,config.category_id,config.activity_type,config.counts,
+  		config.surplus_counts,config.start_time,config.end_time,config.status,config.sn,config.active_time,config.inactive_time,
+	  	shop.name shopName , type.name prizeTypeName , store.name storeName ,prizeCategory.category_id prizeCategoryId from 
+	  	as_prize_config config 
+	  	join as_shop shop on config.shop_id = shop.shop_id
+	  	join as_yp_base_category type on config.category_id = type.id
+	  	join as_prize_category prizeCategory on config.prize_config_id = prizeCategory.prize_config_id
+	  	left join as_store store on store.store_id = shop.store_id
+  	where 1 = 1 
+  	and config.activity_type = 3
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')
+		or store.name LIKE concat(concat('%',#{keyWord}),'%')
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	config.shop_id = #{shopId} 
+  	</if>
+  	<if test="provinceId != null and provinceId != ''">
+      	and shop.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and shop.city_id = #{cityId}
+      </if>
+      <if test="areaId != null and areaId != ''">
+      	and shop.area_id = #{areaId}
+      </if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and config.category_id = #{categoryId}
+  	</if>
+      <if test="status == null  or status == '' ">
+          and ( (config.status IN (1, 2) and config.end_time <![CDATA[<]]> now()) or (config.status IN (1, 2) and config.surplus_counts <![CDATA[=]]> 0)
+          or config.status in (3,4,5) )
+      </if>
+      <if test="status eq 3 ">
+          and (config.status = 3 or (config.status IN (1, 2)  and config.surplus_counts <![CDATA[=]]> 0))
+      </if>
+      <if test="status eq 4 ">
+          and (config.status = 4 or (config.status IN (1, 2)  and config.end_time <![CDATA[<]]> now()))
+      </if>
+      <if test="status eq 5 ">
+          and config.status = 5
+      </if>
+  	<if test="couponTagId != null and couponTagId != ''">
+  		and prizeCategory.category_id = #{couponTagId}
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+  <update id="updatePrizeStatus" parameterType="java.lang.Integer">
+  		update as_prize_config
+  		<set>
+  			 <if test="status == 5" >
+       	 		status = 5,
+      		</if>
+  			 <if test="status == 0" >
+  			 	reason = null,
+       	 		audit_status = 0,
+      		</if>
+  			 <if test="status == 2" >
+       	 		status = 2,
+      		</if>
+  			 <if test="status == 1" >
+       	 		status = 1,
+      		</if>
+  		</set>
+  		where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </update>
+  
+     <select id="listAudit" resultMap="BaseRowMap">
+  	select config.* , shop.name shopName ,shop.address address,store.name storeName, type.name prizeTypeName from as_prize_config config 
+  	join as_shop shop on config.shop_id = shop.shop_id
+  	left join as_store store on shop.store_id = store.store_id
+  	join as_yp_base_category type on config.category_id = type.id
+  	where 1=1 
+    and config.status not in(4,5)  and config.audit_status=0 and config.activity_type != 4
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%') 	
+		or config.prize_config_id LIKE concat(concat('%',#{keyWord}),'%')	
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%')	
+		)
+  	</if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and type.id = #{categoryId}
+  	</if>
+  	<if test="activityType != null and activityType != ''">
+  		and config.activity_type = #{activityType}
+  	</if>
+  	<if test="auditStatus != null and auditStatus != ''">
+  		and config.audit_status = #{auditStatus}
+  	</if>
+  	<if test="status != null and status != ''">
+  		and config.status = #{status}
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+    <select id="getPrize" resultMap="BaseRowMap">
+  	select config.*,shop.name shopName,shop.address address,baseCategory.name typeName  FROM as_prize_config config 
+    join as_shop shop on config.shop_id=shop.shop_id
+    join as_yp_base_category baseCategory on config.category_id=baseCategory.id
+    where 1=1
+    and config.prize_config_id=#{prizeConfigId}
+    </select>
+    
+    <select id="listAuditHistory" resultMap="BaseRowMap">
+  	select config.* , shop.name shopName ,shop.address address,store.name storeName, type.name prizeTypeName from as_prize_config config 
+  	join as_shop shop on config.shop_id = shop.shop_id
+  	join as_yp_base_category type on config.category_id = type.id
+  	left join as_store store on shop.store_id = store.store_id
+  	where 1=1 
+  	and config.audit_status  &gt; 0 and config.activity_type != 4
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+  		config.prize_config_id LIKE concat(concat('%',#{keyWord}),'%')
+  		or shop.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.name LIKE concat(concat('%',#{keyWord}),'%')
+		or config.sn LIKE concat(concat('%',#{keyWord}),'%') 		
+		)
+  	</if>
+  	<if test="categoryId != null and categoryId != ''">
+  		and type.id = #{categoryId}
+  	</if>
+  	<if test="activityType != null and activityType != ''">
+  		and config.activity_type = #{activityType}
+  	</if>
+  	<if test="status != null and status != ''">
+  		and config.status = #{status}
+  	</if>
+  	<if test="auditStatus != null and auditStatus != ''">
+  		and config.audit_status = #{auditStatus}
+  	</if>
+  	order by config.create_time desc
+  </select>
+  
+  <select id="countShopPrize" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		as_prize_config
+	WHERE
+		shop_id = #{shopId}
+	AND audit_status = 1
+	AND STATUS IN (1, 3, 4)
+  </select>
+  
+  <select id="info" parameterType="java.lang.Integer" resultType="java.util.Map">
+  		SELECT activity_type  type, SUM(counts-surplus_counts) total,COUNT(shop_id) time FROM  as_prize_config 
+  		 WHERE 1=1 and `status` in (3,4) and audit_status = 1  and DATE_FORMAT(end_time,'%m') =#{month}
+  		 <if test="shopId != 'null' and shopId !=''">
+  		 	and shop_id=#{shopId}
+  		 </if>
+  		  GROUP BY activity_type
+  </select>
+  
+  <select id="findByName"  resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_prize_config WHERE `name` = #{name} and shop_id = #{shopId} and activity_type = #{type} and ((status  in (0,1,2) and end_time <![CDATA[>]]> now()) or(status  in (0,1,2) and end_time = ''))
+  </select>
+  
+  <select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_prize_config WHERE category_id = #{categoryId}
+  </select>
+  <select id="queryList" parameterType="java.util.List" resultMap="WithName">
+        SELECT a.*, b.name AS categoryName FROM
+        as_prize_config a LEFT JOIN as_yp_base_category b ON a.category_id=b.id       
+        WHERE a.surplus_counts <![CDATA[>]]>0 AND a.activity_type=2 AND a.audit_status=1 AND a.status=1 AND (a.end_time<![CDATA[>]]>NOW() OR a.start_time ='' OR a.end_time='')
+        <if test="name != null">
+            and a.name like CONCAT(CONCAT('%',#{name}),'%')
+        </if>
+  </select>
+   <select id="queryById"  parameterType="java.lang.Integer" resultMap="WithName">
+        SELECT a.*, b.name AS categoryName 
+        FROM as_prize_config a 
+        LEFT JOIN as_yp_base_category b ON a.category_id=b.id       
+        WHERE 1=1 and  a.prize_config_id=#{prizeConfigId}
+  </select>
+  <select id="listAuditHistoryByCfgId" resultMap="BaseRowMap">
+  	SELECT config.* , shop.name shopName ,shop.address address,store.name storeName, type.name prizeTypeName FROM as_prize_config config 
+  	JOIN as_shop shop ON config.shop_id = shop.shop_id
+  	JOIN as_yp_base_category TYPE ON config.category_id = type.id
+  	LEFT JOIN as_store store ON shop.store_id = store.store_id
+  	WHERE 1=1 
+  	AND config.audit_status  &gt; 0
+  	AND config.prize_config_id =#{prizeConfigId,jdbcType=INTEGER}
+  	
+  </select>
+</mapper>

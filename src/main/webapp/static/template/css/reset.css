@@ -1,0 +1,62 @@
+@charset "utf-8";
+
+body {
+	font: 14px/1.5 microsoft yahei, tahoma, arial, Hiragino Sans GB, WenQuanYi Micro Hei, \5FAE\8F6F\96C5\9ED1, \5B8B\4F53, sans-serif;
+	line-height: 1.5;
+	background-color: #FFF;
+}
+body, blockquote, dl, dd, figure, form, fieldset, p, pre, h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+menu, ul, ol {
+	list-style-type: none;
+	margin: 0;
+	padding-left: 0;
+}
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+fieldset, legend {
+	padding: 0;/*===== 设置表单元素的样式 =====*/
+}
+legend {
+	color: windowtext;
+}
+input, textarea, select {
+	font-size: 100%;
+	font-family: inherit;
+}
+button {
+	cursor: pointer;
+	font-family: inherit;
+}
+a {
+	text-decoration: none;
+	color: #141414;
+}
+img {
+	display: block;
+	vertical-align: middle;
+}
+a img {
+	border: 0;
+}
+input[type="button"], input[type="submit"], input[type="reset"] {
+	padding: .1em .25em;
+	cursor: pointer;
+}
+input[type="text"], select, textarea {
+	background-color: #FFFFFF;
+}
+select {
+	border: 1px inset;
+}
+textarea {
+	overflow: auto;
+	vertical-align: text-bottom;
+	border: 1px solid;
+	resize: none;
+}

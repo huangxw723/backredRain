@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsEventMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsEvent" >
+    <id column="as_event_id" property="asEventId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="event_name" property="eventName" jdbcType="VARCHAR" />
+    <result column="event_title" property="eventTitle" jdbcType="VARCHAR" />
+    <result column="event_logo" property="eventLogo" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="audit_status" property="auditStatus" jdbcType="INTEGER" />
+    <result column="audit_time" property="auditTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsEvent" extends="BaseResultMap" >
+    <result column="event_detail" property="eventDetail" jdbcType="LONGVARCHAR" />
+    <result column="reason" property="reason" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <resultMap extends="ResultMapWithBLOBs" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    as_event_id, shop_id, store_id, event_name, event_title, event_logo, start_time, 
+    end_time, status, audit_status, audit_time, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    event_detail, reason
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_event
+    where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_event
+    where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsEvent" >
+    insert into as_event (as_event_id, shop_id, store_id, 
+      event_name, event_title, event_logo, 
+      start_time, end_time, status, 
+      audit_status, audit_time, create_time, 
+      event_detail, reason)
+    values (#{asEventId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, 
+      #{eventName,jdbcType=VARCHAR}, #{eventTitle,jdbcType=VARCHAR}, #{eventLogo,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{auditStatus,jdbcType=INTEGER}, #{auditTime,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{eventDetail,jdbcType=LONGVARCHAR}, #{reason,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsEvent" >
+    insert into as_event
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="asEventId != null" >
+        as_event_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="eventName != null" >
+        event_name,
+      </if>
+      <if test="eventTitle != null" >
+        event_title,
+      </if>
+      <if test="eventLogo != null" >
+        event_logo,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditTime != null" >
+        audit_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="eventDetail != null" >
+        event_detail,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="asEventId != null" >
+        #{asEventId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="eventName != null" >
+        #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventTitle != null" >
+        #{eventTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="eventLogo != null" >
+        #{eventLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="eventDetail != null" >
+        #{eventDetail,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsEvent" >
+    update as_event
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="eventName != null" >
+        event_name = #{eventName,jdbcType=VARCHAR},
+      </if>
+      <if test="eventTitle != null" >
+        event_title = #{eventTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="eventLogo != null" >
+        event_logo = #{eventLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null" >
+        audit_time = #{auditTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="eventDetail != null" >
+        event_detail = #{eventDetail,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsEvent" >
+    update as_event
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      event_name = #{eventName,jdbcType=VARCHAR},
+      event_title = #{eventTitle,jdbcType=VARCHAR},
+      event_logo = #{eventLogo,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      event_detail = #{eventDetail,jdbcType=LONGVARCHAR},
+      reason = #{reason,jdbcType=LONGVARCHAR}
+    where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsEvent" >
+    update as_event
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      event_name = #{eventName,jdbcType=VARCHAR},
+      event_title = #{eventTitle,jdbcType=VARCHAR},
+      event_logo = #{eventLogo,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      audit_status = #{auditStatus,jdbcType=INTEGER},
+      audit_time = #{auditTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </update>
+
+  <select id="listAudit" resultMap="BaseRowMap">
+    select e.* , shop.name shopName,store.name storeName
+    from as_event e
+    join as_shop shop on e.shop_id = shop.shop_id
+    left join as_store store on shop.store_id = store.store_id
+    where 1=1
+    and e.audit_status=0
+    <if test="shopName != null and shopName != ''">
+    and  shop.name LIKE concat(concat('%',#{shopName}),'%')
+  </if>
+    <if test="eventName != null and eventName != ''">
+      and  e.event_name LIKE concat(concat('%',#{eventName}),'%')
+    </if>
+    <if test="eventTitle != null and eventTitle != ''">
+      and  e.event_title LIKE concat(concat('%',#{eventTitle}),'%')
+    </if>
+    order by e.as_event_id desc
+  </select>
+
+  <select id="listAuditHistory" resultMap="BaseRowMap">
+    select e.* , shop.name shopName,store.name storeName
+    from as_event e
+    join as_shop shop on e.shop_id = shop.shop_id
+    left join as_store store on shop.store_id = store.store_id
+    where 1=1
+    and e.audit_status in (1,2)
+    <if test="shopName != null and shopName != ''">
+      and  shop.name LIKE concat(concat('%',#{shopName}),'%')
+    </if>
+    <if test="eventName != null and eventName != ''">
+      and  e.event_name LIKE concat(concat('%',#{eventName}),'%')
+    </if>
+    <if test="eventTitle != null and eventTitle != ''">
+      and  e.event_title LIKE concat(concat('%',#{eventTitle}),'%')
+    </if>
+    <if test="auditStatus != null and auditStatus != ''">
+      and e.audit_status = #{auditStatus}
+    </if>
+    order by e.as_event_id desc
+  </select>
+
+  <select id="auditHistoryById" resultMap="BaseRowMap">
+    SELECT e.* , shop.name shopName ,store.name storeName
+    FROM as_event e
+    JOIN as_shop shop ON e.shop_id = shop.shop_id
+    LEFT JOIN as_store store ON shop.store_id = store.store_id
+    WHERE  e.as_event_id =#{asEventId,jdbcType=INTEGER}
+  </select>
+
+ <select id="listAll" resultMap="BaseRowMap">
+  	select 
+    event.*,shop.name shopName
+    FROM as_event event
+    left join as_shop shop on event.shop_id = shop.shop_id
+    WHERE 1=1
+  	<if test="keyWord != null and keyWord != ''">
+  		and (
+		event.event_name LIKE concat(concat('%',#{keyWord}),'%')
+		or event.event_title LIKE concat(concat('%',#{keyWord}),'%') 
+		or shop.name LIKE concat(concat('%',#{keyWord}),'%')	
+		)
+  	</if>
+  	<if test="shopId != 'null' and shopId != ''">
+  		and	event.shop_id = #{shopId} 
+  	</if>	
+  	<if test="status == 1 ">
+  		and event.status=1
+  	</if>
+  	<if test="status == 2 ">
+  		and event.status=2
+  	</if>
+  	<if test="status == 3 ">
+  		and event.audit_status=0
+  	</if>
+  	<if test="status == 4 ">
+  		and event.audit_status=2
+  	</if>
+  	    ORDER BY event.create_time desc
+  </select>
+   <select id="findByName"  resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_event WHERE event_name = #{eventName}    
+  </select>
+  <update id="updateEventStatus" parameterType="java.lang.Integer">
+  		update as_event
+  		<set>
+  			 <if test="status == 2" >
+       	 		status = 2,
+      		</if>
+  			 <if test="status == 1" >
+       	 		status = 1,
+      		</if>
+      		<if test="status == 0" >
+      		    reason="",
+       	 		audit_status = 0 ,
+      		</if>
+  		</set>
+  		where as_event_id = #{asEventId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

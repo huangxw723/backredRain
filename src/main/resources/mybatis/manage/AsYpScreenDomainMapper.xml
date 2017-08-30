@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpScreenDomainMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpScreenDomain" >
+    <id column="screen_domain_id" property="screenDomainId" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="user_template_id" property="userTemplateId" jdbcType="INTEGER" />
+    <result column="screen_id" property="screenId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_main" property="isMain" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    screen_domain_id, url, user_template_id, screen_id, user_id, status, is_main, create_time,shop_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_screen_domain
+    where screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+  </select>
+   <select id="listAll" resultMap="BaseRowMap">
+  	select * from as_yp_screen_domain domain
+  	where 1=1
+  	 <if test="status != null and status != ''" >
+      and domain.status =#{status}
+     </if>
+      <if test="shopId != null and shopId != ''" >
+      and domain.shop_id =#{shopId}
+     </if>
+  	order by screen_domain_id desc
+  </select>
+  
+  <select id="getDomains" resultMap="BaseRowMap">
+  	select screen_domain_id,url,shop_id from as_yp_screen_domain
+  	<if test="spId != null and spId != ''" >
+      and domain.shop_id =#{spId}
+    </if>
+  	order by screen_domain_id desc
+  </select>
+<!--   商家的站点信息，屏信息 -->
+  <select id="domainListByShopId" resultMap="BaseRowMap">
+  SELECT
+	*
+   FROM
+	(
+	SELECT
+		dt.url,
+		dt.`status`,
+		u.account,
+		dt.create_time,
+		dt.screen_domain_id
+	FROM
+		as_yp_screen_domain dt
+		JOIN as_user u ON u.user_id = dt.user_id
+		JOIN as_shop shop ON shop.shop_id = dt.shop_id
+		WHERE
+		1 = 1
+	<if test="status != null and status != ''" >
+    AND dt.status =#{status}
+    </if>
+	AND main.is_main = 0
+	) a1
+   JOIN (
+	SELECT
+		count(f.screen_domain_id) AS num,
+		f.screen_domain_id
+	FROM
+		as_yp_screen_info f
+	JOIN as_yp_screen_domain main ON main.screen_domain_id = f.screen_domain_id
+	JOIN as_shop shop ON shop.shop_id = main.shop_id
+	JOIN as_user u ON u.user_id = main.user_id
+	WHERE
+	1 = 1
+	 AND main.is_main = 0
+    <if test="status != null and status != ''" >
+     AND main.status =#{status}
+    </if>
+	GROUP BY
+		f.screen_domain_id
+   ) a2 ON a1.screen_domain_id = a2.screen_domain_id
+   ORDER BY a1.screen_domain_id DESC
+  </select>
+  <select id="childDomainList" resultMap="BaseRowMap">
+  	select * from as_yp_screen_domain domain
+  	where 1=1
+  	AND is_main=0
+  	 <if test="status != null and status != ''" >
+      and domain.status =#{status}
+     </if>
+      <if test="shopId != null and shopId != ''" >
+      and domain.shop_id =#{shopId}
+     </if>
+  	order by screen_domain_id desc
+  </select>
+<!--  查看所有企业站点信息-管理员 -->
+  <select id="listAllInfo" resultMap="BaseRowMap">
+	  	SELECT
+		a1.*,IFNULL(a2.num,0) as num
+	FROM
+		(
+		SELECT
+			shop.shop_id,
+			shop.`name` AS shopName,
+			dt.url,
+			dt. create_time,
+			dt.`status`
+		FROM
+			as_shop shop
+		LEFT JOIN as_yp_screen_domain dt ON dt.shop_id = shop.shop_id
+		WHERE
+			1 = 1
+		AND dt.is_main = 1
+		<if test="url != null and url != ''" >
+	    AND dt.url like concat(concat('%', #{url}),'%')
+	    </if>
+	    <if test="status != null and status != ''" >
+	    AND dt.status =#{status}
+	    </if>
+	    <if test="shopName != null and shopName != ''" >
+	    AND shop.name =#{shopName}
+	    </if>
+		GROUP BY
+		shop.shop_id,
+		dt.url,
+		dt. create_time,
+		dt. STATUS
+		) a1
+	    LEFT JOIN (
+		SELECT
+			mshop.shop_id,
+			COUNT(dt.screen_domain_id) AS num
+		FROM
+			as_shop mshop
+		JOIN as_yp_screen_domain dt ON dt.shop_id = mshop.shop_id
+		WHERE
+			1 = 1
+		AND dt.is_main = 0
+		<if test="url != null and url != ''" >
+	      and dt.url like concat(concat('%', #{url}),'%')
+	    </if>
+	    <if test="status != null and status != ''" >
+	      and dt.status =#{status}
+	    </if>
+	    <if test="shopName != null and shopName != ''" >
+	      and mshop.name like concat(concat('%', #{shopName}),'%')
+	    </if>
+		GROUP BY
+			mshop.shop_id
+	) a2 ON a1.shop_id = a2.shop_id
+    
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_screen_domain
+    where screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpScreenDomain" >
+    insert into as_yp_screen_domain (screen_domain_id, url, user_template_id, 
+      screen_id, user_id, status, 
+      is_main, create_time,shop_id)
+    values (#{screenDomainId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{userTemplateId,jdbcType=INTEGER}, 
+      #{screenId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{isMain,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpScreenDomain" useGeneratedKeys="true" keyProperty="screenDomainId">
+    insert into as_yp_screen_domain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="screenDomainId != null" >
+        screen_domain_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="userTemplateId != null" >
+        user_template_id,
+      </if>
+      <if test="screenId != null" >
+        screen_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isMain != null" >
+        is_main,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="screenDomainId != null" >
+        #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="userTemplateId != null" >
+        #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="screenId != null" >
+        #{screenId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isMain != null" >
+        #{isMain,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpScreenDomain" >
+    update as_yp_screen_domain
+    <set >
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="userTemplateId != null" >
+        user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="screenId != null" >
+        screen_id = #{screenId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isMain != null" >
+        is_main = #{isMain,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpScreenDomain" >
+    update as_yp_screen_domain
+    set url = #{url,jdbcType=VARCHAR},
+      user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      screen_id = #{screenId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      is_main = #{isMain,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+  </update>
+   <update id="updateStatus" parameterType="com.aoshi.domain.AsYpScreenDomain" >
+    update as_yp_screen_domain
+    set status = #{status,jdbcType=INTEGER}
+    where screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+  </update>
+<!--   主域名停用启用 -->
+  <update id="updateDomainStatus" parameterType="com.aoshi.domain.AsYpScreenDomain" >
+    update as_yp_screen_domain
+    set status = #{status,jdbcType=INTEGER}
+    where shop_id = #{shopId,jdbcType=INTEGER} and status!=#{status,jdbcType=INTEGER}
+  </update>
+  <select id="listAllBShopId" resultMap="BaseRowMap" >
+     SELECT
+	*
+	FROM
+	  as_yp_screen_domain domain
+	  join as_shop shop on shop.shop_id=domain.shop_id
+	WHERE
+		1 = 1
+   <if test="status != null and status != ''" >
+     and domain.status = #{status,jdbcType=VARCHAR}
+   </if>
+	 and shop.shop_id=#{shopId}
+  </select>
+  <select id="queryDomainAll" resultMap="BaseRowMap" parameterType="pd">
+    SELECT
+	*
+    FROM
+	(
+	SELECT
+		shop.`name` AS shopName,
+		dt.url,
+		dt.create_time,
+		dt.screen_domain_id,
+		dt.`status`,
+		dt.is_main,
+     u.account,
+		shop.shop_id
+	FROM
+		as_yp_screen_domain dt
+	JOIN as_yp_screen_info f ON dt.screen_domain_id = f.screen_domain_id
+	JOIN as_shop shop ON dt.shop_id = shop.shop_id
+    JOIN as_user u on dt.user_id = u.user_id
+	WHERE
+		1 = 1
+	GROUP BY
+	shop.shop_id,
+	dt.url,
+	dt.create_time,
+	dt.screen_domain_id,
+	shop.`name`,
+	dt. STATUS,
+    u.account,
+	dt.is_main
+	) a1
+   JOIN (
+	SELECT
+		dt.screen_domain_id,
+		COUNT(f.screen_info_id) AS num
+	FROM
+		as_yp_screen_domain dt
+	JOIN as_yp_screen_info f ON dt.screen_domain_id = f.screen_domain_id
+	JOIN as_shop shop ON dt.shop_id = shop.shop_id
+	WHERE
+		1 = 1
+	GROUP BY
+	dt.url,
+	dt.create_time,
+	dt.screen_domain_id,
+	shop.`name`,
+	dt. STATUS
+    ) a2 ON a1.screen_domain_id = a2.screen_domain_id
+    where 1=1
+   <if test="startTime != null and startTime != '' ">
+	and a1.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and a1.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+   <if test="keyWord != null and keyWord != ''">
+    and a1.shopName like concat(concat('%', #{keyWord}),'%') or a1.account like concat(concat('%', #{keyWord}),'%')
+  	</if>
+  	<if test="shopId != null and shopId != ''" >
+    and a1.shop_id = #{shopId,jdbcType=INTEGER}
+   </if>
+	<if test="status != null and status != ''" >
+    and a1.status = #{status,jdbcType=VARCHAR}
+   </if>
+	order by a1.create_time desc
+  </select>
+<!--  根据单个站点id和shopId查看终端信息-->
+  <select id="getScreenPageById" resultMap="BaseRowMap">
+   SELECT
+	     f.*,
+	     p.province_name,
+	     a.area_name,
+	     c.city_name,
+	     dt.url,
+	     shop.name
+	FROM
+		 as_yp_screen_info f
+	JOIN as_province p ON f.province_id = p.province_id
+	JOIN as_city c ON f.city_id = c.city_id
+	JOIN as_area a ON a.area_id = f.area_id
+	JOIN as_shop shop ON shop.shop_id = f.shop_id
+	JOIN as_yp_screen_domain dt ON dt.screen_domain_id = f.screen_domain_id
+	WHERE
+		1 = 1
+	AND f.screen_domain_id = #{domainId}
+	AND f.shop_id = #{shopId}
+	ORDER BY
+		f.screen_domain_id DESC
+  </select>
+</mapper>

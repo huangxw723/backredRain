@@ -1,0 +1,149 @@
+
+.bc{
+	background-color: #ccc;
+}
+/*左侧边*/
+
+/*二级菜单*/
+.menu-content{
+	width: 100%;
+	margin:  54px auto;
+	text-align: center;
+}
+.second-menu{
+	width: 1812px;
+	margin: 0 auto;
+}
+.second-menu li{
+	width: 438px;
+	height: 434px;
+	margin-right: 20px;
+	background-color: #ccc;
+	float: left;
+	margin-bottom: 20px;
+}
+.second-menu li:nth-child(4n+4){
+	margin-right: 0;
+}
+/*end*/
+/*三级菜单*/
+.third-food{
+	width: 100%;
+	margin: 54px auto;
+	text-align: center;
+}
+.third-food .third-l{
+	width: 478px;
+	height: 886px;
+	margin-right: 20px;
+}
+.third-food .third-r .item-h{
+	width: 1314px;
+	height: 674px;
+	margin-bottom: 20px;
+	background-color: #ccc;
+}
+.third-food .third-r .item-b li{
+	width: 312px;
+	height: 192px;
+	float: left;
+	background-color: #ccc;
+}
+.third-food .third-r .item-b li+li{
+	margin-left: 20px;
+	
+}
+
+/*end*/
+
+/*娱乐*/
+.yule{
+	margin: 54px auto;
+	text-align: center;
+	width: 1812px;
+}
+.yule li{
+	width: 438px;
+	height: 886px;
+	float: left;
+	background-color: #ccc;	
+}
+.yule li+li{
+	margin-left: 20px;
+}
+/*end*/
+/*场内活动*/
+.in-act{
+	margin: 54px auto;
+	width: 1812px;
+}
+.in-act .second-l{
+	background-color: #ccc;
+	width: 564px;
+	height: 886px;
+	margin-right: 20px;
+}
+
+.in-act .act li{
+	width: 604px;
+	height: 516px;
+	background-color: #ccc;
+	float: left;
+}
+.in-act .act li:nth-child(3){
+	height: 350px;
+}
+.in-act .act li:nth-child(4){
+	height: 350px;
+}
+.m_l_20{
+	margin-right: 20px;
+}
+.m_b_20{
+	margin-bottom: 20px;
+}
+/*end*/
+/*电影院*/
+.cinema{
+	width: 1812px;
+	margin: 54px auto;
+}
+.cinema .second-l li{
+    width: 582px;
+    border-bottom-right-radius: 20px;
+    background-color: #ccc;
+}
+.cinema .second-l li:nth-child(1){
+	height: 286px;
+	margin-bottom: 20px;
+}
+.cinema .second-l li:nth-child(2){
+	height: 356px;
+	margin-bottom: 20px;
+}
+.cinema .second-l li:nth-child(3){
+	height: 210px;
+}
+.cinema .second-r li{
+    width: 1210px;
+    background-color: #ccc; 
+}
+.cinema .second-r li:nth-child(1){
+    height: 658px;
+    border-bottom-left-radius: 20px;
+}
+.cinema .second-r li:nth-child(2){
+    height: 210px; 
+    border-top-left-radius: 20px;
+}
+/*end*/
+/*公司介绍*/
+.company .item{
+   margin-top: -183px;
+}
+.company .po_ab{
+   right: 90px;
+   bottom: 24px;
+}
+
+

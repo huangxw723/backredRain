@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsConsultationCityMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationCity">
+    <id column="consultation_city_id" jdbcType="INTEGER" property="consultationCityId" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="cover_img" jdbcType="VARCHAR" property="coverImg" />
+    <result column="consultation_desc" jdbcType="VARCHAR" property="consultationDesc" />
+    <result column="visit_count" jdbcType="INTEGER" property="visitCount" />
+    <result column="public_time" jdbcType="VARCHAR" property="publicTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.aoshi.domain.AsConsultationCity">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    consultation_city_id, type_id, province_id, city_id, area_id, title, cover_img, consultation_desc, visit_count, public_time, status, address, lng, lat
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  
+  <!--查询 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_consultation_city
+    where consultation_city_id = #{consultationCityId,jdbcType=INTEGER}
+  </select>
+  
+  <!--查询 -->
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+	SELECT * FROM 
+	as_consultation_city food,
+	as_province p,
+	as_city c,
+	as_consultation_type t 
+	WHERE food.province_id=p.province_id 
+	AND food.city_id=c.city_id 
+	AND food.type_id=t.consultation_type_id
+	AND food.consultation_city_id = #{consultationCityId,jdbcType=INTEGER}
+  </select>
+  
+  <!--列表显示 -->
+  <select id="queryList" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
+	 SELECT * FROM 
+		as_consultation_city food,
+		as_province p,
+		as_city c,
+		as_area a,
+		as_consultation_type t
+		WHERE food.province_id=p.province_id 
+		AND food.city_id=c.city_id 
+		AND food.area_id=a.area_id 
+		AND food.type_id=t.consultation_type_id 
+	<if test="provinceId != null and provinceId>0">
+	  and food.province_id = #{provinceId,jdbcType=INTEGER}
+	</if>
+	<if test="cityId != null and cityId>0">
+	  and food.city_id = #{cityId,jdbcType=INTEGER}
+	</if>
+	<if test="areaId != null and areaId>0">
+	  and food.area_id = #{areaId,jdbcType=INTEGER}
+	</if>
+	<if test="typeId != null and typeId>0">
+	  and food.type_id = #{typeId,jdbcType=INTEGER}
+	</if>
+	<if test="status != null and status>0">
+	  and food.status = #{status,jdbcType=INTEGER}
+	</if>
+	<if test="title != null and title !=''">
+	  and food.title like CONCAT( CONCAT('%',#{title}), '%')
+	</if>
+	order by consultation_city_id desc
+  </select>
+  
+  
+  
+  <!-- 新增 -->
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationCity">
+    insert into as_consultation_city
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consultationCityId != null">
+       consultation_City_Id,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="coverImg != null">
+        cover_img,
+      </if>
+      <if test="consultationDesc != null">
+        consultation_desc,
+      </if>
+      <if test="visitCount != null">
+        visit_count,
+      </if>
+      <if test="publicTime != null">
+        public_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consultationCityId != null">
+        #{consultationCityId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="consultationDesc != null">
+        #{consultationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_consultation_city
+    where consultation_city_id = #{consultationCityId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 批量删除 -->
+  <update id="deleteByIds">
+    delete from as_consultation_city where consultation_city_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  
+  <!-- 更新 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationCity">
+    update as_consultation_city
+    <set>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        cover_img = #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="consultationDesc != null">
+        consultation_desc = #{consultationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        visit_count = #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        public_time = #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where consultation_city_id = #{consultationCityId,jdbcType=INTEGER}
+  </update>
+  <!-- 更新 -->
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationCity">
+    update as_consultation_city
+    set type_id = #{typeId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      consultation_desc = #{consultationDesc,jdbcType=VARCHAR},
+      visit_count = #{visitCount,jdbcType=INTEGER},
+      public_time = #{publicTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where consultation_city_id = #{consultationCityId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 批量下架 -->
+  <update id="offSaleAll">
+    update as_consultation_city set status=3 where consultation_city_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+</mapper>

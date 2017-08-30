@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityRedrainMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityRedrain" >
+    <id column="activity_redrain_id" property="activityRedrainId" jdbcType="INTEGER" />
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="activity_code" property="activityCode" jdbcType="INTEGER" />
+    <result column="page_url" property="pageUrl" jdbcType="VARCHAR" />
+    <result column="activity_detail" property="activityDetail" jdbcType="LONGVARCHAR" />
+    <result column="activity_review" property="activityReview" jdbcType="LONGVARCHAR" />
+    <result column="activityStatus" property="activityStatus" jdbcType="VARCHAR" />   
+  </resultMap>
+   <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  <result column="activity.startTime" jdbcType="VARCHAR" property="startTime" />
+   <result column="activity.endTime" jdbcType="VARCHAR" property="endTime" />
+   <result column="activity.activityName" jdbcType="VARCHAR" property="activityName" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_redrain_id, activity_id, activity_code, page_url
+  </sql>
+  <sql id="Blob_Column_List" >
+    activity_detail, activity_review
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_activity_redrain
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_redrain
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityRedrain" >
+    insert into as_activity_redrain (activity_redrain_id, activity_id, activity_code, 
+      page_url, activity_detail, activity_review
+      )
+    values (#{activityRedrainId,jdbcType=INTEGER}, #{activityId,jdbcType=INTEGER}, #{activityCode,jdbcType=INTEGER}, 
+      #{pageUrl,jdbcType=VARCHAR}, #{activityDetail,jdbcType=LONGVARCHAR}, #{activityReview,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityRedrain" useGeneratedKeys="true" keyProperty="activityRedrainId" >
+    insert into as_activity_redrain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityRedrainId != null" >
+        activity_redrain_id,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="activityCode != null" >
+        activity_code,
+      </if>
+      <if test="pageUrl != null" >
+        page_url,
+      </if>
+      <if test="activityDetail != null" >
+        activity_detail,
+      </if>
+      <if test="activityReview != null" >
+        activity_review,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityRedrainId != null" >
+        #{activityRedrainId,jdbcType=INTEGER},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="activityCode != null" >
+        #{activityCode,jdbcType=INTEGER},
+      </if>
+      <if test="pageUrl != null" >
+        #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDetail != null" >
+        #{activityDetail,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityReview != null" >
+        #{activityReview,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityRedrain" >
+    update as_activity_redrain
+    <set >
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="activityCode != null" >
+        activity_code = #{activityCode,jdbcType=INTEGER},
+      </if>
+      <if test="pageUrl != null" >
+        page_url = #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDetail != null" >
+        activity_detail = #{activityDetail,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="activityReview != null" >
+        activity_review = #{activityReview,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsActivityRedrain" >
+    update as_activity_redrain
+    set activity_id = #{activityId,jdbcType=INTEGER},
+      activity_code = #{activityCode,jdbcType=INTEGER},
+      page_url = #{pageUrl,jdbcType=VARCHAR},
+      activity_detail = #{activityDetail,jdbcType=LONGVARCHAR},
+      activity_review = #{activityReview,jdbcType=LONGVARCHAR}
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityRedrain" >
+    update as_activity_redrain
+    set activity_id = #{activityId,jdbcType=INTEGER},
+      activity_code = #{activityCode,jdbcType=INTEGER},
+      page_url = #{pageUrl,jdbcType=VARCHAR}
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </update>
+<!--   红包雨活动信息 start -->
+  <select id="listAll" resultMap="BaseRowMap" >
+    select 
+    a.activity_redrain_id, a.activity_id,activity.start_time as startTime,activity.end_time as endTime,a.activity_code,activity.activity_name as activityName,
+    CASE
+	WHEN
+	 <![CDATA[
+	 start_time > DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s') AND end_time > DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s') THEN
+		1
+	WHEN start_time < DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s') AND end_time < DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s')THEN
+		3
+	WHEN start_time <=DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s') AND end_time >= DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s') THEN
+		2
+	ELSE
+		4
+	END activityStatus
+	 ]]>
+    from as_activity_redrain a LEFT join as_activity activity 
+    on a.activity_id=activity.activity_id
+    where 1=1   
+    and activity.activity_type=1
+	<if test="startTime != null and startTime != '' ">
+	and activity.start_time &gt;= #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and activity.end_time &lt;= #{endTime,jdbcType=VARCHAR}
+	</if>
+	<if test="keyWord != null and keyWord != ''">
+	and activity.activity_name LIKE concat(concat('%',#{keyWord}),'%')
+	</if>
+	order by activity.start_time DESC
+  </select>
+<!--   红包雨活动信息  end -->
+<select id="getActivityById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_redrain
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByActivityRedrainId" parameterType="com.aoshi.domain.AsActivityRedrain" >
+    delete from as_activity_redrain
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

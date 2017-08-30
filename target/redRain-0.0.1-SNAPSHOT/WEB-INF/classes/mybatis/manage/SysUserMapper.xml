@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.SysUserMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.SysUser" >
+    <id column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="RIGHTS" property="rights" jdbcType="VARCHAR" />
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="GROUP_ID" property="groupId" jdbcType="VARCHAR" />
+    <result column="LAST_LOGIN" property="lastLogin" jdbcType="VARCHAR" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="BZ" property="bz" jdbcType="VARCHAR" />
+    <result column="SKIN" property="skin" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="NUMBER" property="number" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="as_user_id" property="asUserId" jdbcType="INTEGER" />
+    <result column="as_shop_id" property="asShopId" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    USER_ID, USERNAME, PASSWORD, NAME, RIGHTS, ROLE_ID, GROUP_ID, LAST_LOGIN, IP, STATUS, 
+    BZ, SKIN, EMAIL, NUMBER, PHONE, as_user_id, as_shop_id, create_by
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.SysUser" >
+    insert into sys_user (USER_ID, USERNAME, PASSWORD, 
+      NAME, RIGHTS, ROLE_ID, 
+      GROUP_ID, LAST_LOGIN, IP, 
+      STATUS, BZ, SKIN, EMAIL, 
+      NUMBER, PHONE, as_user_id, 
+      as_shop_id, create_by)
+    values (#{userId,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{rights,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=VARCHAR}, #{lastLogin,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR}, #{skin,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{number,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{asUserId,jdbcType=INTEGER}, 
+      #{asShopId,jdbcType=INTEGER}, #{createBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.SysUser" >
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="rights != null" >
+        RIGHTS,
+      </if>
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="groupId != null" >
+        GROUP_ID,
+      </if>
+      <if test="lastLogin != null" >
+        LAST_LOGIN,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="bz != null" >
+        BZ,
+      </if>
+      <if test="skin != null" >
+        SKIN,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="number != null" >
+        NUMBER,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="asUserId != null" >
+        as_user_id,
+      </if>
+      <if test="asShopId != null" >
+        as_shop_id,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rights != null" >
+        #{rights,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLogin != null" >
+        #{lastLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null" >
+        #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="asUserId != null" >
+        #{asUserId,jdbcType=INTEGER},
+      </if>
+      <if test="asShopId != null" >
+        #{asShopId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.SysUser" >
+    update sys_user
+    <set >
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rights != null" >
+        RIGHTS = #{rights,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        GROUP_ID = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLogin != null" >
+        LAST_LOGIN = #{lastLogin,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bz != null" >
+        BZ = #{bz,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null" >
+        SKIN = #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        NUMBER = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="asUserId != null" >
+        as_user_id = #{asUserId,jdbcType=INTEGER},
+      </if>
+      <if test="asShopId != null" >
+        as_shop_id = #{asShopId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.SysUser" >
+    update sys_user
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      RIGHTS = #{rights,jdbcType=VARCHAR},
+      ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      GROUP_ID = #{groupId,jdbcType=VARCHAR},
+      LAST_LOGIN = #{lastLogin,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      BZ = #{bz,jdbcType=VARCHAR},
+      SKIN = #{skin,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      NUMBER = #{number,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      as_user_id = #{asUserId,jdbcType=INTEGER},
+      as_shop_id = #{asShopId,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <select id="findByAccountAndPwd" resultMap="BaseResultMap">
+  	select
+  		sys.*
+  	from sys_user sys 
+  	JOIN as_user user ON sys.user_id = user.sys_user_id
+  	where 
+  	sys.USERNAME = #{account,jdbcType=VARCHAR} 
+  	and sys.PASSWORD = #{password,jdbcType=VARCHAR}
+  	and user.status = 0
+  </select>
+  
+    <delete id="deleteData">
+    delete from sys_user
+    where as_shop_id = #{shopId}
+  </delete>
+  
+  <select id="selectByGroupIds" resultMap="BaseResultMap">
+  	select
+  		sys.*
+  	from sys_user sys 
+  	JOIN as_user user ON sys.user_id = user.sys_user_id
+  	where user.status = 0 
+  	
+  	and sys.GROUP_ID in 
+	<foreach collection="list" item="id" open="(" separator="," close=")">
+		#{id}
+	</foreach>
+ 
+  </select>
+
+  <!--检查用户名是否重复-->
+  <select id="userNameIsExist" resultType="java.lang.Integer" >
+    select
+  		count(*)
+  	from sys_user sys
+  	JOIN as_user u ON sys.user_id = u.sys_user_id
+  	where
+  	sys.USERNAME = #{account,jdbcType=VARCHAR}
+  	and u.status = 0 and u.account = #{account} and u.type=#{type}
+  </select>
+
+</mapper>

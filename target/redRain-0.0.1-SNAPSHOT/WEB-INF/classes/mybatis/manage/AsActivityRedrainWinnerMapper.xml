@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityRedrainWinnerMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivityRedrainWinner" >
+    <id column="activity_redrain_winner_id" property="activityRedrainWinnerId" jdbcType="INTEGER" />
+    <result column="activity_redrain_id" property="activityRedrainId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="prize_info" property="prizeInfo" jdbcType="VARCHAR" />
+    <result column="win_time" property="winTime" jdbcType="VARCHAR" />
+  </resultMap>
+   <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_redrain_winner_id, activity_redrain_id, user_name, prize_info, win_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_redrain_winner
+    where activity_redrain_winner_id = #{activityRedrainWinnerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity_redrain_winner
+    where activity_redrain_winner_id = #{activityRedrainWinnerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivityRedrainWinner" >
+    insert into as_activity_redrain_winner (activity_redrain_winner_id, activity_redrain_id, 
+      user_name, prize_info, win_time
+      )
+    values (#{activityRedrainWinnerId,jdbcType=INTEGER}, #{activityRedrainId,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{prizeInfo,jdbcType=VARCHAR}, #{winTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivityRedrainWinner" keyColumn="activity_id" keyProperty="activityRedrainWinnerId" >
+    insert into as_activity_redrain_winner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityRedrainWinnerId != null" >
+        activity_redrain_winner_id,
+      </if>
+      <if test="activityRedrainId != null" >
+        activity_redrain_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="prizeInfo != null" >
+        prize_info,
+      </if>
+      <if test="winTime != null" >
+        win_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityRedrainWinnerId != null" >
+        #{activityRedrainWinnerId,jdbcType=INTEGER},
+      </if>
+      <if test="activityRedrainId != null" >
+        #{activityRedrainId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeInfo != null" >
+        #{prizeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="winTime != null" >
+        #{winTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivityRedrainWinner" >
+    update as_activity_redrain_winner
+    <set >
+      <if test="activityRedrainId != null" >
+        activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="prizeInfo != null" >
+        prize_info = #{prizeInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="winTime != null" >
+        win_time = #{winTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where activity_redrain_winner_id = #{activityRedrainWinnerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivityRedrainWinner" >
+    update as_activity_redrain_winner
+    set activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      prize_info = #{prizeInfo,jdbcType=VARCHAR},
+      win_time = #{winTime,jdbcType=VARCHAR}
+    where activity_redrain_winner_id = #{activityRedrainWinnerId,jdbcType=INTEGER}
+  </update>
+  <select id="listAll" resultMap="BaseRowMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity_redrain_winner
+    where activity_redrain_id = #{activityRedrainId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

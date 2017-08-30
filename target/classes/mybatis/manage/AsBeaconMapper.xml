@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBeaconMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBeacon" >
+    <id column="beacon_id" property="beaconId" jdbcType="INTEGER" />
+    <result column="beacon_name" property="beaconName" jdbcType="VARCHAR" />
+    <result column="beacon_blue" property="beaconBlue" jdbcType="VARCHAR" />
+    <result column="beacon_mac" property="beaconMac" jdbcType="VARCHAR" />
+    <result column="beacon_uid" property="beaconUid" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="minor" property="minor" jdbcType="VARCHAR" />
+    <result column="screen_name" property="screenName" jdbcType="VARCHAR" />
+    <result column="up_screen_code" property="upScreenCode" jdbcType="VARCHAR" />
+    <result column="down_screen_code" property="downScreenCode" jdbcType="VARCHAR" />
+    <result column="screen_system" property="screenSystem" jdbcType="VARCHAR" />
+    <result column="screen_model" property="screenModel" jdbcType="VARCHAR" />
+    <result column="startup_time" property="startupTime" jdbcType="VARCHAR" />
+    <result column="shutdown_time" property="shutdownTime" jdbcType="VARCHAR" />
+    <result column="screen_address" property="screenAddress" jdbcType="VARCHAR" />
+    <result column="screen_type" property="screenType" jdbcType="VARCHAR" />
+    <result column="beacon_remark" property="beaconRemark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    beacon_id, beacon_name, beacon_blue, beacon_mac, beacon_uid, category_id, major, 
+    minor, screen_name, up_screen_code, down_screen_code, screen_system, screen_model, 
+    startup_time, shutdown_time, screen_address, screen_type, beacon_remark, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    a.*,category.name categoryName
+    from as_beacon a
+    join as_yp_base_category category  on a.category_id=category.id
+    where a.beacon_id = #{beaconId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_beacon
+    where beacon_id = #{beaconId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBeacon" >
+    insert into as_beacon (beacon_id, beacon_name, beacon_blue, 
+      beacon_mac, beacon_uid, category_id, 
+      major, minor, screen_name, 
+      up_screen_code, down_screen_code, screen_system, 
+      screen_model, startup_time, shutdown_time, 
+      screen_address, screen_type, beacon_remark, 
+      create_time)
+    values (#{beaconId,jdbcType=INTEGER}, #{beaconName,jdbcType=VARCHAR}, #{beaconBlue,jdbcType=VARCHAR}, 
+      #{beaconMac,jdbcType=VARCHAR}, #{beaconUid,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, 
+      #{major,jdbcType=VARCHAR}, #{minor,jdbcType=VARCHAR}, #{screenName,jdbcType=VARCHAR}, 
+      #{upScreenCode,jdbcType=VARCHAR}, #{downScreenCode,jdbcType=VARCHAR}, #{screenSystem,jdbcType=VARCHAR}, 
+      #{screenModel,jdbcType=VARCHAR}, #{startupTime,jdbcType=VARCHAR}, #{shutdownTime,jdbcType=VARCHAR}, 
+      #{screenAddress,jdbcType=VARCHAR}, #{screenType,jdbcType=VARCHAR}, #{beaconRemark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBeacon" >
+    insert into as_beacon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beaconId != null" >
+        beacon_id,
+      </if>
+      <if test="beaconName != null" >
+        beacon_name,
+      </if>
+      <if test="beaconBlue != null" >
+        beacon_blue,
+      </if>
+      <if test="beaconMac != null" >
+        beacon_mac,
+      </if>
+      <if test="beaconUid != null" >
+        beacon_uid,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="major != null" >
+        major,
+      </if>
+      <if test="minor != null" >
+        minor,
+      </if>
+      <if test="screenName != null" >
+        screen_name,
+      </if>
+      <if test="upScreenCode != null" >
+        up_screen_code,
+      </if>
+      <if test="downScreenCode != null" >
+        down_screen_code,
+      </if>
+      <if test="screenSystem != null" >
+        screen_system,
+      </if>
+      <if test="screenModel != null" >
+        screen_model,
+      </if>
+      <if test="startupTime != null" >
+        startup_time,
+      </if>
+      <if test="shutdownTime != null" >
+        shutdown_time,
+      </if>
+      <if test="screenAddress != null" >
+        screen_address,
+      </if>
+      <if test="screenType != null" >
+        screen_type,
+      </if>
+      <if test="beaconRemark != null" >
+        beacon_remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beaconId != null" >
+        #{beaconId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconName != null" >
+        #{beaconName,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconBlue != null" >
+        #{beaconBlue,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconMac != null" >
+        #{beaconMac,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconUid != null" >
+        #{beaconUid,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="major != null" >
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="minor != null" >
+        #{minor,jdbcType=VARCHAR},
+      </if>
+      <if test="screenName != null" >
+        #{screenName,jdbcType=VARCHAR},
+      </if>
+      <if test="upScreenCode != null" >
+        #{upScreenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="downScreenCode != null" >
+        #{downScreenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="screenSystem != null" >
+        #{screenSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="screenModel != null" >
+        #{screenModel,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null" >
+        #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shutdownTime != null" >
+        #{shutdownTime,jdbcType=VARCHAR},
+      </if>
+      <if test="screenAddress != null" >
+        #{screenAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="screenType != null" >
+        #{screenType,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconRemark != null" >
+        #{beaconRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBeacon" >
+    update as_beacon
+    <set >
+      <if test="beaconName != null" >
+        beacon_name = #{beaconName,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconBlue != null" >
+        beacon_blue = #{beaconBlue,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconMac != null" >
+        beacon_mac = #{beaconMac,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconUid != null" >
+        beacon_uid = #{beaconUid,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="minor != null" >
+        minor = #{minor,jdbcType=VARCHAR},
+      </if>
+      <if test="screenName != null" >
+        screen_name = #{screenName,jdbcType=VARCHAR},
+      </if>
+      <if test="upScreenCode != null" >
+        up_screen_code = #{upScreenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="downScreenCode != null" >
+        down_screen_code = #{downScreenCode,jdbcType=VARCHAR},
+      </if>
+      <if test="screenSystem != null" >
+        screen_system = #{screenSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="screenModel != null" >
+        screen_model = #{screenModel,jdbcType=VARCHAR},
+      </if>
+      <if test="startupTime != null" >
+        startup_time = #{startupTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shutdownTime != null" >
+        shutdown_time = #{shutdownTime,jdbcType=VARCHAR},
+      </if>
+      <if test="screenAddress != null" >
+        screen_address = #{screenAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="screenType != null" >
+        screen_type = #{screenType,jdbcType=VARCHAR},
+      </if>
+      <if test="beaconRemark != null" >
+        beacon_remark = #{beaconRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where beacon_id = #{beaconId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBeacon" >
+    update as_beacon
+    set beacon_name = #{beaconName,jdbcType=VARCHAR},
+      beacon_blue = #{beaconBlue,jdbcType=VARCHAR},
+      beacon_mac = #{beaconMac,jdbcType=VARCHAR},
+      beacon_uid = #{beaconUid,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      major = #{major,jdbcType=VARCHAR},
+      minor = #{minor,jdbcType=VARCHAR},
+      screen_name = #{screenName,jdbcType=VARCHAR},
+      up_screen_code = #{upScreenCode,jdbcType=VARCHAR},
+      down_screen_code = #{downScreenCode,jdbcType=VARCHAR},
+      screen_system = #{screenSystem,jdbcType=VARCHAR},
+      screen_model = #{screenModel,jdbcType=VARCHAR},
+      startup_time = #{startupTime,jdbcType=VARCHAR},
+      shutdown_time = #{shutdownTime,jdbcType=VARCHAR},
+      screen_address = #{screenAddress,jdbcType=VARCHAR},
+      screen_type = #{screenType,jdbcType=VARCHAR},
+      beacon_remark = #{beaconRemark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where beacon_id = #{beaconId,jdbcType=INTEGER}
+  </update>
+  <select id="queryList" parameterType="java.util.List" resultMap="BaseRowMap">
+    SELECT a.beacon_id beaconId , a.beacon_name beaconName, a.beacon_blue beaconBlue,
+    a.beacon_mac beaconMac, a.beacon_uid beaconUid, a.category_id categoryId,
+    a.major, a.minor, a.screen_name screenName,a.up_screen_code upScreenCode ,
+    a.down_screen_code downScreenCode, a.screen_system screenSystem,
+    a.screen_model screenModel, a.startup_time startupTime,a.shutdown_time shutdownTime,
+    a.screen_address screenAddress, a.screen_type, a.beacon_remark beaconRemark,
+    a.create_time createTime ,category.name categoryName
+    FROM as_beacon a
+    join as_yp_base_category category  on a.category_id=category.id
+    where 1=1 
+    <if test="screenName != null and screenName !=''">
+      AND screen_name LIKE concat(concat('%',#{screenName}),'%')
+    </if>
+    <if test="categoryId != null and categoryId !=''">
+      AND a.category_id=#{categoryId}
+    </if>
+    order by a.beacon_id 
+  </select>
+  <select id="queryById"  resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT a.*,category.name categoryName
+    FROM as_beacon a
+    join as_yp_base_category category  on a.category_id=category.id
+    where 1=1
+    and a.beacon_id ={beaconId}
+  </select>
+  <update id="deleteByIds">
+    delete from as_beacon where beacon_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  <insert id="saveInfo" parameterType="pd" flushCache="false">
+     insert into as_beacon (beacon_name, beacon_blue, 
+      beacon_mac, beacon_uid,category_id, major,
+      minor, screen_name, up_screen_code, 
+      down_screen_code, screen_system, screen_model, 
+      startup_time, shutdown_time, screen_address, 
+      screen_type, beacon_remark, create_time
+      )
+    values (#{beaconName,jdbcType=VARCHAR}, #{beaconBlue,jdbcType=VARCHAR}, 
+      #{beaconMac,jdbcType=VARCHAR}, #{beaconUid,jdbcType=VARCHAR},#{categoryId,jdbcType=INTEGER}, #{major,jdbcType=VARCHAR},
+      #{minor,jdbcType=VARCHAR}, #{screenName,jdbcType=VARCHAR}, #{upScreenCode,jdbcType=VARCHAR}, 
+      #{downScreenCode,jdbcType=VARCHAR}, #{screenSystem,jdbcType=VARCHAR}, #{screenModel,jdbcType=VARCHAR}, 
+      #{startupTime,jdbcType=VARCHAR}, #{shutdownTime,jdbcType=VARCHAR}, #{screenAddress,jdbcType=VARCHAR}, 
+      #{screenType,jdbcType=VARCHAR}, #{beaconRemark,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+</mapper>

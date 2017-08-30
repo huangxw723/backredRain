@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsSpotsMapper" >
+	<resultMap id="pro" type="com.aoshi.domain.AsProvince" >
+  	  	<id column="province_id" property="provinceId" jdbcType="INTEGER" />
+      	<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="city" type="com.aoshi.domain.AsCity">
+      <id column="city_id" property="cityId" jdbcType="INTEGER" />
+      <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+   </resultMap>
+   <resultMap id="area" type="com.aoshi.domain.AsArea" >
+      <id column="area_id" property="areaId" jdbcType="INTEGER" />
+      <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+   </resultMap>
+   <resultMap type="com.aoshi.domain.AsConsultationType" id="type">
+   		<id column="consultation_type_id" property="consultationTypeId" jdbcType="INTEGER"/>
+   		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+   </resultMap>
+ <resultMap type="com.aoshi.domain.AsConsultationImgs" id="imgs">
+   		<id column="consultation_imgs_id" property="consultationImgsId" jdbcType="INTEGER"/>
+   		<result column="type_id" property="typeId" jdbcType="INTEGER" />
+   		<result column="consultation_id" property="consultationId" jdbcType="INTEGER" />
+   		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+   </resultMap>
+   
+   <resultMap type="com.aoshi.domain.AsConsultationSpots" id="allCate">
+   		<id column="consultation_spots_id" property="consultationSpotsId" jdbcType="INTEGER"/>
+   		<result column="type_id" property="typeId" jdbcType="INTEGER" />
+   		<result column="province_id" property="provinceId" jdbcType="INTEGER" />
+   		<result column="city_id" property="cityId" jdbcType="INTEGER" />
+   		<result column="area_id" property="areaId" jdbcType="INTEGER" />
+   		<result column="yp_base_category_id" property="ypBaseCategoryId" jdbcType="INTEGER" />
+   		<result column="consultation_desc" property="consultationDesc" jdbcType="INTEGER" />
+   		<result column="name" property="name" jdbcType="VARCHAR" />
+   		<result column="cover_img" property="coverImg" jdbcType="VARCHAR" />
+   		<result column="star_level" property="starLevel" jdbcType="VARCHAR" />
+   		<result column="visit_count" property="visitCount" jdbcType="INTEGER" />
+   		<result column="public_time" property="publicTime" jdbcType="VARCHAR" />
+   		<result column="status" property="status" jdbcType="INTEGER" />
+   		<result column="address" property="address" jdbcType="VARCHAR" />
+   		<result column="lng" property="lng" jdbcType="VARCHAR" />
+   		<result column="lat" property="lat" jdbcType="VARCHAR" />  		
+   		<result column="open_time" property="openTime" jdbcType="VARCHAR" />  		
+   		<result column="line" property="line" jdbcType="VARCHAR" />  		
+   		<result column="phone" property="phone" jdbcType="VARCHAR" />  		
+   </resultMap>
+   
+   <resultMap extends="allCate" id="localityResultMap" type="com.aoshi.domain.AsConsultationSpots">
+  	<association property="province" javaType="com.aoshi.domain.AsProvince">
+      <id column="province_id" property="provinceId" jdbcType="INTEGER" />
+      <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    </association>
+    <association property="city" javaType="com.aoshi.domain.AsCity">
+      <id column="city_id" property="cityId" jdbcType="INTEGER" />
+      <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    </association>
+    <association property="asConsultationType" javaType="com.aoshi.domain.AsConsultationType">
+      <id column="consultation_type_id" property="consultationTypeId" jdbcType="INTEGER" />
+      <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    </association>
+     <association property="area" javaType="com.aoshi.domain.AsArea">
+      <id column="area_id" property="areaId" jdbcType="INTEGER" />
+      <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+   	</association>
+     <association property="asYpBaseCategory" javaType="com.aoshi.domain.AsYpBaseCategory">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="caName" property="name" jdbcType="VARCHAR" />
+   	</association>
+    </resultMap>
+
+
+ <select id="queryPro" resultMap="pro">
+  	select * from as_province
+  </select>
+  
+  <select id="queryCity" resultMap="city" parameterType="java.lang.Integer">
+  	select city_id,city_name from as_city where 1=1
+  	<if test="id!=null">
+  		and province_id=#{id}
+  	</if>
+  </select>
+  
+  <select id="queryArea"  resultMap="area" parameterType="java.lang.Integer">
+  	select area_id,area_name from as_area where 1=1
+  	<if test="id!=null">
+  		and city_id=#{id}
+  	</if>
+  </select>
+	
+	<select id="queryType" resultMap="type" parameterType="java.lang.String">
+	select consultation_type_id,type_name from as_consultation_type where type_name=#{name}
+	</select>
+	
+	<select id="queryFood" resultType="com.aoshi.domain.AsYpBaseCategory">
+		SELECT * FROM as_yp_base_category  where status=0
+	</select>
+	
+	<select id="queryCityList" resultMap="city" parameterType="java.lang.Integer">
+	select city_id,city_name from as_city where province_id=#{id}
+	</select>
+	
+	<insert id="insertImgs" parameterType="com.aoshi.domain.AsConsultationImgs" useGeneratedKeys="true" keyProperty="consultationImgsId" >
+		INSERT INTO as_consultation_imgs(type_id,consultation_id,img_url) 
+		VALUES(		
+		#{typeId},#{consultationId},#{imgUrl})
+	</insert>
+	
+	<select id="queryAllCate" resultMap="localityResultMap" parameterType="com.aoshi.domain.AsConsultationSpots">
+		SELECT food.*,p.*,c.city_id,c.city_name,t.consultation_type_id,t.type_name FROM as_consultation_spots food 
+		LEFT JOIN as_province p ON  food.province_id=p.province_id  
+		LEFT JOIN as_city c ON food.city_id=c.city_id 
+		LEFT JOIN as_consultation_type t ON food.type_id=t.consultation_type_id where 1=1
+		 <if test="provinceId != null and provinceId != ''">
+		 	and food.province_id=#{provinceId}
+		 </if>
+		 <if test="cityId != null and cityId != ''">
+		 	and food.city_id=#{cityId}
+		 </if>
+		 <if test="typeId != null and typeId != ''">
+		 	and food.type_id=#{typeId}
+		 </if>
+		 <if test="status != null  and status != ''">
+		 	and food.status=#{status}
+		 </if>
+		 <if test="name != null and name != ''">    		
+    		and food.name like '%${name}%'
+  		</if>
+  			ORDER BY public_time desc
+	</select>
+	
+	<insert id="insertFood" parameterType="com.aoshi.domain.AsConsultationSpots"   useGeneratedKeys="true" keyProperty="consultationSpotsId">
+		INSERT INTO as_consultation_spots(consultation_spots_id,type_id,province_id,city_id,area_id,yp_base_category_id,consultation_desc,NAME,cover_img,star_level,visit_count,public_time,STATUS,address,lng,lat,open_time,line,phone)
+		 VALUES(		 
+		#{consultationSpotsId},#{typeId},#{provinceId},#{cityId},#{areaId},#{ypBaseCategoryId},#{consultationDesc},#{name},#{coverImg},#{starLevel},#{visitCount},#{publicTime},#{status},#{address},#{lng},#{lat},#{openTime},#{line},#{phone})		
+	</insert>
+	
+		<update id="updateCate" parameterType="com.aoshi.domain.AsConsultationSpots">
+		   update as_consultation_spots
+    <set >
+      <if test="typeId != null and typeId != '' ">
+        type_id = #{typeId},
+      </if>
+      <if test="provinceId != null and provinceId !='' " >
+        province_id = #{provinceId},
+      </if>
+      <if test="cityId != null and cityId !='' " >
+        city_id = #{cityId},
+      </if>
+      <if test="areaId != null and areaId !='' " >
+        area_id = #{areaId},
+      </if>
+      <if test="ypBaseCategoryId != null and ypBaseCategoryId !='' " >
+        yp_base_category_id = #{ypBaseCategoryId},
+      </if>
+      <if test="name != null and name !='' " >
+        name = #{name},
+      </if>
+      <if test="consultationDesc != null and consultationDesc !='' " >
+        consultation_desc = #{consultationDesc},
+      </if>
+      <if test="coverImg != null and coverImg !='' " >
+        cover_img = #{coverImg},
+      </if>
+      <if test="starLevel != null and starLevel !='' " >
+        star_level = #{starLevel},
+      </if>
+     <if test="visitCount != null and visitCount !='' " >
+        visit_count = #{visitCount},
+      </if>
+      <if test="publicTime != null and publicTime !='' " >
+        public_time = #{publicTime},
+      </if>
+      <if test="status != null and status !='' " >
+        status = #{status},
+      </if>
+      <if test="address != null and address !='' " >
+        address = #{address},
+      </if>
+      <if test="lng != null and lng !='' " >
+        lng = #{lng},
+      </if>
+      <if test="lat != null and lat !='' " >
+        lat = #{lat},
+      </if>    
+      <if test="openTime != null and openTime !='' " >
+        open_time = #{openTime},
+      </if>      
+      <if test="line != null and line !='' " >
+        line = #{line},
+      </if>      
+      <if test="phone != null and phone !='' " >
+        phone = #{phone},
+      </if>      
+    </set>
+    where consultation_spots_id=#{consultationSpotsId}
+	</update>
+	
+	<select id="selectByPrimaryKey" resultMap="localityResultMap" parameterType="java.lang.Integer">
+		SELECT food.*,p.*,c.city_id,c.city_name,a.area_id,a.area_name,t.consultation_type_id,t.type_name,ca.id,ca.name AS caName
+		FROM as_consultation_spots food 
+		LEFT JOIN as_province p ON food.province_id=p.province_id 
+		LEFT JOIN as_city c ON food.city_id=c.city_id  
+		LEFT JOIN as_area a ON food.area_id=a.area_id
+		LEFT JOIN as_consultation_type t ON food.type_id=t.consultation_type_id  
+		LEFT JOIN as_yp_base_category ca ON  food.yp_base_category_id=ca.id
+		WHERE  food.consultation_spots_id=#{id}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM as_consultation_spots WHERE consultation_spots_id=#{consultationSpotsId}
+	</delete>
+	
+	<delete id="deleteByPrimaryKeyforImgs" >
+		DELETE FROM as_consultation_imgs WHERE  consultation_id=#{consultationSpotsId} AND type_id =#{typeId}
+	</delete>
+	
+  <select id="queryImgsById"  resultMap="imgs">
+  	 SELECT * FROM as_consultation_imgs WHERE  consultation_id =#{id} AND type_id=#{typeId}
+  </select>
+  
+  <delete id="deleteCateByIds"> 
+    delete from as_consultation_spots where consultation_spots_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </delete>
+  
+   <select id="queryTypeId" resultType="java.lang.Integer" parameterType="java.lang.String">
+  	SELECT type_id FROM as_consultation_spots WHERE consultation_spots_id=#{id}
+  </select>
+  
+  <delete id="deleteImgsByIds"> 
+    DELETE FROM as_consultation_imgs WHERE consultation_id IN
+    <foreach close=")" collection="ids" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+     AND type_id =#{typeId}
+  </delete>
+  
+  	<update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationSpots">
+		   update as_consultation_spots
+    <set >
+      <if test="status != null" >
+        status = #{status},
+      </if>
+    </set>
+    where consultation_spots_id=#{consultationSpotsId}
+	</update>
+  <update id="offSaleAll">
+    update as_consultation_spots set status=3 where consultation_spots_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  
+  <select id="selectByPrimaryKeyImg" parameterType="java.lang.Integer" resultMap="imgs">
+  	SELECT * FROM as_consultation_imgs WHERE consultation_imgs_id=#{id}
+  </select>
+  
+  <update id="updateByPrimaryKeySelectiveImg"  parameterType="com.aoshi.domain.AsConsultationImgs">
+  		UPDATE as_consultation_imgs  SET img_url=#{imgUrl}		
+  		WHERE consultation_imgs_id=#{consultationImgsId}
+  </update>
+  
+  <delete id="deleteByPrimaryKeyImg" parameterType="java.lang.Integer">
+  	DELETE FROM as_consultation_imgs WHERE consultation_imgs_id=#{id}
+  </delete>
+  <insert id="insertSelectiveImg" parameterType="com.aoshi.domain.AsConsultationImgs" keyProperty="consultationImgsId" useGeneratedKeys="true" >
+  INSERT INTO as_consultation_imgs(type_id,consultation_id,img_url) 
+		VALUES(		
+		#{typeId},#{consultationId},#{imgUrl})
+  </insert>
+</mapper>

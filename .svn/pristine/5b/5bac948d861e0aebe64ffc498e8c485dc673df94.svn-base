@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta charset="UTF-8">
+	<title>商场首页</title>
+	<link rel="stylesheet" href="../css/base.css">
+	<link rel="stylesheet" href="css_market/style.css">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+</head>
+<body>
+	<div class="r-content fix">
+<!-- 右侧边 -->
+		<div class="c-main-right pull-right">
+			<ul>
+            <li>
+                <a>
+                    <img src="../images/aside_img1.png" alt="好客武汉" title="好客武汉"></a>
+            </li>
+            <li>
+                <a>
+                    <img src="../images/aside_img2.png" alt="优惠券" title="优惠券"></a>
+            </li>
+            <li>
+                <a>
+                    <img src="../images/aside_img3.png" alt="红包雨" title="红包雨"></a>
+            </li>
+        </ul>
+		</div>
+<!-- end -->
+<!-- 中间 -->
+		<div class="c-main inline">
+			<div position="5" class="video">
+				<video id="media" width="1213" height="680" controls="controls" loop="loop" autoplay="autoplay">
+						<source src="images/video.mov" type="video/mp4"  >
+						<source src="images/movie.ogg" type="video/ogg">
+				</video>
+			</div>
+			<div position="6" class="item1 bg-c1 po_re">
+			    <marquee behavior="scroll" contenteditable="true" loop="-1" scrollamount="10"  onmouseover="this.stop();" onmouseout="this.start();"> 
+	              <span name="content"></span>
+	           </marquee>
+			</div>
+			<div position="7" class="item2 bc po_re">
+				<p class="center-txt"><span name="content"></span></p>
+				<img src="">
+			</div>
+		</div>
+<!-- end -->
+<!-- 左边栏 -->
+		<div class="c-main-left pull-left m_r_10">
+			<ul>
+				<li position="1">
+					<a>
+						<p class="center-txt"><span name="content"></span></p>
+						<img src="">
+					</a>
+				</li>
+				<li position="2">
+					<a>
+						<p class="center-txt"><span name="content"></span></p>
+						<img src="">
+					</a>
+				</li>
+				<li position="3">
+					<a>
+						<p class="center-txt"><span name="content"></span></p>
+						<img src="">
+					</a>
+				</li>
+				<li position="4">
+					<a>
+						<p class="center-txt"><span name="content"></span></p>
+						<img src="">
+					</a>
+				</li>
+			</ul>
+		</div>
+<!-- end -->
+	</div>
+</body>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript">
+
+	
+	var host = "http://"+location.host+"/redRain/";
+	var api = "static/template/";
+	var addr = host+api;
+	var imgAddr = "http://120.24.240.62:8099/"
+	
+	var userTemplateId = location.href.split("?")[1].split("=")[1];
+	$.ajax({
+		type: "GET",
+		url: addr+"getUserTemplateById",
+    	data: {userTemplateId:userTemplateId},
+		dataType:'json',
+		//beforeSend: validateData,
+		success: function(data){
+			var userTemplate = data.userTemplate;
+			var userModules = data.userModules;
+			setData(userModules);
+		}
+	});
+	
+	function setData(data){
+		$.each(data,function(index,value){
+			var position = value.position;
+			var icon = value.icon;
+			var content = value.content;
+			var type = value.type;
+			if(type==2){
+				$("source").attr("src",imgAddr+icon);
+				document.getElementById("media").load();
+			}
+			var _this = $("[position="+position+"]");
+			if(icon != undefined && icon!= null){
+				$(_this).find("img").attr("src",imgAddr+icon);
+			}
+			$(_this).find("span[name=content]").text(content);
+			if(value.template != null){
+				$(_this).find("a").attr("href",value.template.path+".html?userTemplateId="+value.template.id);
+			}
+			//链接
+			if(type==4){
+				$(_this).find("a").attr("href",value.dynamicValue);
+			}
+		})
+	}
+</script>
+</html>

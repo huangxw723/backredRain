@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOrderActionMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOrderAction" >
+    <id column="order_action_id" property="orderActionId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_goods_id" property="orderGoodsId" jdbcType="INTEGER" />
+    <result column="action_user" property="actionUser" jdbcType="INTEGER" />
+    <result column="action_admin" property="actionAdmin" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="action_note" property="actionNote" jdbcType="INTEGER" />
+    <result column="action_reason" property="actionReason" jdbcType="VARCHAR" />
+    <result column="action_remark" property="actionRemark" jdbcType="VARCHAR" />
+    <result column="action_time" property="actionTime" jdbcType="VARCHAR" />
+    <association property="user" javaType="com.aoshi.domain.AsUserInfo">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    </association>
+    <association property="sysUser" javaType="com.aoshi.entity.system.User">
+      <id column="USER_ID" property="USER_ID" jdbcType="VARCHAR" />
+      <result column="USERNAME" property="USERNAME" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_action_id, order_id, order_goods_id, action_user, action_admin, order_status, 
+    status, action_note, action_reason, action_remark, action_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_order_action
+    where order_action_id = #{orderActionId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAttr" resultMap="BaseResultMap" parameterType="pd" >
+    SELECT
+	a.*, b.user_id,
+	b.nick_name,
+	c.USER_ID, 
+	c.USERNAME
+	FROM
+		as_order_action a
+	LEFT JOIN as_user_info b ON a.action_user = b.user_id
+	LEFT JOIN sys_user c ON a.action_admin = c.USER_ID
+    LEFT JOIN as_user u on u.sys_user_id=c.user_id
+    <where>
+	  <if test="orderId != null and orderId != ''">
+		a.order_id = #{orderId}
+	  </if>
+    </where>
+    order by a.order_action_id desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_order_action
+    where order_action_id = #{orderActionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOrderAction" >
+    insert into as_order_action (order_action_id, order_id, order_goods_id, 
+      action_user, action_admin, order_status, 
+      status, action_note, action_reason, 
+      action_remark, action_time)
+    values (#{orderActionId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderGoodsId,jdbcType=INTEGER}, 
+      #{actionUser,jdbcType=INTEGER}, #{actionAdmin,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{actionNote,jdbcType=INTEGER}, #{actionReason,jdbcType=VARCHAR}, 
+      #{actionRemark,jdbcType=VARCHAR}, #{actionTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOrderAction" >
+    insert into as_order_action
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderActionId != null" >
+        order_action_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderGoodsId != null" >
+        order_goods_id,
+      </if>
+      <if test="actionUser != null" >
+        action_user,
+      </if>
+      <if test="actionAdmin != null" >
+        action_admin,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="actionNote != null" >
+        action_note,
+      </if>
+      <if test="actionReason != null" >
+        action_reason,
+      </if>
+      <if test="actionRemark != null" >
+        action_remark,
+      </if>
+      <if test="actionTime != null" >
+        action_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderActionId != null" >
+        #{orderActionId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoodsId != null" >
+        #{orderGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="actionUser != null" >
+        #{actionUser,jdbcType=INTEGER},
+      </if>
+      <if test="actionAdmin != null" >
+        #{actionAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="actionNote != null" >
+        #{actionNote,jdbcType=INTEGER},
+      </if>
+      <if test="actionReason != null" >
+        #{actionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="actionRemark != null" >
+        #{actionRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="actionTime != null" >
+        #{actionTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOrderAction" >
+    update as_order_action
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoodsId != null" >
+        order_goods_id = #{orderGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="actionUser != null" >
+        action_user = #{actionUser,jdbcType=INTEGER},
+      </if>
+      <if test="actionAdmin != null" >
+        action_admin = #{actionAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="actionNote != null" >
+        action_note = #{actionNote,jdbcType=INTEGER},
+      </if>
+      <if test="actionReason != null" >
+        action_reason = #{actionReason,jdbcType=VARCHAR},
+      </if>
+      <if test="actionRemark != null" >
+        action_remark = #{actionRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="actionTime != null" >
+        action_time = #{actionTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_action_id = #{orderActionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOrderAction" >
+    update as_order_action
+    set order_id = #{orderId,jdbcType=INTEGER},
+      order_goods_id = #{orderGoodsId,jdbcType=INTEGER},
+      action_user = #{actionUser,jdbcType=INTEGER},
+      action_admin = #{actionAdmin,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      action_note = #{actionNote,jdbcType=INTEGER},
+      action_reason = #{actionReason,jdbcType=VARCHAR},
+      action_remark = #{actionRemark,jdbcType=VARCHAR},
+      action_time = #{actionTime,jdbcType=VARCHAR}
+    where order_action_id = #{orderActionId,jdbcType=INTEGER}
+  </update>
+</mapper>

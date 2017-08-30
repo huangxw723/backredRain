@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsStoreMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsStore">
+    <id column="store_id" jdbcType="INTEGER" property="storeId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
+    <result column="qr_code_url" jdbcType="VARCHAR" property="qrCodeUrl" />
+    <result column="business_district_id" jdbcType="INTEGER" property="businessDistrictId" />
+    <result column="is_cooperation" jdbcType="INTEGER" property="isCooperation" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="yp_base_category_id" jdbcType="INTEGER" property="ypBaseCategoryId" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+	   <result column="p.provinceId" jdbcType="VARCHAR" property="provinceId" />
+	   <result column="c.cityId" jdbcType="VARCHAR" property="cityId" />
+	   <result column="r.areaId" jdbcType="VARCHAR" property="areaId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    store_id, name, address, logo_url, qr_code_url, business_district_id, is_cooperation, 
+    lng, lat, create_time, yp_base_category_id, site
+  </sql>
+  <select id="getCitByBusinessDistrictId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_store
+    <where>
+     <if test="businessDistrictId != null and businessDistrictId!='' ">
+        business_district_id=#{businessDistrictId,jdbcType=INTEGER},
+      </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_store
+    where store_id = #{storeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_store
+    where store_id = #{storeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsStore">
+    insert into as_store (store_id, name, address, 
+      logo_url, qr_code_url, business_district_id, 
+      is_cooperation, lng, lat, 
+      create_time, yp_base_category_id, site
+      )
+    values (#{storeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{logoUrl,jdbcType=VARCHAR}, #{qrCodeUrl,jdbcType=VARCHAR}, #{businessDistrictId,jdbcType=INTEGER}, 
+      #{isCooperation,jdbcType=INTEGER}, #{lng,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{ypBaseCategoryId,jdbcType=INTEGER}, #{site,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsStore">
+    insert into as_store
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="logoUrl != null">
+        logo_url,
+      </if>
+      <if test="qrCodeUrl != null">
+        qr_code_url,
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id,
+      </if>
+      <if test="isCooperation != null">
+        is_cooperation,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id,
+      </if>
+      <if test="site != null">
+        site,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null">
+        #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDistrictId != null">
+        #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="isCooperation != null">
+        #{isCooperation,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ypBaseCategoryId != null">
+        #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsStore">
+    update as_store
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeUrl != null">
+        qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="isCooperation != null">
+        is_cooperation = #{isCooperation,jdbcType=INTEGER},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="site != null">
+        site = #{site,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where store_id = #{storeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsStore">
+    update as_store
+    set name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      qr_code_url = #{qrCodeUrl,jdbcType=VARCHAR},
+      business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      is_cooperation = #{isCooperation,jdbcType=INTEGER},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      site = #{site,jdbcType=VARCHAR}
+    where store_id = #{storeId,jdbcType=INTEGER}
+  </update>
+
+  
+  <resultMap extends="BaseResultMap" id="districtResultMap" type="com.aoshi.domain.AsStore">
+  	<association javaType="com.aoshi.domain.AsBusinessDistrict" property="businessDistrict">
+      <id column="business_district_id" jdbcType="INTEGER" property="businessDistrictId" />
+      <result column="district_name" jdbcType="VARCHAR" property="name" />
+    </association>
+  </resultMap>
+  
+  <select id="selectByAttr" parameterType="pd" resultMap="districtResultMap">
+    select 
+      a.*, b.business_district_id, b.name as district_name
+    from as_store a
+    left join as_business_district b on a.business_district_id = b.business_district_id
+    <where>
+      <if test="keyWord != null and keyWord != ''">
+      	a.name like concat(concat('%', #{keyWord}),'%')
+      </if>
+      <if test="businessDistrictId != null and businessDistrictId != ''">
+      	and a.business_district_id = #{businessDistrictId}
+      </if>
+    </where>
+    order by a.store_id desc
+  </select>
+  
+  <delete id="deleteByPrimaryKeys" parameterType="java.lang.String">
+    delete from as_store
+    where store_id in
+      <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+        #{item}
+      </foreach>
+  </delete>
+
+  <select id="selectByNoAddCooperation" parameterType="pd" resultMap="BaseResultMap">
+    select 
+    	DISTINCT(s.store_id),s.`name`,s.address,s.lat,s.lng 
+     from as_store s
+    left join as_cooperation c on s.store_id = c.unactive_id
+    left join as_business_district d on s.business_district_id = d.business_district_id
+    where  s.store_id not in
+    (select unactive_id from as_cooperation WHERE active_id = #{storeId}) and s.store_id not in (#{storeId})
+      <if test="keyWord != null and keyWord != ''">
+        and ( s.name like concat(concat('%', #{keyWord}),'%')
+      		or s.store_id like concat(concat('%', #{keyWord}),'%')
+      )
+      </if>
+      <if test="provinceId != null and provinceId != ''">
+      	and d.province_id = #{provinceId}
+      </if>
+      <if test="cityId != null and cityId != ''">
+      	and d.city_id = #{cityId}
+      </if>
+  </select>
+  <select id="listAll" resultMap="BaseRowMap">
+  	select * from as_store order by store_id desc
+  </select>
+  <select id="getStorList" parameterType="pd" resultMap="BaseRowMap">
+    select 
+      a.*, b.business_district_id, b.name as district_name,b.area_id as areaId
+    from as_store a
+    left join as_business_district b on a.business_district_id = b.business_district_id
+    <where>
+      <if test="keyWord != null and keyWord != ''">
+      	a.name like concat(concat('%', #{keyWord}),'%')
+      </if>
+      <if test="businessDistrictId != null and businessDistrictId != ''">
+      	and a.business_district_id = #{businessDistrictId}
+      </if>
+    </where>
+  </select>
+<!--  根据storeid获取省市区商圈ID -->
+  <select id="getAddress" parameterType="java.lang.Integer" resultMap="BaseRowMap">
+    SELECT
+		p.province_id as provinceId,
+		c.city_id as cityId,
+		r.area_id as areaId,
+		s.business_district_id,
+		s.store_id,
+	    s.lat,
+	    s.lng,
+	    s.address
+	FROM
+		as_province p
+	JOIN as_city c ON c.province_id = p.province_id
+	JOIN as_area r ON r.city_id = c.city_id
+	JOIN as_business_district cd ON cd.area_id = r.area_id
+	JOIN as_store s ON s.business_district_id = cd.business_district_id
+	WHERE
+	s.store_id = #{storeId}
+  </select>
+</mapper>

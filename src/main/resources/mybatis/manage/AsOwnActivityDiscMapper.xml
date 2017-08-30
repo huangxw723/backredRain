@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOwnActivityDiscMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOwnActivityDisc" >
+    <id column="own_activity_disc_id" property="ownActivityDiscId" jdbcType="INTEGER" />
+    <result column="own_activity_id" property="ownActivityId" jdbcType="INTEGER" />
+    <result column="probability" property="probability" jdbcType="DECIMAL" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <association property="asPrizeConfig" javaType="com.aoshi.domain.AsPrizeConfig">
+      <id column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    own_activity_disc_id, own_activity_id, probability, prize_config_id, create_time
+  </sql>
+  
+  <select id="queryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT d.*,p.prize_config_id,p.name FROM as_own_activity_disc d LEFT JOIN as_prize_config p ON d.prize_config_id = p.prize_config_id 
+  	WHERE d.own_activity_id = #{ownActivityId}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_own_activity_disc
+    where own_activity_disc_id = #{ownActivityDiscId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_own_activity_disc
+    where own_activity_disc_id = #{ownActivityDiscId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOwnActivityDisc" >
+    insert into as_own_activity_disc (own_activity_disc_id, own_activity_id, 
+      probability, prize_config_id, create_time
+      )
+    values (#{ownActivityDiscId,jdbcType=INTEGER}, #{ownActivityId,jdbcType=INTEGER}, 
+      #{probability,jdbcType=DECIMAL}, #{prizeConfigId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOwnActivityDisc" >
+    insert into as_own_activity_disc
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ownActivityDiscId != null" >
+        own_activity_disc_id,
+      </if>
+      <if test="ownActivityId != null" >
+        own_activity_id,
+      </if>
+      <if test="probability != null" >
+        probability,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ownActivityDiscId != null" >
+        #{ownActivityDiscId,jdbcType=INTEGER},
+      </if>
+      <if test="ownActivityId != null" >
+        #{ownActivityId,jdbcType=INTEGER},
+      </if>
+      <if test="probability != null" >
+        #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOwnActivityDisc" >
+    update as_own_activity_disc
+    <set >
+      <if test="ownActivityId != null" >
+        own_activity_id = #{ownActivityId,jdbcType=INTEGER},
+      </if>
+      <if test="probability != null" >
+        probability = #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where own_activity_disc_id = #{ownActivityDiscId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOwnActivityDisc" >
+    update as_own_activity_disc
+    set own_activity_id = #{ownActivityId,jdbcType=INTEGER},
+      probability = #{probability,jdbcType=DECIMAL},
+      prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where own_activity_disc_id = #{ownActivityDiscId,jdbcType=INTEGER}
+  </update>
+</mapper>

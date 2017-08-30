@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="order_merge_id" property="orderMergeId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="is_comment" property="isComment" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="address_id" property="addressId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+    <result column="subtract_price" property="subtractPrice" jdbcType="DECIMAL" />
+    <result column="shipping_id" property="shippingId" jdbcType="INTEGER" />
+    <result column="shipping_sn" property="shippingSn" jdbcType="VARCHAR" />
+    <result column="shipping_price" property="shippingPrice" jdbcType="DECIMAL" />
+    <result column="actual_price" property="actualPrice" jdbcType="DECIMAL" />
+    <result column="point_pay" property="pointPay" jdbcType="INTEGER" />
+    <result column="point_price" property="pointPrice" jdbcType="DECIMAL" />
+    <result column="user_coupon_id" property="userCouponId" jdbcType="INTEGER" />
+    <result column="coupon_price" property="couponPrice" jdbcType="DECIMAL" />
+    <result column="platform_price" property="platformPrice" jdbcType="DECIMAL" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="income_price" property="incomePrice" jdbcType="DECIMAL" />
+    <result column="order_source" property="orderSource" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="pay_time" property="payTime" jdbcType="VARCHAR" />
+    <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+    <result column="is_refund" property="isRefund" jdbcType="INTEGER" />
+    <association property="user" javaType="com.aoshi.domain.AsUserInfo">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    </association>
+    <association property="asUser" javaType="com.aoshi.domain.AsUser">
+      <id column="user_id" property="userId" jdbcType="INTEGER" />
+      <result column="account" property="account" jdbcType="VARCHAR" />
+    </association>
+    <association property="orderGoods" javaType="com.aoshi.domain.AsOrderGoods">
+      <id column="order_id" property="orderId" jdbcType="INTEGER" />
+      <result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+      <result column="derate_price" property="deratePrice" jdbcType="DECIMAL" />
+    </association>
+    <association property="shop" javaType="com.aoshi.domain.AsShop">
+      <id column="shop_id" property="shopId" jdbcType="INTEGER" />
+      <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+      <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+      <result column="shop_bg" property="shopBg" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, order_sn, order_merge_id, shop_id, shop_name, shop_logo, user_id, order_status, 
+    is_comment, is_delete, address_id, address, postcode, receiver, receiver_phone, remark, 
+    goods_price, subtract_price, shipping_id, shipping_sn, shipping_price, actual_price, 
+    point_pay, point_price, user_coupon_id, coupon_price, platform_price, order_price, 
+    income_price, order_source, order_type, pay_type, create_time, pay_time, trade_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAttr" resultMap="BaseResultMap">
+    select 
+    a.*, exists(select * from as_order_goods c where a.order_id = c.order_id and c.status in(2,3,4)) as is_refund
+    from as_order a
+    WHERE
+      (a.is_delete = 0 or a.is_delete is null) 
+      <if test="orderStatus != null and orderStatus != ''">
+      	<if test="orderStatus == 5 or orderStatus == 6 or orderStatus == 7">
+      	  and exists(select * from as_order_goods c where a.order_id = c.order_id and c.status in(2,3,4))
+      	</if>
+      	<if test="orderStatus != 5 and orderStatus != 6 and orderStatus != 7">
+      	  and a.order_status = #{orderStatus}
+      	</if>
+      </if>
+      <if test="payType != null and payType != ''">
+      	and a.pay_type = #{payType}
+      </if>
+      <if test="timeStart != null and timeStart != ''">
+      <![CDATA[ and UNIX_TIMESTAMP(a.create_time) >= UNIX_TIMESTAMP(#{timeStart}) ]]>
+	  </if>
+	  <if test="timeEnd != null and timeEnd != ''">
+	  <![CDATA[ and UNIX_TIMESTAMP(a.create_time) <= UNIX_TIMESTAMP(#{timeEnd}) ]]>
+	  </if>
+	  <if test="orderSn != null and orderSn != ''">
+	  	and a.order_sn = #{orderSn} 
+	  </if>
+    
+    order by a.order_id desc 
+  </select>
+  <select id="selectByPrimaryKeys" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    a.*, b.nick_name,e.name as shop_name, e.logo_url as shop_logo, f.derate_price
+    from as_order a
+    left join as_user_info b on a.user_id = b.user_id
+    left join as_shop e on a.shop_id = e.shop_id
+    left join as_order_goods f on a.order_id = f.order_id
+    where a.order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOrder" >
+    insert into as_order (order_id, order_sn, order_merge_id, 
+      shop_id, shop_name, shop_logo, 
+      user_id, order_status, is_comment, 
+      is_delete, address_id, address, 
+      postcode, receiver, receiver_phone, 
+      remark, goods_price, subtract_price, 
+      shipping_id, shipping_sn, shipping_price, 
+      actual_price, point_pay, point_price, 
+      user_coupon_id, coupon_price, platform_price, 
+      order_price, income_price, order_source, 
+      order_type, pay_type, create_time, 
+      pay_time, trade_no)
+    values (#{orderId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{orderMergeId,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopLogo,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{orderStatus,jdbcType=INTEGER}, #{isComment,jdbcType=INTEGER}, 
+      #{isDelete,jdbcType=INTEGER}, #{addressId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{postcode,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{receiverPhone,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{subtractPrice,jdbcType=DECIMAL}, 
+      #{shippingId,jdbcType=INTEGER}, #{shippingSn,jdbcType=VARCHAR}, #{shippingPrice,jdbcType=DECIMAL}, 
+      #{actualPrice,jdbcType=DECIMAL}, #{pointPay,jdbcType=INTEGER}, #{pointPrice,jdbcType=DECIMAL}, 
+      #{userCouponId,jdbcType=INTEGER}, #{couponPrice,jdbcType=DECIMAL}, #{platformPrice,jdbcType=DECIMAL}, 
+      #{orderPrice,jdbcType=DECIMAL}, #{incomePrice,jdbcType=DECIMAL}, #{orderSource,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{payTime,jdbcType=VARCHAR}, #{tradeNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOrder" >
+    insert into as_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderSn != null" >
+        order_sn,
+      </if>
+      <if test="orderMergeId != null" >
+        order_merge_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="isComment != null" >
+        is_comment,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="postcode != null" >
+        postcode,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
+      <if test="receiverPhone != null" >
+        receiver_phone,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price,
+      </if>
+      <if test="subtractPrice != null" >
+        subtract_price,
+      </if>
+      <if test="shippingId != null" >
+        shipping_id,
+      </if>
+      <if test="shippingSn != null" >
+        shipping_sn,
+      </if>
+      <if test="shippingPrice != null" >
+        shipping_price,
+      </if>
+      <if test="actualPrice != null" >
+        actual_price,
+      </if>
+      <if test="pointPay != null" >
+        point_pay,
+      </if>
+      <if test="pointPrice != null" >
+        point_price,
+      </if>
+      <if test="userCouponId != null" >
+        user_coupon_id,
+      </if>
+      <if test="couponPrice != null" >
+        coupon_price,
+      </if>
+      <if test="platformPrice != null" >
+        platform_price,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="incomePrice != null" >
+        income_price,
+      </if>
+      <if test="orderSource != null" >
+        order_source,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="tradeNo != null" >
+        trade_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSn != null" >
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMergeId != null" >
+        #{orderMergeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null" >
+        #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="subtractPrice != null" >
+        #{subtractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingId != null" >
+        #{shippingId,jdbcType=INTEGER},
+      </if>
+      <if test="shippingSn != null" >
+        #{shippingSn,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPrice != null" >
+        #{shippingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="pointPay != null" >
+        #{pointPay,jdbcType=INTEGER},
+      </if>
+      <if test="pointPrice != null" >
+        #{pointPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="userCouponId != null" >
+        #{userCouponId,jdbcType=INTEGER},
+      </if>
+      <if test="couponPrice != null" >
+        #{couponPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="platformPrice != null" >
+        #{platformPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="incomePrice != null" >
+        #{incomePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOrder" >
+    update as_order
+    <set >
+      <if test="orderSn != null" >
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMergeId != null" >
+        order_merge_id = #{orderMergeId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        is_comment = #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        postcode = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPhone != null" >
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="subtractPrice != null" >
+        subtract_price = #{subtractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingId != null" >
+        shipping_id = #{shippingId,jdbcType=INTEGER},
+      </if>
+      <if test="shippingSn != null" >
+        shipping_sn = #{shippingSn,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPrice != null" >
+        shipping_price = #{shippingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="pointPay != null" >
+        point_pay = #{pointPay,jdbcType=INTEGER},
+      </if>
+      <if test="pointPrice != null" >
+        point_price = #{pointPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="userCouponId != null" >
+        user_coupon_id = #{userCouponId,jdbcType=INTEGER},
+      </if>
+      <if test="couponPrice != null" >
+        coupon_price = #{couponPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="platformPrice != null" >
+        platform_price = #{platformPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="incomePrice != null" >
+        income_price = #{incomePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderSource != null" >
+        order_source = #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOrder" >
+    update as_order
+    set order_sn = #{orderSn,jdbcType=VARCHAR},
+      order_merge_id = #{orderMergeId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      is_comment = #{isComment,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      address_id = #{addressId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      subtract_price = #{subtractPrice,jdbcType=DECIMAL},
+      shipping_id = #{shippingId,jdbcType=INTEGER},
+      shipping_sn = #{shippingSn,jdbcType=VARCHAR},
+      shipping_price = #{shippingPrice,jdbcType=DECIMAL},
+      actual_price = #{actualPrice,jdbcType=DECIMAL},
+      point_pay = #{pointPay,jdbcType=INTEGER},
+      point_price = #{pointPrice,jdbcType=DECIMAL},
+      user_coupon_id = #{userCouponId,jdbcType=INTEGER},
+      coupon_price = #{couponPrice,jdbcType=DECIMAL},
+      platform_price = #{platformPrice,jdbcType=DECIMAL},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      income_price = #{incomePrice,jdbcType=DECIMAL},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateDelivery" parameterType="com.aoshi.domain.AsOrder" >
+    update as_order
+    set order_status = 3, shipping_id = #{shippingId}, shipping_sn = #{shippingSn}
+    where order_id = #{orderId,jdbcType=INTEGER} and order_status = 2
+  </update>
+  
+  <!-- 获取积分商城订单 -->
+  <select id="getIntegrationOrderList" resultMap="BaseResultMap">
+    select 
+    a.*
+    from as_order a
+    WHERE order_type = 2
+      <if test="payType != null and payType != ''">
+      	and a.pay_type = #{payType}
+      </if>
+      <if test="timeStart != null and timeStart != ''">
+      <![CDATA[ and UNIX_TIMESTAMP(a.create_time) >= UNIX_TIMESTAMP(#{timeStart}) ]]>
+	  </if>
+	  <if test="timeEnd != null and timeEnd != ''">
+	  <![CDATA[ and UNIX_TIMESTAMP(a.create_time) <= UNIX_TIMESTAMP(#{timeEnd}) ]]>
+	  </if>
+	  <if test="orderSn != null and orderSn != ''">
+	  	and a.order_sn like CONCAT(CONCAT('%',#{orderSn}),'%')  
+	  </if>
+	  <if test="orderStatus != null and orderStatus != ''">
+      	  and a.order_status = #{orderStatus}
+      	</if>
+    
+    order by a.order_id desc 
+  </select>
+  
+    <update id="pointOrderDelivery" parameterType="com.aoshi.domain.AsOrder" >
+    update as_order
+    set order_status = 3,
+      shipping_sn = #{shippingSn},
+      shipping_id = #{shippingId}
+    where order_id = #{orderId} and shop_id = #{shopId} and order_status = 2
+  </update>
+  
+   <select id="getShopOrderInfo" resultMap="BaseResultMap" parameterType="com.aoshi.domain.AsOrder" >
+    select 
+      a.*,user.user_id,b.goods_img
+    from as_order a
+    left join as_order_goods b on a.order_id = b.order_id
+    left join as_order_action c on a.order_id = c.order_id 
+    left join as_user user on a.user_id= user.user_id
+    where a.order_id = #{orderId} and a.shop_id = #{shopId}
+  </select>
+</mapper>

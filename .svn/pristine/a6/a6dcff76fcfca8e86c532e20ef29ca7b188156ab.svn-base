@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsConsultationTypeMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationType">
+    <id column="consultation_type_id" jdbcType="INTEGER" property="consultationTypeId" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="type_img" jdbcType="VARCHAR" property="typeImg" />
+    <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
+    <result column="type_level" jdbcType="INTEGER" property="typeLevel" />
+    <result column="id_path" jdbcType="VARCHAR" property="idPath" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    consultation_type_id, parent_id, type_name, type_img, sort_order, type_level, id_path
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_type
+    where consultation_type_id = #{consultationTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_consultation_type
+    where consultation_type_id = #{consultationTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationType">
+    insert into as_consultation_type (consultation_type_id, parent_id, type_name, 
+      type_img, sort_order, type_level,
+      id_path)
+    values (#{consultationTypeId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, 
+      #{typeImg,jdbcType=VARCHAR}, #{sortOrder,jdbcType=INTEGER}, #{typeLevel,jdbcType=INTEGER},
+      #{idPath,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationType">
+    insert into as_consultation_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consultationTypeId != null">
+        consultation_type_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="typeName != null">
+        type_name,
+      </if>
+      <if test="typeImg != null">
+        type_img,
+      </if>
+      <if test="sortOrder != null">
+        sort_order,
+      </if>
+      <if test="typeLevel != null">
+        type_level,
+      </if>
+      <if test="idPath != null">
+        id_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consultationTypeId != null">
+        #{consultationTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeImg != null">
+        #{typeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sortOrder != null">
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="typeLevel != null">
+        #{typeLevel,jdbcType=INTEGER},
+      </if>
+      <if test="idPath != null">
+        #{idPath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationType">
+    update as_consultation_type
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null">
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeImg != null">
+        type_img = #{typeImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sortOrder != null">
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="typeLevel != null">
+        type_level = #{typeLevel,jdbcType=INTEGER},
+      </if>
+      <if test="idPath != null">
+        id_path = #{idPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consultation_type_id = #{consultationTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationType">
+    update as_consultation_type
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      type_img = #{typeImg,jdbcType=VARCHAR},
+      sort_order = #{sortOrder,jdbcType=INTEGER},
+      type_level = #{typeLevel,jdbcType=INTEGER},
+      id_path = #{idPath,jdbcType=VARCHAR}
+    where consultation_type_id = #{consultationTypeId,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" parameterType="com.aoshi.domain.AsConsultationType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from as_consultation_type where 1=1
+    <if test="typeName != null">
+      and type_name  like CONCAT(CONCAT('%',#{typeName}),'%')
+    </if>
+    order by sort_order asc
+  </select>
+</mapper>

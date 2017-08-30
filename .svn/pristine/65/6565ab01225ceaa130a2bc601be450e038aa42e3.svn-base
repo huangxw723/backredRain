@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUserAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUserAccount" >
+    <id column="user_account_id" property="userAccountId" jdbcType="INTEGER" />
+    <result column="user_admin" property="userAdmin" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="account_type" property="accountType" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_account_id, user_admin, user_id, amount, account_type, item_id, create_time, 
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUserAccount" >
+    insert into as_user_account (user_account_id, user_admin, user_id, 
+      amount, account_type, item_id, 
+      create_time, remark)
+    values (#{userAccountId,jdbcType=INTEGER}, #{userAdmin,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DECIMAL}, #{accountType,jdbcType=INTEGER}, #{itemId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsUserAccount" >
+    insert into as_user_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userAccountId != null" >
+        user_account_id,
+      </if>
+      <if test="userAdmin != null" >
+        user_admin,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="accountType != null" >
+        account_type,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userAccountId != null" >
+        #{userAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="userAdmin != null" >
+        #{userAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUserAccount" >
+    update as_user_account
+    <set >
+      <if test="userAdmin != null" >
+        user_admin = #{userAdmin,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="accountType != null" >
+        account_type = #{accountType,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUserAccount" >
+    update as_user_account
+    set user_admin = #{userAdmin,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      account_type = #{accountType,jdbcType=INTEGER},
+      item_id = #{itemId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
+</mapper>

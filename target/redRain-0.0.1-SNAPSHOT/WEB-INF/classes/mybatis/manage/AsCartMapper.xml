@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCartMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCart" >
+    <id column="cart_id" property="cartId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_amount" property="goodsAmount" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    cart_id, user_id, goods_id, goods_amount, shop_id, product_id, create_time
+  </sql>
+  <select id="selectByAttr" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+      a.*, b.nick_name, c.goods_name, d.shop_name
+    from as_cart a
+    left join as_user b on a.user_id = b.user_id
+    left join as_goods c on a.goods_id = c.goods_id
+    left join as_shop d on a.shop_id = d.shop_id
+    <where>
+      <if test="shopId != null and shopId != ''">
+      	a.shop_id = #{shopId}
+      </if>
+      <if test="userId != null and userId != ''">
+      	and a.user_id = #{userId}
+      </if>
+      <if test="goodsId != null and goodsId != ''">
+      	and a.goods_id = #{goodsId}
+      </if>
+      <if test="timeStart != null and timeStart != ''">
+		and a.create_time &gt;= #{timeStart}
+	  </if>
+	  <if test="timeEnd != null and timeEnd != ''">
+		and a.create_time &lt;= #{timeEnd}
+	  </if>
+    </where>
+  </select>
+  
+  <select id="selectCartUser" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+      distinct a.user_id, b.nick_name
+    from as_cart a
+    left join as_user b on a.user_id = b.user_id
+    <where>
+      <if test="shopId != null and shopId != ''">
+      	a.shop_id = #{shopId}
+      </if>
+    </where>
+    group by a.user_id
+  </select>
+  
+  <select id="selectCartGoods" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+      distinct a.goods_id, b.goods_name
+    from as_cart a
+    left join as_goods b on a.goods_id = b.goods_id
+    <where>
+      <if test="shopId != null and shopId != ''">
+      	a.shop_id = #{shopId}
+      </if>
+    </where>
+    group by a.goods_id
+  </select>
+  
+  <select id="selectCartShop" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+      distinct a.shop_id, b.shop_name
+    from as_cart a
+    left join as_shop b on a.shop_id = b.shop_id
+    group by a.shop_id
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_cart
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_cart
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCart" >
+    insert into as_cart (cart_id, user_id, goods_id, 
+      goods_amount, shop_id, product_id, 
+      create_time)
+    values (#{cartId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{goodsAmount,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCart" >
+    insert into as_cart
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cartId != null" >
+        cart_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cartId != null" >
+        #{cartId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsAmount != null" >
+        #{goodsAmount,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCart" >
+    update as_cart
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount = #{goodsAmount,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCart" >
+    update as_cart
+    set user_id = #{userId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      goods_amount = #{goodsAmount,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      product_id = #{productId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where cart_id = #{cartId,jdbcType=INTEGER}
+  </update>
+  
+  <delete id="deleteByPrimaryKeys" parameterType="java.lang.String" >
+    delete from as_cart
+    where cart_id in
+      <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </delete>
+</mapper>

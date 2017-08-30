@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBusinessTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBusinessTemplate" >
+    <id column="business_template_id" property="businessTemplateId" jdbcType="INTEGER" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="parent_business_module_id" property="parentBusinessModuleId" jdbcType="INTEGER" />
+    <result column="parent_business_template_id" property="parentBusinessTemplateId" jdbcType="INTEGER" />
+    <result column="root_business_template_id" property="rootBusinessTemplateId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="preview" property="preview" jdbcType="VARCHAR" />
+    <result column="module_number" property="moduleNumber" jdbcType="INTEGER" />
+    <result column="template_type_id" property="templateTypeId" jdbcType="INTEGER" />
+    <result column="is_sample" property="isSample" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    business_template_id, template_name, user_id, status, level, parent_business_module_id, 
+    parent_business_template_id, root_business_template_id, create_time, path, preview, 
+    module_number, template_type_id, is_sample
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_business_template
+    where business_template_id = #{businessTemplateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_business_template
+    where business_template_id = #{businessTemplateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBusinessTemplate" >
+    insert into as_business_template (business_template_id, template_name, 
+      user_id, status, level, 
+      parent_business_module_id, parent_business_template_id, 
+      root_business_template_id, create_time, path, 
+      preview, module_number, template_type_id, 
+      is_sample)
+    values (#{businessTemplateId,jdbcType=INTEGER}, #{templateName,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{parentBusinessModuleId,jdbcType=INTEGER}, #{parentBusinessTemplateId,jdbcType=INTEGER}, 
+      #{rootBusinessTemplateId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{preview,jdbcType=VARCHAR}, #{moduleNumber,jdbcType=INTEGER}, #{templateTypeId,jdbcType=INTEGER}, 
+      #{isSample,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBusinessTemplate" useGeneratedKeys="true" keyProperty="businessTemplateId">
+    insert into as_business_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="businessTemplateId != null" >
+        business_template_id,
+      </if>
+      <if test="templateName != null" >
+        template_name,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="parentBusinessModuleId != null" >
+        parent_business_module_id,
+      </if>
+      <if test="parentBusinessTemplateId != null" >
+        parent_business_template_id,
+      </if>
+      <if test="rootBusinessTemplateId != null" >
+        root_business_template_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="preview != null" >
+        preview,
+      </if>
+      <if test="moduleNumber != null" >
+        module_number,
+      </if>
+      <if test="templateTypeId != null" >
+        template_type_id,
+      </if>
+      <if test="isSample != null" >
+        is_sample,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="businessTemplateId != null" >
+        #{businessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="templateName != null" >
+        #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentBusinessModuleId != null" >
+        #{parentBusinessModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="parentBusinessTemplateId != null" >
+        #{parentBusinessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="rootBusinessTemplateId != null" >
+        #{rootBusinessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="preview != null" >
+        #{preview,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleNumber != null" >
+        #{moduleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="templateTypeId != null" >
+        #{templateTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="isSample != null" >
+        #{isSample,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBusinessTemplate" >
+    update as_business_template
+    <set >
+      <if test="templateName != null" >
+        template_name = #{templateName,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentBusinessModuleId != null" >
+        parent_business_module_id = #{parentBusinessModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="parentBusinessTemplateId != null" >
+        parent_business_template_id = #{parentBusinessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="rootBusinessTemplateId != null" >
+        root_business_template_id = #{rootBusinessTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="preview != null" >
+        preview = #{preview,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleNumber != null" >
+        module_number = #{moduleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="templateTypeId != null" >
+        template_type_id = #{templateTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="isSample != null" >
+        is_sample = #{isSample,jdbcType=BIT},
+      </if>
+    </set>
+    where business_template_id = #{businessTemplateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBusinessTemplate" >
+    update as_business_template
+    set template_name = #{templateName,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      parent_business_module_id = #{parentBusinessModuleId,jdbcType=INTEGER},
+      parent_business_template_id = #{parentBusinessTemplateId,jdbcType=INTEGER},
+      root_business_template_id = #{rootBusinessTemplateId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      preview = #{preview,jdbcType=VARCHAR},
+      module_number = #{moduleNumber,jdbcType=INTEGER},
+      template_type_id = #{templateTypeId,jdbcType=INTEGER},
+      is_sample = #{isSample,jdbcType=BIT}
+    where business_template_id = #{businessTemplateId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectTemplateByAttr" parameterType="com.aoshi.domain.AsBusinessTemplate" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" /> 
+  	from as_business_template where 1=1 
+  	<if test="isSample != null">
+  		and is_sample = #{isSample}
+  	</if>
+  	<if test="parentBusinessTemplateId != null">
+  		and parent_business_template_id = #{parentBusinessTemplateId}
+  	</if>
+  </select>
+</mapper>

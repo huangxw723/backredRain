@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsConsultationImgsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationImgs" >
+    <id column="consultation_imgs_id" property="consultationImgsId" jdbcType="INTEGER" />
+    <result column="type_id" property="typeId" jdbcType="INTEGER" />
+    <result column="consultation_id" property="consultationId" jdbcType="INTEGER" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    consultation_imgs_id, type_id, consultation_id, img_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_imgs
+    where consultation_imgs_id = #{consultationImgsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_consultation_imgs
+    where consultation_imgs_id = #{consultationImgsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationImgs" >
+    insert into as_consultation_imgs (consultation_imgs_id, type_id, consultation_id, 
+      img_url)
+    values (#{consultationImgsId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{consultationId,jdbcType=INTEGER}, 
+      #{imgUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationImgs" >
+    insert into as_consultation_imgs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="consultationImgsId != null" >
+        consultation_imgs_id,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="consultationId != null" >
+        consultation_id,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="consultationImgsId != null" >
+        #{consultationImgsId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationId != null" >
+        #{consultationId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationImgs" >
+    update as_consultation_imgs
+    <set >
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationId != null" >
+        consultation_id = #{consultationId,jdbcType=INTEGER},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consultation_imgs_id = #{consultationImgsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationImgs" >
+    update as_consultation_imgs
+    set type_id = #{typeId,jdbcType=INTEGER},
+      consultation_id = #{consultationId,jdbcType=INTEGER},
+      img_url = #{imgUrl,jdbcType=VARCHAR}
+    where consultation_imgs_id = #{consultationImgsId,jdbcType=INTEGER}
+  </update>
+  <delete id="deleteByConsultationId" parameterType="java.lang.Integer" >
+    delete from as_consultation_imgs
+    where consultation_id = #{consultationId,jdbcType=INTEGER} AND type_id = #{typeId,jdbcType=INTEGER}
+  </delete>
+
+  <update id="deleteByIds">
+    delete from as_consultation_imgs where consultation_id in
+    <foreach close=")" collection="conditions" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+      AND type_id =#{typeId}
+  </update>
+
+    <select id="queryTypeId" resultType="INTEGER" parameterType="java.lang.String">
+        SELECT type_id FROM as_consultation_imgs WHERE consultation_id=#{id}
+    </select>
+</mapper>

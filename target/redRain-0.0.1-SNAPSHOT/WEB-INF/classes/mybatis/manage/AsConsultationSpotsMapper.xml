@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsConsultationSpotsMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationSpots">
+    <id column="consultation_spots_id" jdbcType="INTEGER" property="consultationSpotsId" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="yp_base_category_id" jdbcType="INTEGER" property="ypBaseCategoryId" />
+    <result column="consultation_desc" jdbcType="VARCHAR" property="consultationDesc" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="cover_img" jdbcType="VARCHAR" property="coverImg" />
+    <result column="star_level" jdbcType="INTEGER" property="starLevel" />
+    <result column="visit_count" jdbcType="INTEGER" property="visitCount" />
+    <result column="public_time" jdbcType="VARCHAR" property="publicTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="open_time" jdbcType="VARCHAR" property="openTime" />
+    <result column="line" jdbcType="VARCHAR" property="line" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    consultation_spots_id, type_id, province_id, city_id, area_id, yp_base_category_id, 
+    consultation_desc, name, cover_img, star_level, visit_count, public_time, status, 
+    address, lng, lat, open_time, line, phone
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_spots
+    where consultation_spots_id = #{consultationSpotsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_consultation_spots
+    where consultation_spots_id = #{consultationSpotsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationSpots">
+    insert into as_consultation_spots (consultation_spots_id, type_id, province_id, 
+      city_id, area_id, yp_base_category_id, 
+      consultation_desc, name, cover_img, 
+      star_level, visit_count, public_time, 
+      status, address, lng, 
+      lat, open_time, line, 
+      phone)
+    values (#{consultationSpotsId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, 
+      #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{ypBaseCategoryId,jdbcType=INTEGER}, 
+      #{consultationDesc,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{coverImg,jdbcType=VARCHAR}, 
+      #{starLevel,jdbcType=INTEGER}, #{visitCount,jdbcType=INTEGER}, #{publicTime,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}, 
+      #{lat,jdbcType=VARCHAR}, #{openTime,jdbcType=VARCHAR}, #{line,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationSpots">
+    insert into as_consultation_spots
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consultationSpotsId != null">
+        consultation_spots_id,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id,
+      </if>
+      <if test="consultationDesc != null">
+        consultation_desc,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="coverImg != null">
+        cover_img,
+      </if>
+      <if test="starLevel != null">
+        star_level,
+      </if>
+      <if test="visitCount != null">
+        visit_count,
+      </if>
+      <if test="publicTime != null">
+        public_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="openTime != null">
+        open_time,
+      </if>
+      <if test="line != null">
+        line,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consultationSpotsId != null">
+        #{consultationSpotsId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="ypBaseCategoryId != null">
+        #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationDesc != null">
+        #{consultationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        #{starLevel,jdbcType=INTEGER},
+      </if>
+      <if test="visitCount != null">
+        #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null">
+        #{openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="line != null">
+        #{line,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationSpots">
+    update as_consultation_spots
+    <set>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="consultationDesc != null">
+        consultation_desc = #{consultationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        cover_img = #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        star_level = #{starLevel,jdbcType=INTEGER},
+      </if>
+      <if test="visitCount != null">
+        visit_count = #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        public_time = #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="openTime != null">
+        open_time = #{openTime,jdbcType=VARCHAR},
+      </if>
+      <if test="line != null">
+        line = #{line,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consultation_spots_id = #{consultationSpotsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationSpots">
+    update as_consultation_spots
+    set type_id = #{typeId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      consultation_desc = #{consultationDesc,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      star_level = #{starLevel,jdbcType=INTEGER},
+      visit_count = #{visitCount,jdbcType=INTEGER},
+      public_time = #{publicTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      open_time = #{openTime,jdbcType=VARCHAR},
+      line = #{line,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where consultation_spots_id = #{consultationSpotsId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUserPointMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUserPoint" >
+    <id column="user_point_id" property="userPointId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="point_id" property="pointId" jdbcType="INTEGER" />
+    <result column="point_type" property="pointType" jdbcType="INTEGER" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    user_point_id, user_id, point_id, point_type, point, remark, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_user_point
+    where user_point_id = #{userPointId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_user_point
+    where user_point_id = #{userPointId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUserPoint" >
+    insert into as_user_point (user_point_id, user_id, point_id, 
+      point_type, point, remark, 
+      create_time)
+    values (#{userPointId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{pointId,jdbcType=INTEGER}, 
+      #{pointType,jdbcType=INTEGER}, #{point,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsUserPoint" >
+    insert into as_user_point
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userPointId != null" >
+        user_point_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="pointId != null" >
+        point_id,
+      </if>
+      <if test="pointType != null" >
+        point_type,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userPointId != null" >
+        #{userPointId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="pointId != null" >
+        #{pointId,jdbcType=INTEGER},
+      </if>
+      <if test="pointType != null" >
+        #{pointType,jdbcType=INTEGER},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUserPoint" >
+    update as_user_point
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="pointId != null" >
+        point_id = #{pointId,jdbcType=INTEGER},
+      </if>
+      <if test="pointType != null" >
+        point_type = #{pointType,jdbcType=INTEGER},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_point_id = #{userPointId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUserPoint" >
+    update as_user_point
+    set user_id = #{userId,jdbcType=INTEGER},
+      point_id = #{pointId,jdbcType=INTEGER},
+      point_type = #{pointType,jdbcType=INTEGER},
+      point = #{point,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where user_point_id = #{userPointId,jdbcType=INTEGER}
+  </update>
+
+  <!--积分明细-->
+  <select id="listAll" resultMap="BaseRowMap">
+    select * from as_user_point
+    where user_id = #{userId}
+    order by user_point_id desc
+  </select>
+
+  <!--积分兑换记录 -->
+  <select id="getExchangeRecordList" resultMap="BaseRowMap" >
+    SELECT
+    o.order_id AS id,
+    o.order_sn AS sn,
+    o.create_time AS orderTime,
+    o.order_type AS orderType,
+    order_price AS orderPrice,
+    og.goods_amount AS goodsAmount,
+    og.attr_name AS attrName,
+    og.sales_price AS salesPoint,
+    gs.goods_thumb AS goodsThumb,
+    gs.goods_name AS goodsName,
+    gs.goods_id AS goodsId,
+    u.nick_name AS nickName
+    FROM
+    as_order o
+    JOIN as_order_goods og ON o.order_id = og.order_id
+    JOIN as_goods gs ON gs.goods_id = og.goods_id
+    JOIN as_user_info u ON u.user_id = o.user_id
+    WHERE
+    o.order_type = 2
+    AND o.user_id = #{userId,jdbcType=INTEGER}
+    ORDER BY o.create_time DESC
+  </select>
+
+</mapper>

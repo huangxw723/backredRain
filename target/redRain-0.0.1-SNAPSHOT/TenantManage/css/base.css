@@ -1,0 +1,101 @@
+/* css reset */
+@charset "utf-8";
+
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+body {
+    font: 12px/1.5 "Microsoft YaHei", Helvetica, Tahoma, Arial, SourceHanSansSC-Normal, STXihei, SimSun, Heiti, sans-serif;
+    color: #333;
+    background-color: transparent;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, form {
+    margin: 0;
+}
+ul, ol, dl {
+    padding-left: 0;
+    list-style-type: none;
+}
+input, textarea, select {
+    font-size: 100%;
+    font-family: inherit;
+}
+input {
+    border: none;
+}
+textarea {
+    word-wrap: break-word;
+    resize: none;
+}
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+a {
+    text-decoration: none;
+    color: #333;
+}
+img {
+    vertical-align: middle;
+}
+a, img {
+    border: 0;
+}
+
+/* ==============================
+   common css
+   ============================== */
+.dn {
+    display: none;
+}
+.dib {
+    display: inline-block;
+}
+.l {
+    float: left;
+}
+.r {
+    float: right;
+}
+.li-l>li {
+    float: left;
+}
+.fix {
+    *zoom: 1;
+}
+.fix:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.tc {
+    text-align: center;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.hidden {
+    overflow: hidden;
+}
+
+.pr {
+    position: relative;
+}

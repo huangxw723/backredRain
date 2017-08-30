@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBeaconRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBeaconRelation" >
+    <id column="beacon_relation_id" property="beaconRelationId" jdbcType="INTEGER" />
+    <result column="beacon_id" property="beaconId" jdbcType="INTEGER" />
+    <result column="beacon_link_id" property="beaconLinkId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    beacon_relation_id, beacon_id, beacon_link_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from as_beacon_relation
+    where beacon_relation_id = #{beaconRelationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_beacon_relation
+    where beacon_relation_id = #{beaconRelationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBeaconRelation" >
+    insert into as_beacon_relation (beacon_relation_id, beacon_id, beacon_link_id
+      )
+    values (#{beaconRelationId,jdbcType=INTEGER}, #{beaconId,jdbcType=INTEGER}, #{beaconLinkId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBeaconRelation" >
+    insert into as_beacon_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beaconRelationId != null" >
+        beacon_relation_id,
+      </if>
+      <if test="beaconId != null" >
+        beacon_id,
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beaconRelationId != null" >
+        #{beaconRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconId != null" >
+        #{beaconId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBeaconRelation" >
+    update as_beacon_relation
+    <set >
+      <if test="beaconId != null" >
+        beacon_id = #{beaconId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id = #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where beacon_relation_id = #{beaconRelationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBeaconRelation" >
+    update as_beacon_relation
+    set beacon_id = #{beaconId,jdbcType=INTEGER},
+      beacon_link_id = #{beaconLinkId,jdbcType=INTEGER}
+    where beacon_relation_id = #{beaconRelationId,jdbcType=INTEGER}
+  </update>
+
+  <select id="listByBeaconLinkId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from as_beacon_relation
+    where beacon_link_id = #{beaconLinkId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByBeaconLinkId" parameterType="java.lang.Integer" >
+    delete from as_beacon_relation
+    where beacon_link_id = #{beaconLinkId,jdbcType=INTEGER}
+  </delete>
+  <update id="deleteByIds">
+    delete from as_beacon_relation where beacon_link_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  <select id="selectByBeaconId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from as_beacon_relation
+    where beacon_id = #{beaconId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByBeaconId" parameterType="java.lang.Integer" >
+    delete from as_beacon_relation
+    where beacon_id = #{beaconId,jdbcType=INTEGER}
+  </delete>
+
+  <update id="deleteByBeaconIds">
+    delete from as_beacon_relation where beacon_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="selectByBeaconIds" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from as_beacon_relation
+    where beacon_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

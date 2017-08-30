@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeType" >
+    <id column="prize_type_id" property="prizeTypeId" jdbcType="INTEGER" />
+    <result column="prize_type_name" property="prizeTypeName" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_type_id, prize_type_name, shop_id, store_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_prize_type
+    where prize_type_id = #{prizeTypeId,jdbcType=INTEGER}
+  </select>
+
+  <select id="isPrizeExists" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select 
+    count(1)
+    from as_prize_type
+    where 1=1 
+    <if test="prizeTypeName != null and prizeTypeName!=''" >
+        prize_type_name =#{prizeTypeName,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
+  <select id="findById" resultMap="BaseResultMap">
+  	select 
+    *
+    from as_prize_type where  prize_type_id = #{prizeTypeId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="isPrizeTypeExists" resultType="java.lang.Integer" parameterType="pd" >
+    select 
+    count(1)
+    from as_prize_type
+    where 1=1 
+    <if test="prizeTypeName != null and prizeTypeName!=''" >
+      and  prize_type_name =#{prizeTypeName,jdbcType=VARCHAR}
+      </if>
+  </select>
+   <select id="isPrizeConfigExists" resultType="java.lang.Integer" parameterType="pd" >
+   select 
+    count(*)
+    from as_prize_type t where 
+    EXISTS(select c.prize_type_id from as_prize_config c where t.prize_type_id=c.prize_type_id) 
+    <if test="prizeTypeName != null and prizeTypeName!=''" >
+     and t.prize_type_name =#{prizeTypeName,jdbcType=VARCHAR}
+    </if>
+    <if test="prizeTypeId != null" >
+     and t.prize_type_id =#{prizeTypeId,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize_type
+    where prize_type_id = #{prizeTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrizeType" keyProperty="prizeTypeId">
+    insert into as_prize_type (prize_type_id, prize_type_name, shop_id, 
+      store_id)
+    values (#{prizeTypeId,jdbcType=INTEGER}, #{prizeTypeName,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, 
+      #{storeId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrizeType" useGeneratedKeys="true" keyProperty="prizeTypeId">
+    insert into as_prize_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeTypeId != null" >
+        prize_type_id,
+      </if>
+      <if test="prizeTypeName != null" >
+        prize_type_name,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeTypeId != null" >
+        #{prizeTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeTypeName != null" >
+        #{prizeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrizeType" >
+    update as_prize_type
+    <set >
+      <if test="prizeTypeName != null" >
+        prize_type_name = #{prizeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where prize_type_id = #{prizeTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrizeType" >
+    update as_prize_type
+    set prize_type_name = #{prizeTypeName,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER}
+    where prize_type_id = #{prizeTypeId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="listAll" resultMap="BaseRowMap">
+  	select * from as_prize_type                     
+  	order by prize_type_id asc
+  </select>
+  
+  <select id="queryPrizeTypesLike" resultMap="BaseResultMap" parameterType="com.aoshi.domain.AsPrizeType">
+  	select 
+  	<include refid="Base_Column_List"/>
+  		from as_prize_type 
+  	where 
+  		prize_type_name like CONCAT('%',#{prizeTypeName}) 
+  	
+  </select>
+  
+  <select id="findByCategoryId" resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_prize_config WHERE category_id = #{categoryId}
+  </select>
+  
+</mapper>

@@ -1,0 +1,359 @@
+package com.aoshi.service.business;
+
+import com.aoshi.common.asenum.DictParam;
+import com.aoshi.common.asenum.OperaEnum;
+import com.aoshi.common.asenum.UploadPathEnum;
+import com.aoshi.common.asenum.UserTypeEnum;
+import com.aoshi.controller.base.BaseController;
+import com.aoshi.dao.*;
+import com.aoshi.domain.AsShopStaffInfo;
+import com.aoshi.domain.AsUser;
+import com.aoshi.domain.AsWallet;
+import com.aoshi.domain.SysUser;
+import com.aoshi.resolver.ValidatorBreakException;
+import com.aoshi.service.base.AsBaseService;
+import com.aoshi.util.CommonUtils;
+import com.aoshi.util.Conditions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * 员工管理 Service
+ * 
+ * @author yangyanchao
+ * @date 2016年9月1日
+ */
+@Service
+public class StaffService extends AsBaseService {
+
+	private final static String PAGE_PATH = "business/staff/";
+
+	@Autowired
+	private AsDictParamMapper asDictParamMapper;
+
+	@Autowired
+	private SysUserMapper sysUserMapper;
+
+	@Autowired
+	private AsUserMapper asUserMapper;
+
+	@Autowired
+	private AsWalletMapper asWalletMapper;
+
+	@Autowired
+	private AsShopStaffInfoMapper asShopStaffInfoMapper;
+
+	@Autowired
+	private AsShopOwnerInfoMapper asShopOwnerInfoMapper;
+	
+
+	@Autowired
+	private AsShopMapper asShopMapper;
+
+	/**
+	 * 添加员工
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年9月1日
+	 * @param c
+	 * @return
+	 */
+	public Object page(BaseController c) {
+
+		initialized(c);
+
+		OperaEnum action = OperaEnum.get(pd.getInt("action") == 0 ? 1 : pd.getInt("action"));
+		switch (action) {
+
+		case ADD:
+			break;
+
+		case EDIT:
+
+			Conditions staff = (Conditions) asShopStaffInfoMapper.findByUserId(pd.getIntRequired("userId"));
+			addViewData("pd", staff);
+			break;
+
+		case QUERY:
+
+			staff = (Conditions) asShopStaffInfoMapper.findByUserId(pd.getIntRequired("userId"));
+			addViewData("pd", staff);
+			break;
+
+		default:
+			ValidatorBreakException.NOT_NULL(null);
+		}
+
+		addViewData("action", action.getId());
+		return renderView(PAGE_PATH + "save");
+	}
+
+	/**
+	 * 员工管理操作
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年9月1日
+	 * @param c
+	 * @return
+	 */
+	public Object opera(BaseController c) {
+
+		initialized(c);
+
+		OperaEnum action = OperaEnum.get(pd.getInt("action"));
+
+		switch (action) {
+
+		case ADD:
+
+			String account = pd.getStringRequired("account"); // 员工股帐号
+			String password = pd.getStringRequired("password"); // 密码
+			String name = pd.getStringRequired("name"); // 名称
+			String descp = pd.getStringRequired("descp"); // 简介
+			int status = pd.getIntRequired("status"); // 简介
+
+			operaFlag = asUserMapper.isAccountExists(Conditions.newInstance()
+					.putData("account", account)
+					.putData("type", UserTypeEnum.STAFF.getId())) > 0;
+			ValidatorBreakException.NOT_TRUE(!operaFlag, "账号已被注册");
+
+			String sys_user_id = get32UUID();
+			Conditions sysUser = Conditions.newInstance();
+			sysUser.putData("username", account)
+					.putData("name", account)
+					.putData("userId", sys_user_id)
+					.putData("createBy", getUser().getUSER_ID())
+					.putData("password", CommonUtils.encryptPwd(password, 2))
+					.putData("asShopId", getUser().getAs_shop_id())
+					.putData("status", 0)
+					.putData(
+							"roleId",
+							asDictParamMapper
+									.findByKeyCode(DictParam.PARAM_STAFF_ROLE_ID));
+			operaFlag = sysUserMapper.insertSelective(sysUser) == 1;
+			ValidatorBreakException.NOT_TRUE(operaFlag);
+
+			// 添加帐号信息
+			Conditions user = Conditions.newInstance();
+			user.putData("account", account)
+					.putData("password", CommonUtils.encryptPwd(password))
+					.putData("createTime", CommonUtils.getCurDate())
+					.putData("type", UserTypeEnum.STAFF.getId())
+					.putData("sysUserId", sys_user_id);
+			operaFlag = asUserMapper.insertSelective(user) == 1;
+			ValidatorBreakException.NOT_TRUE(operaFlag);
+
+			// 添加员工信息
+			Conditions shopUser = (Conditions) asShopOwnerInfoMapper
+					.findBySysUserId(getUser().getUSER_ID());
+			ValidatorBreakException.NOT_NULL(shopUser, "商家信息不存在");
+			uploadModule(UploadPathEnum.USERS, "userHead");
+			String userHead = pd.getStringRequired("userHead");// 头像
+			AsShopStaffInfo staff = new AsShopStaffInfo();
+			staff.setUserId(user.getInt("userId"));
+			staff.setShopUserId(shopUser.getInt("userId"));
+			staff.setShopId(shopUser.getInt("shopId"));
+			staff.setDescp(descp);
+			staff.setName(name);
+			staff.setStatus(status);
+			staff.setSn(get32UUID());
+			staff.setUserHead(userHead);
+			operaFlag = asShopStaffInfoMapper.insertSelective(staff) == 1;
+			ValidatorBreakException.NOT_TRUE(operaFlag);
+
+			// 添加用户钱包
+			AsWallet wallet = new AsWallet();
+			wallet.setUserId(user.getInt("userId"));
+			wallet.setCreateTime(CommonUtils.getCurDate());
+			operaFlag = asWalletMapper.insertSelective(wallet) == 1;
+			ValidatorBreakException.NOT_TRUE(operaFlag);
+
+			break;
+
+		case EDIT:
+
+
+			Conditions conditions = (Conditions) asShopStaffInfoMapper.findByUserId(pd);
+			ValidatorBreakException.NOT_NULL(conditions);
+
+			uploadModule(UploadPathEnum.USERS, "userHead");
+			userHead = pd.getString("userHead");
+			Integer id = conditions.getInt("shopStaffInfoId");
+
+			AsShopStaffInfo staffe = new AsShopStaffInfo();
+			staffe.setStatus(pd.getInt("status"));
+			staffe.setUpdateTime(CommonUtils.getCurDate());
+			staffe.setShopStaffInfoId(id);
+			staffe.setName(pd.getString("name"));
+			staffe.setDescp(pd.getString("descp"));
+			staffe.setUpdateTime(CommonUtils.getCurDate());
+			staffe.setUserHead(userHead);
+			staffe.setShopStaffInfoId(id);
+			operaFlag = asShopStaffInfoMapper.updateByPrimaryKeySelective(staffe) > 0;
+
+			break;
+
+		default:
+			ValidatorBreakException.NOT_NULL(null);
+		}
+
+		return renderSuccess();
+	}
+
+	/**
+	 * 密码重置 Action
+	 * 
+	 * @author huangxw
+	 * @date 2016年9月3日
+	 * @param c
+	 * @return
+	 */
+	public Object resetPwd(BaseController c) {
+
+		initialized(c);
+
+		int userId = pd.getIntRequired("userId");
+
+		AsUser user = (AsUser) asUserMapper.selectByPrimaryKey(userId);
+		ValidatorBreakException.NOT_NULL(user);
+
+		SysUser sysUser = (SysUser) sysUserMapper.selectByPrimaryKey(user.getSysUserId());
+		ValidatorBreakException.NOT_NULL(sysUser);
+
+		String password = pd.getStringRequired("password");
+		String MD5Password = CommonUtils.encryptPwd(password);
+		String SHA1Password = CommonUtils.encryptPwd(password, 2);
+
+		user.setPassword(MD5Password);
+		sysUser.setPassword(SHA1Password);
+
+		operaFlag = asUserMapper.updateByPrimaryKeySelective(user) == 1;
+		ValidatorBreakException.NOT_TRUE(operaFlag);
+		operaFlag = sysUserMapper.updateByPrimaryKeySelective(sysUser) == 1;
+		ValidatorBreakException.NOT_TRUE(operaFlag);
+
+		return renderSuccess(1);
+	}
+
+	/**
+	 * 查询店铺管理帐号(店铺管理员&员工管理员)
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年10月28日
+	 * @param c
+	 * @return
+	 */
+	public Object getShopAccountList(BaseController c) {
+
+		initialized(c);
+
+		pd.put("shopId", getUser().getAs_shop_id());
+		pageQueryModule(asUserMapper, "getUserWhitConditions", true);
+
+		return renderView(PAGE_PATH + "shop_account_list");
+	}
+
+	
+	/**
+	 * 查询店铺员工管理帐号(员工管理员列表)
+	 * 
+	 * @author huangxw
+	 * @date 2017年03月03日
+	 * @param c
+	 * @return
+	 */
+	public Object getShopStaffAccountList(BaseController c) {
+
+		initialized(c);
+		
+		pd.put("shopId", isRoomAdmin()==true?null:getUser().getAs_shop_id());
+		
+		pageQueryModule(asUserMapper, "getStaffUserWhitConditions", true);
+
+		//用于判断是否是当前用户
+		addViewData("asUser",asUserMapper.getUserByUserId(Integer.parseInt(getUser().getNewUserId())));
+
+		return renderView(PAGE_PATH + "shop_account_list");
+	}
+	/**
+	 * 添加商家端帐号
+	 * 
+	 * @author yangyanchao
+	 * @date 2016年10月31日
+	 * @param c
+	 * @return
+	 */
+	public Object saveShopAccountPage(BaseController c) {
+
+		initialized(c);
+
+		OperaEnum action = OperaEnum.get(pd.getInt("action") == 0 ? 1 : pd
+				.getInt("action"));
+		switch (action) {
+
+		case ADD:
+
+			addViewData("shopId", getUser().getAs_shop_id());
+			List<Object> shopList = queryModule(asShopMapper, "listShopAll", false);
+			
+			addViewData("shopList", shopList);
+			addViewData("isAdmin", isAdmin());
+			break;
+
+		default:
+			ValidatorBreakException.NOT_NULL(null);
+		}
+
+		addField("action", action.getId());
+
+		return renderView(PAGE_PATH + "save_shop_account");
+	}
+
+	/**
+	 * 更改账号信息
+	 * 
+	 * @author huangxw
+	 * @date 2016年9月2日
+	 * @return
+	 */
+	/*
+	 * public Object accountStatus_Tx(BaseController c) {
+	 * 
+	 * initialized(c);
+	 * 
+	 * operaFlag = asShopStaffInfoMapper.updateStatus(pd) == 1;
+	 * ValidatorBreakException.NOT_TRUE(operaFlag, "数据已过期，请刷新后重试");
+	 * 
+	 * return renderSuccess(); }
+	 */
+
+	/*
+	 * public Object delete(BaseController c) {
+	 * 
+	 * initialized(c);
+	 * 
+	 * int userId = pd.getIntRequired("userId");
+	 * 
+	 * Conditions user = (Conditions) asUserMapper.findByUserId(userId);
+	 * ValidatorBreakException.NOT_NULL(user);
+	 * 
+	 * Conditions shopstaffinfo = (Conditions)
+	 * asShopStaffInfoMapper.findByUserId(userId);
+	 * ValidatorBreakException.NOT_NULL(shopstaffinfo);
+	 * 
+	 * 
+	 * // 删除账号表 operaFlag = asUserMapper.deleteByUserId(userId) == 1;
+	 * ValidatorBreakException.NOT_TRUE(operaFlag, "数据信息已过期，请刷新后重试");
+	 * 
+	 * // 删除员工管理员信息表 operaFlag = asShopStaffInfoMapper.deleteByUserId(userId) ==
+	 * 1; ValidatorBreakException.NOT_TRUE(operaFlag, "数据信息已过期，请刷新后重试");
+	 * 
+	 * // 删除后台用户表 String sysUserId = user.getStr("sysUserId"); operaFlag =
+	 * sysUserMapper.deleteByPrimaryKey(sysUserId) == 1;
+	 * ValidatorBreakException.NOT_TRUE(operaFlag, "数据信息已过期，请刷新后重试");
+	 * 
+	 * return renderSuccess(); }
+	 */
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsShopSpellMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsShopSpell" >
+    <id column="spell_id" property="spellId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="spell_value" property="spellValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    spell_id, shop_id, spell_value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop_spell
+    where spell_id = #{spellId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByShopId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_shop_spell
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_shop_spell
+    where spell_id = #{spellId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKeyByshopId" parameterType="java.lang.Integer" >
+    delete from as_shop_spell
+    where shop_id = #{shopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsShopSpell" >
+    insert into as_shop_spell (spell_id, shop_id, spell_value
+      )
+    values (#{spellId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{spellValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsShopSpell" useGeneratedKeys="true" keyProperty="spellId">
+    insert into as_shop_spell
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="spellId != null" >
+        spell_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="spellValue != null" >
+        spell_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="spellId != null" >
+        #{spellId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="spellValue != null" >
+        #{spellValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsShopSpell" >
+    update as_shop_spell
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="spellValue != null" >
+        spell_value = #{spellValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where spell_id = #{spellId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsShopSpell" >
+    update as_shop_spell
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      spell_value = #{spellValue,jdbcType=VARCHAR}
+    where spell_id = #{spellId,jdbcType=INTEGER}
+  </update>
+</mapper>

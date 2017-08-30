@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsConsultationHotelMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationHotel">
+    <id column="consultation_traffic_id" jdbcType="INTEGER" property="consultationTrafficId" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="business_district_id" jdbcType="INTEGER" property="businessDistrictId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="suggest_price" jdbcType="REAL" property="suggestPrice" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="star_level" jdbcType="VARCHAR" property="starLevel" />
+    <result column="visit_count" jdbcType="INTEGER" property="visitCount" />
+    <result column="public_time" jdbcType="VARCHAR" property="publicTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="cover_img" jdbcType="VARCHAR" property="coverImg" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+  </resultMap>
+  <resultMap id="AsConsultationHotelWithName" type="com.aoshi.domain.AsConsultationHotel" extends="BaseResultMap" >
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="districtName" property="districtName" jdbcType="VARCHAR" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap type="com.aoshi.domain.AsConsultationImgs" id="imgs">
+	<id column="consultation_imgs_id" property="consultationImgsId" jdbcType="INTEGER"/>
+	<result column="type_id" property="typeId" jdbcType="INTEGER" />
+	<result column="consultation_id" property="consultationId" jdbcType="INTEGER" />
+	<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+  </resultMap>
+   
+  <sql id="Base_Column_List">
+    consultation_traffic_id, type_id, province_id, city_id, area_id, business_district_id, 
+    brand_id, suggest_price, name, star_level, visit_count, public_time, status, address, 
+    lng, lat, phone, cover_img, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_hotel
+    where consultation_traffic_id = #{consultationTrafficId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_consultation_hotel
+    where consultation_traffic_id = #{consultationTrafficId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationHotel">
+    insert into as_consultation_hotel (consultation_traffic_id, type_id, province_id, 
+      city_id, area_id, business_district_id, 
+      brand_id, suggest_price, name, 
+      star_level, visit_count, public_time, 
+      status, address, lng, 
+      lat, phone, cover_img, 
+      create_time)
+    values (#{consultationTrafficId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, 
+      #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{businessDistrictId,jdbcType=INTEGER}, 
+      #{brandId,jdbcType=INTEGER}, #{suggestPrice,jdbcType=REAL}, #{name,jdbcType=VARCHAR}, 
+      #{starLevel,jdbcType=VARCHAR}, #{visitCount,jdbcType=INTEGER}, #{publicTime,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}, 
+      #{lat,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{coverImg,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationHotel" useGeneratedKeys="true" keyProperty="consultationTrafficId">
+    insert into as_consultation_hotel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consultationTrafficId != null">
+        consultation_traffic_id,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id,
+      </if>
+      <if test="brandId != null">
+        brand_id,
+      </if>
+      <if test="suggestPrice != null">
+        suggest_price,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="starLevel != null">
+        star_level,
+      </if>
+      <if test="visitCount != null">
+        visit_count,
+      </if>
+      <if test="publicTime != null">
+        public_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="coverImg != null">
+        cover_img,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consultationTrafficId != null">
+        #{consultationTrafficId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null">
+        #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null">
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="suggestPrice != null">
+        #{suggestPrice,jdbcType=REAL},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationHotel">
+    update as_consultation_hotel
+    <set>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="suggestPrice != null">
+        suggest_price = #{suggestPrice,jdbcType=REAL},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="starLevel != null">
+        star_level = #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        visit_count = #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="publicTime != null">
+        public_time = #{publicTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        cover_img = #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where consultation_traffic_id = #{consultationTrafficId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationHotel">
+    update as_consultation_hotel
+    set type_id = #{typeId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      suggest_price = #{suggestPrice,jdbcType=REAL},
+      name = #{name,jdbcType=VARCHAR},
+      star_level = #{starLevel,jdbcType=VARCHAR},
+      visit_count = #{visitCount,jdbcType=INTEGER},
+      public_time = #{publicTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where consultation_traffic_id = #{consultationTrafficId,jdbcType=INTEGER}
+  </update>
+  <select id="queryList" parameterType="java.util.List" resultMap="AsConsultationHotelWithName">
+    SELECT a.*,b.`name` as brandName,e.`area_name`,c.`province_name`,d.`city_name` ,f.`name` AS districtName,typ.`type_name` FROM  as_consultation_hotel a
+    LEFT JOIN as_yp_base_category b ON a.`brand_id` =b.id
+    LEFT JOIN `as_province` c ON a.`province_id` = c.`province_id`
+    LEFT JOIN `as_city` d ON a.`city_id` = d.`city_id`
+    LEFT JOIN `as_area` e ON a.`area_id` =e.`area_id`
+    LEFT JOIN as_business_district f ON a.business_district_id =f.`business_district_id`
+    LEFT JOIN as_consultation_type typ ON a.type_id=typ.consultation_type_id 
+    where 1=1
+    <if test="brandId != null">
+      and a.brand_id = #{brandId,jdbcType=INTEGER}
+    </if>
+    <if test="provinceId != null">
+      and a.province_id = #{provinceId,jdbcType=INTEGER}
+    </if>
+    <if test="cityId != null">
+      and a.city_id = #{cityId,jdbcType=INTEGER}
+    </if>
+    <if test="areaId != null">
+      and a.area_id = #{areaId,jdbcType=INTEGER}
+    </if>
+    <if test="name != null">
+      and a.name like CONCAT(CONCAT('%',#{name}),'%')
+    </if>
+    <if test="status != null">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="typeId != null">
+      and a.type_id = #{typeId,jdbcType=INTEGER}
+    </if>
+    order by a.consultation_traffic_id desc
+  </select>
+  <update id="deleteByIds">
+    delete from as_consultation_hotel where consultation_traffic_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  <update id="offSaleAll">
+    update as_consultation_hotel set status=3 where consultation_traffic_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  
+  <insert id="insertImgs" parameterType="com.aoshi.domain.AsConsultationImgs" useGeneratedKeys="true" keyProperty="consultationImgsId" >
+	INSERT INTO as_consultation_imgs(type_id,consultation_id,img_url) 
+	VALUES(
+	#{typeId},#{consultationId},#{imgUrl})
+  </insert>
+
+  
+   <select id="selectByPrimaryKeyImg" parameterType="java.lang.Integer" resultMap="imgs">
+  	SELECT * FROM as_consultation_imgs WHERE consultation_imgs_id=#{id}
+  </select>
+  
+  <insert id="insertSelectiveImg" parameterType="com.aoshi.domain.AsConsultationImgs" keyProperty="consultationImgsId" useGeneratedKeys="true" >
+       INSERT INTO as_consultation_imgs(type_id,consultation_id,img_url) 
+		VALUES(		
+		#{typeId},#{consultationId},#{imgUrl})
+  </insert>
+  
+  <update id="updateByPrimaryKeySelectiveImg"  parameterType="com.aoshi.domain.AsConsultationImgs">
+  		UPDATE as_consultation_imgs  SET img_url=#{imgUrl}		
+  		WHERE consultation_imgs_id=#{consultationImgsId}
+  </update>
+  
+   <delete id="deleteByPrimaryKeyImgs" parameterType="java.lang.Integer">
+  	    DELETE FROM as_consultation_imgs WHERE consultation_imgs_id=#{id}
+  </delete>
+  
+</mapper>

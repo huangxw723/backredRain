@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpSysMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpSysMessage" >
+    <id column="sys_message_id" property="sysMessageId" jdbcType="INTEGER" />
+    <result column="receive_user_id" property="receiveUserId" jdbcType="INTEGER" />
+    <result column="send_user_id" property="sendUserId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsYpSysMessage" extends="BaseResultMap" >
+    <result column="descp" property="descp" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sys_message_id, receive_user_id, send_user_id, title, type, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    descp
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_yp_sys_message
+    where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_sys_message
+    where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpSysMessage" >
+    insert into as_yp_sys_message (sys_message_id, receive_user_id, send_user_id, 
+      title, type, create_time, 
+      descp)
+    values (#{sysMessageId,jdbcType=INTEGER}, #{receiveUserId,jdbcType=INTEGER}, #{sendUserId,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{descp,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpSysMessage" useGeneratedKeys="true" keyProperty="sysMessageId">
+    insert into as_yp_sys_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysMessageId != null" >
+        sys_message_id,
+      </if>
+      <if test="receiveUserId != null" >
+        receive_user_id,
+      </if>
+      <if test="sendUserId != null" >
+        send_user_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="descp != null" >
+        descp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysMessageId != null" >
+        #{sysMessageId,jdbcType=INTEGER},
+      </if>
+      <if test="receiveUserId != null" >
+        #{receiveUserId,jdbcType=INTEGER},
+      </if>
+      <if test="sendUserId != null" >
+        #{sendUserId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpSysMessage" >
+    update as_yp_sys_message
+    <set >
+      <if test="receiveUserId != null" >
+        receive_user_id = #{receiveUserId,jdbcType=INTEGER},
+      </if>
+      <if test="sendUserId != null" >
+        send_user_id = #{sendUserId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null" >
+        descp = #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsYpSysMessage" >
+    update as_yp_sys_message
+    set receive_user_id = #{receiveUserId,jdbcType=INTEGER},
+      send_user_id = #{sendUserId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      descp = #{descp,jdbcType=LONGVARCHAR}
+    where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpSysMessage" >
+    update as_yp_sys_message
+    set receive_user_id = #{receiveUserId,jdbcType=INTEGER},
+      send_user_id = #{sendUserId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="countUnreadSystemMessage" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		as_yp_sys_message msg
+	WHERE
+		msg.type = 1
+	AND
+		msg.sys_message_id not in
+		(select sys_message_id from as_yp_sys_message_record where user_id = #{userId})
+  </select>
+  
+  <select id="countUnreadPersonalMessage" resultType="java.lang.Integer">
+  	SELECT
+		count(1)
+	FROM
+		as_yp_sys_message msg
+	WHERE
+		msg.type = 2
+	AND
+		msg.receive_user_id = #{userId}
+	AND
+		msg.sys_message_id not in
+	(select sys_message_id from as_yp_sys_message_record where user_id = #{userId})
+  </select>
+  
+  <select id="getAllUnreadMessageList" resultMap="ResultMapWithBLOBs">
+  	SELECT
+			msg.*
+		FROM
+			as_yp_sys_message msg
+		WHERE
+			msg.type = 1
+		AND msg.sys_message_id NOT IN (
+			SELECT
+				sys_message_id
+			FROM
+				as_yp_sys_message_record
+			WHERE
+				user_id = #{userId}
+		)
+		UNION
+			SELECT
+				msg.*
+			FROM
+				as_yp_sys_message msg
+			WHERE
+				msg.type = 2
+			AND msg.receive_user_id = #{userId}
+			AND msg.sys_message_id NOT IN (
+				SELECT
+					sys_message_id
+				FROM
+					as_yp_sys_message_record
+				WHERE
+					user_id = #{userId}
+			)
+  </select>
+  
+    	<select id="getAllMessageList" resultMap="ResultMapWithBLOBs">
+  		SELECT
+			msg.*,
+			0 AS isRead
+		FROM
+			as_yp_sys_message msg
+		WHERE
+			msg.type = 1
+		AND msg.sys_message_id NOT IN (
+			SELECT
+				sys_message_id
+			FROM
+				as_yp_sys_message_record
+			WHERE
+				user_id = #{userId}
+		)
+		UNION
+			SELECT
+				msg.*,
+				0 AS isRead
+			FROM
+				as_yp_sys_message msg
+			WHERE
+				msg.type = 2
+			AND msg.receive_user_id = #{userId}
+			AND msg.sys_message_id NOT IN (
+				SELECT
+					sys_message_id
+				FROM
+					as_yp_sys_message_record
+				WHERE
+					user_id = #{userId}
+			)
+			UNION
+				SELECT
+					msg.*, 1 AS isRead
+				FROM
+					as_yp_sys_message msg
+				WHERE
+					msg.type = 1
+				AND msg.sys_message_id IN (
+					SELECT
+						sys_message_id
+					FROM
+						as_yp_sys_message_record
+					WHERE
+						user_id = #{userId}
+					AND STATUS = 0
+				)
+				UNION
+					SELECT
+						msg.*, 1 AS isRead
+					FROM
+						as_yp_sys_message msg
+					WHERE
+						msg.type = 2
+					AND msg.receive_user_id = #{userId}
+					AND msg.sys_message_id IN (
+						SELECT
+							sys_message_id
+						FROM
+							as_yp_sys_message_record
+						WHERE
+							user_id = #{userId}
+						AND STATUS = 0
+					)
+					ORDER BY
+						isRead ASC,sys_message_id DESC
+  	</select>
+ 
+</mapper>

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpScreenInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpScreenInfo" >
+    <id column="screen_info_id" property="screenInfoId" jdbcType="INTEGER" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="screen_domain_id" property="screenDomainId" jdbcType="INTEGER" />
+    <result column="click_count" property="clickCount" jdbcType="INTEGER" />
+    <result column="opera_time" property="operaTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    screen_info_id, sn, province_id, city_id, area_id, shop_id, address, status, screen_domain_id, 
+    click_count, opera_time, create_time
+  </sql>
+  <select id="queryScreenNum" resultType="Integer" >
+        SELECT
+		ifnull(count(f.screen_info_id),0)as num
+		FROM
+			as_yp_screen_info f
+		JOIN as_province p ON f.province_id = p.province_id
+		JOIN as_city c ON f.city_id = c.city_id
+		JOIN as_area a ON a.area_id = f.area_id
+		JOIN as_yp_screen_domain dt ON dt.screen_domain_id = f.screen_domain_id
+		JOIN as_shop shop on shop.shop_id=f.shop_id
+		WHERE
+			1 = 1
+	  <if test="sn != null and sn != ''" >
+         AND f.sn like concat(concat('%',#{sn}),'%')
+      </if>
+		 <if test="status != null and status != ''" >
+          AND f.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="url != null and url != ''" >
+          AND dt.url like concat(concat('%',#{url}),'%')
+      </if>
+      <if test="screenDomainId != null and screenDomainId != ''" >
+          AND f.screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null and shopId != ''" >
+          AND f.shop_id = #{shopId,jdbcType=INTEGER}
+      </if>
+      <if test="shopName != null and shopName != ''" >
+          AND shop.name = #{shopName,jdbcType=INTEGER}
+      </if>
+		ORDER BY screen_info_id DESC
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_screen_info
+    where screen_info_id = #{screenInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_screen_info
+    where screen_info_id = #{screenInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpScreenInfo" >
+    insert into as_yp_screen_info (screen_info_id, sn, province_id, 
+      city_id, area_id, shop_id, 
+      address, status, screen_domain_id, 
+      click_count, opera_time, create_time
+      )
+    values (#{screenInfoId,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{provinceId,jdbcType=INTEGER}, 
+      #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{screenDomainId,jdbcType=INTEGER}, 
+      #{clickCount,jdbcType=INTEGER}, #{operaTime,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpScreenInfo" useGeneratedKeys="true" keyProperty="screenInfoId">
+    insert into as_yp_screen_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="screenInfoId != null" >
+        screen_info_id,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id,
+      </if>
+      <if test="clickCount != null" >
+        click_count,
+      </if>
+      <if test="operaTime != null" >
+        opera_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="screenInfoId != null" >
+        #{screenInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="screenDomainId != null" >
+        #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="clickCount != null" >
+        #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="operaTime != null" >
+        #{operaTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpScreenInfo" >
+    update as_yp_screen_info
+    <set >
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="screenDomainId != null" >
+        screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="clickCount != null" >
+        click_count = #{clickCount,jdbcType=INTEGER},
+      </if>
+      <if test="operaTime != null" >
+        opera_time = #{operaTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where screen_info_id = #{screenInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpScreenInfo" >
+    update as_yp_screen_info
+    set sn = #{sn,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      click_count = #{clickCount,jdbcType=INTEGER},
+      opera_time = #{operaTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where screen_info_id = #{screenInfoId,jdbcType=INTEGER}
+  </update>
+  <select id="listScreenAll" resultMap="BaseRowMap" >
+    SELECT
+			*, p.province_name,
+			c.city_name,
+			a.area_name
+		FROM
+			as_yp_screen_info f
+		JOIN as_province p ON f.province_id = p.province_id
+		JOIN as_city c ON f.city_id = c.city_id
+		JOIN as_area a ON a.area_id = f.area_id
+		JOIN as_yp_screen_domain dt ON dt.screen_domain_id = f.screen_domain_id
+		JOIN as_shop shop on shop.shop_id=f.shop_id
+		WHERE
+			1 = 1
+		 <if test="sn != null and sn != ''" >
+         AND f.sn like concat(concat('%',#{sn}),'%')
+      </if>
+		 <if test="status != null and status != ''" >
+          AND f.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="url != null and url != ''" >
+          AND dt.url like concat(concat('%',#{url}),'%')
+      </if>
+      <if test="screenDomainId != null and screenDomainId != ''" >
+          AND f.screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+      </if>
+      <if test="shopId != null and shopId != ''" >
+          AND f.shop_id = #{shopId,jdbcType=INTEGER}
+      </if>
+      <if test="shopName != null and shopName != ''" >
+          AND shop.name like concat(concat('%',#{shopName}),'%')
+      </if>
+		ORDER BY screen_info_id DESC
+  </select>
+  <select id="getScreenList" resultMap="BaseRowMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_screen_info
+    where user_id = #{userId}
+  </select>
+  
+   <select id="queryScreenList" resultMap="BaseRowMap" >
+	     SELECT
+			*, p.province_name,
+			c.city_name,
+			a.area_name,
+	      shop.`name` AS shopName,
+	      dt.url
+			FROM
+				as_yp_screen_info f
+			JOIN as_province p ON f.province_id = p.province_id
+			JOIN as_city c ON f.city_id = c.city_id
+			JOIN as_area a ON a.area_id = f.area_id
+			JOIN as_yp_screen_domain dt ON dt.screen_domain_id = f.screen_domain_id
+	    JOIN as_shop shop ON shop.shop_id = f.shop_id
+			WHERE
+				1 = 1
+		 <if test="sn != null and sn != ''" >
+         AND f.sn = #{sn,jdbcType=VARCHAR}
+      </if>
+		 <if test="status != null and status != ''" >
+          AND f.status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="url != null and url != ''" >
+          AND dt.url = #{url,jdbcType=INTEGER}
+      </if>
+      <if test="screenDomainId != null and screenDomainId != ''" >
+          AND f.screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+      </if>
+		ORDER BY screen_info_id DESC
+  </select>
+    <update id="updateScreenStatus" >
+    update as_yp_screen_info
+    set status = #{status,jdbcType=INTEGER}
+    where 
+    screen_info_id = #{screenInfoId,jdbcType=INTEGER}
+    and shop_id = #{shopId,jdbcType=INTEGER}
+  </update>
+  <select id="SrceenNumCount" resultType="Integer">
+    SELECT
+    count(f.screen_info_id) as screenNum
+	FROM
+		as_yp_screen_info f
+	JOIN as_province p ON f.province_id = p.province_id
+	JOIN as_city c ON f.city_id = c.city_id
+	JOIN as_area a ON a.area_id = f.area_id
+	JOIN as_yp_screen_domain dt ON dt.screen_domain_id = f.screen_domain_id
+	JOIN as_shop shop ON shop.shop_id = f.shop_id
+	WHERE
+		1 = 1
+     <if test="sn != null and sn != ''" >
+        AND f.sn like concat(concat('%',#{sn}),'%')
+     </if>
+	 <if test="status != null and status != ''" >
+         AND f.status = #{status,jdbcType=INTEGER}
+     </if>
+     <if test="url != null and url != ''" >
+         AND dt.url like concat(concat('%',#{url}),'%')
+     </if>
+     <if test="screenDomainId != null and screenDomainId != ''" >
+         AND f.screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+     </if>
+     <if test="shopId != null and shopId != ''" >
+         AND f.shop_id = #{shopId,jdbcType=INTEGER}
+     </if>
+     <if test="shopName != null and shopName != ''" >
+         AND shop.name = #{shopName,jdbcType=INTEGER}
+     </if>
+	 ORDER BY
+	 screen_info_id DESC
+  </select>
+</mapper>

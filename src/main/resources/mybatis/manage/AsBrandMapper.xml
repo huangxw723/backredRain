@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBrand" >
+    <id column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_logo" property="brandLogo" jdbcType="VARCHAR" />
+    <result column="brand_desc" property="brandDesc" jdbcType="VARCHAR" />
+    <result column="site_url" property="siteUrl" jdbcType="VARCHAR" />
+    <result column="yp_base_category_id" property="ypBaseCategoryId" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="BrandWithName" type="com.aoshi.domain.AsBrand" extends="BaseResultMap" >
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    brand_id, brand_name, brand_logo, brand_desc, site_url, yp_base_category_id, sort_order, 
+    is_show
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_brand
+    where brand_id = #{brandId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_brand
+    where brand_id = #{brandId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBrand" >
+    insert into as_brand (brand_id, brand_name, brand_logo, 
+      brand_desc, site_url, yp_base_category_id, 
+      sort_order, is_show)
+    values (#{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, #{brandLogo,jdbcType=VARCHAR}, 
+      #{brandDesc,jdbcType=VARCHAR}, #{siteUrl,jdbcType=VARCHAR}, #{ypBaseCategoryId,jdbcType=INTEGER}, 
+      #{sortOrder,jdbcType=VARCHAR}, #{isShow,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBrand" >
+    insert into as_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="brandLogo != null" >
+        brand_logo,
+      </if>
+      <if test="brandDesc != null" >
+        brand_desc,
+      </if>
+      <if test="siteUrl != null" >
+        site_url,
+      </if>
+      <if test="ypBaseCategoryId != null" >
+        yp_base_category_id,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null" >
+        #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDesc != null" >
+        #{brandDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="siteUrl != null" >
+        #{siteUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="ypBaseCategoryId != null" >
+        #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBrand" >
+    update as_brand
+    <set >
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLogo != null" >
+        brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandDesc != null" >
+        brand_desc = #{brandDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="siteUrl != null" >
+        site_url = #{siteUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="ypBaseCategoryId != null" >
+        yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        sort_order = #{sortOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where brand_id = #{brandId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBrand" >
+    update as_brand
+    set brand_name = #{brandName,jdbcType=VARCHAR},
+      brand_logo = #{brandLogo,jdbcType=VARCHAR},
+      brand_desc = #{brandDesc,jdbcType=VARCHAR},
+      site_url = #{siteUrl,jdbcType=VARCHAR},
+      yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      sort_order = #{sortOrder,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=VARCHAR}
+    where brand_id = #{brandId,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryList" parameterType="java.util.List" resultMap="BrandWithName">
+    SELECT a.* ,b.name
+    FROM as_brand a  LEFT JOIN as_yp_base_category b ON a.yp_base_category_id =b.`id`
+    where 1=1
+    <if test="brandName != null">
+      and brand_name like CONCAT(CONCAT('%',#{brandName}),'%')
+    </if>
+    order by brand_id desc
+  </select>
+
+  <update id="deleteByBrandIds">
+    delete from as_brand where brand_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

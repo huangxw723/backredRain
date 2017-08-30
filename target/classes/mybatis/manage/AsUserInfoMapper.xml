@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsUserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsUserInfo" >
+    <id column="user_info_id" property="userInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="avata" property="avata" jdbcType="VARCHAR" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="client_type" property="clientType" jdbcType="INTEGER" />
+    <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="my_invite" property="myInvite" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="inviteRefId" property="inviteRefId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_info_id, user_id, avata, point, nick_name, birthday, sex, province_id, city_id, 
+    area_id, address, source, client_type, invite_code, my_invite
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_user_info
+    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+  </select>
+  <select id="getUserInfoList" resultMap="BaseResultMap" parameterType="pd" >
+    SELECT
+	infos.*, (SELECT
+		account AS 'zhanhao'
+	FROM
+		as_user
+	WHERE
+		user_id = (
+			(
+				SELECT
+					user_id
+				FROM
+					as_user_info
+				WHERE
+					my_invite = infos.invite_code
+			)
+		) )AS inviteRefId,
+		USER .account
+	FROM
+		as_user_info infos
+	LEFT JOIN as_user USER ON infos.user_id = `user`.user_id
+	WHERE
+		infos.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_user_info
+    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsUserInfo" >
+    insert into as_user_info (user_info_id, user_id, avata, 
+      point, nick_name, birthday, 
+      sex, province_id, city_id, 
+      area_id, address, source, 
+      client_type, invite_code, my_invite
+      )
+    values (#{userInfoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{avata,jdbcType=VARCHAR}, 
+      #{point,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{birthday,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, 
+      #{areaId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, 
+      #{clientType,jdbcType=INTEGER}, #{inviteCode,jdbcType=VARCHAR}, #{myInvite,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsUserInfo" >
+    insert into as_user_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        user_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="avata != null" >
+        avata,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="clientType != null" >
+        client_type,
+      </if>
+      <if test="inviteCode != null" >
+        invite_code,
+      </if>
+      <if test="myInvite != null" >
+        my_invite,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userInfoId != null" >
+        #{userInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="avata != null" >
+        #{avata,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="clientType != null" >
+        #{clientType,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null" >
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="myInvite != null" >
+        #{myInvite,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsUserInfo" >
+    update as_user_info
+    <set >
+      <if test="userId != null and userId != ''" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="avata != null and avata != ''" >
+        avata = #{avata,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null and point != ''" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null and nickName != ''" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null and birthday != ''" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null and provinceId != ''" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null and cityId != ''" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null and areaId != ''" >
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null and address != ''" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null and source != ''" >
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="clientType != null and clientType != ''" >
+        client_type = #{clientType,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null and inviteCode != ''" >
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="myInvite != null and myInvite != ''" >
+        my_invite = #{myInvite,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsUserInfo" >
+    update as_user_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      avata = #{avata,jdbcType=VARCHAR},
+      point = #{point,jdbcType=INTEGER},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
+      client_type = #{clientType,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      my_invite = #{myInvite,jdbcType=VARCHAR}
+    where user_info_id = #{userInfoId,jdbcType=INTEGER}
+  </update>
+  <select id="queryUserInfo" resultMap="BaseResultMap" parameterType="com.aoshi.domain.AsUserInfo" >
+    SELECT
+		account AS account
+	FROM
+		as_user
+	WHERE
+	user_id = (
+		(
+		SELECT
+			user_id
+		FROM
+			as_user_info
+		WHERE
+			my_invite = #{inviteCode,jdbcType=VARCHAR}
+		)
+	)
+  </select>
+</mapper>

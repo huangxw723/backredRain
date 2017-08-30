@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsActivityMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsActivity" >
+    <id column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+    <result column="propaganda_url" property="propagandaUrl" jdbcType="VARCHAR" />
+    <result column="activity_type" property="activityType" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+  </resultMap>
+   <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+  <sql id="Base_Column_List" >
+    activity_id, activity_name, propaganda_url, activity_type, start_time, end_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_activity
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_activity
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsActivity" >
+    insert into as_activity (activity_id, activity_name, propaganda_url, 
+      activity_type, start_time, end_time
+      )
+    values (#{activityId,jdbcType=INTEGER}, #{activityName,jdbcType=VARCHAR}, #{propagandaUrl,jdbcType=VARCHAR}, 
+      #{activityType,jdbcType=INTEGER}, #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsActivity"  keyColumn="activity_id" keyProperty="activityId">
+    insert into as_activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="activityName != null" >
+        activity_name,
+      </if>
+      <if test="propagandaUrl != null" >
+        propaganda_url,
+      </if>
+      <if test="activityType != null" >
+        activity_type,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="activityId != null" >
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="activityName != null" >
+        #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="propagandaUrl != null" >
+        #{propagandaUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityType != null" >
+        #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsActivity" >
+    update as_activity
+    <set >
+      <if test="activityName != null" >
+        activity_name = #{activityName,jdbcType=VARCHAR},
+      </if>
+      <if test="propagandaUrl != null" >
+        propaganda_url = #{propagandaUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="activityType != null" >
+        activity_type = #{activityType,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsActivity" >
+    update as_activity
+    set activity_name = #{activityName,jdbcType=VARCHAR},
+      propaganda_url = #{propagandaUrl,jdbcType=VARCHAR},
+      activity_type = #{activityType,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR}
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </update>
+<!--   判断活动时间是否有重复 start-->
+<select id="listAll" resultType="java.lang.Integer" >
+  select 
+   count(1) from as_activity_redrain a LEFT join as_activity activity 
+    on a.activity_id=activity.activity_id
+    where 1=1   
+	<if test="startTime != null and startTime != '' ">
+	and activity.start_time = #{startTime,jdbcType=VARCHAR}
+	</if>
+	<if test="endTime != null and endTime != '' ">
+	and activity.end_time = #{endTime,jdbcType=VARCHAR}
+	</if>
+ </select>
+<!--   判断活动时间是否有重复  end-->
+<select id="getMaxActivityCode" resultType="java.lang.Integer" >
+	SELECT
+		IFNULL(max(a.activity_code),0)
+	FROM
+		as_activity_redrain a
+	LEFT JOIN as_activity activity ON a.activity_id = activity.activity_id
+	WHERE
+		1 = 1
+	AND activity.activity_type = 1
+	ORDER BY activity.end_time
+ </select>
+  <!-- 获取活动明星见面会列表 -->
+  <select id="meetingListAll" resultMap="BaseRowMap" >
+  	select 
+  		a.*
+  		from as_activity a 
+		left join as_activity_meeting m on a.activity_id = m.activity_id 
+		where 1 = 1
+		and a.activity_type = 2
+  	<if test="keyWord != null and keyWord != ''">
+  		and a.activity_name LIKE concat(concat('%',#{keyWord}),'%')
+  	</if>
+  	<if test="startTime != null and startTime != ''">
+  		and	a.start_time <![CDATA[>=]]> #{startTime} 
+  	</if>
+  	<if test="endTime != null and endTime != ''">
+      	and a.end_time <![CDATA[<=]]> #{endTime}
+     </if>
+  	order by a.activity_id desc
+  </select>
+  <select id="isAccountExists" resultType="java.lang.String" >
+	SELECT
+	max(activity.end_time) AS startTime
+	FROM
+		as_activity_redrain a
+	LEFT JOIN as_activity activity ON a.activity_id = activity.activity_id
+	WHERE
+		1 = 1
+	AND activity.activity_type = 1
+	<if test="activityRedrainId != null and activityRedrainId != ''">
+	 AND a.activity_redrain_id <![CDATA[<>]]> #{activityRedrainId}
+  	</if>
+  	<if test="currentstartTime != null and currentstartTime != ''">
+  	AND	activity.end_time  <![CDATA[<]]> #{currentstartTime} ORDER BY activity.end_time DESC 
+  	</if>
+ </select>
+  
+  <select id="findByName"  resultType="java.lang.Integer">
+  		SELECT COUNT(*) FROM as_activity WHERE activity_name = #{activityName}  and activity_type = #{activityType}   
+  </select>
+<!--   删除活动 -->
+ <update id="deleteByActivityId" parameterType="com.aoshi.domain.AsActivity" >
+    delete from as_activity
+    where activity_id = #{activityId,jdbcType=INTEGER}
+  </update>
+</mapper>

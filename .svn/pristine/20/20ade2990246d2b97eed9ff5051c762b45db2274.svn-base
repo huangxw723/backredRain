@@ -1,0 +1,552 @@
+package com.aoshi.service.manage.ownActivity;
+
+import com.aoshi.common.asenum.DictParam;
+import com.aoshi.controller.base.BaseController;
+import com.aoshi.dao.*;
+import com.aoshi.domain.AsActivityReceivedRecord;
+import com.aoshi.domain.AsOwnActivity;
+import com.aoshi.domain.AsOwnActivityDisc;
+import com.aoshi.domain.AsPrize;
+import com.aoshi.entity.system.User;
+import com.aoshi.resolver.ValidatorBreakException;
+import com.aoshi.service.base.AsBaseService;
+import com.aoshi.util.Const;
+import com.aoshi.util.DateUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 商家自主活动service
+ *
+ * @author strong
+ * @version 1.0 2017年2月20日下午3:41:33
+ */
+@Service
+@Transactional
+public class OwnActivityService extends AsBaseService {
+
+    @Autowired
+    private AsOwnActivityMapper asOwnActivityMapper;
+
+    @Autowired
+    private OwnGiftService ownGiftService;
+
+    @Autowired
+    private AsOwnActivityDiscMapper asOwnActivityDiscMapper;
+
+    @Autowired
+    private AsDictParamMapper asDictParamMapper;
+
+
+    private static final String OWN_ACTICITY_PAHT = "/manage/ownActivity/";
+
+
+    /**
+     * 判断活动开始时间是否与最大结束时间重合
+     *
+     * @return
+     */
+    public String isAccountExists(Integer ownActivityId, int shopId) {
+        return asOwnActivityMapper.isAccountExists(ownActivityId, shopId);
+    }
+
+    /**
+     * 判断是否有活动正在进行中
+     *
+     * @return
+     */
+    public Integer isProceed(int shopId) {
+        return asOwnActivityMapper.isProceed(shopId);
+    }
+
+    /**
+     * 登陆账号的身份验证
+     */
+    public int query() {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession();
+        User user = (User) session.getAttribute(Const.SESSION_USER);
+        String adminRoleId = asDictParamMapper.findByKeyCode(DictParam.PARAM_ADMIN_ROLE_ID);
+        String operationRoleId = asDictParamMapper.findByKeyCode(DictParam.PARAM_OPERATION_MANAGER_ROLE_ID);
+        if (user.getROLE_ID().equals(adminRoleId) || user.getROLE_ID().equals(operationRoleId)) {
+            return 0;
+        }
+        return Integer.parseInt(user.getAs_shop_id());
+    }
+
+
+    /**
+     * 添加活动
+     *
+     * @param asOwnActivity
+     * @param pro
+     * @param pcf
+     * @param asOwnActivity
+     */
+    public void save(AsOwnActivity asOwnActivity, String pro, String pcf) {
+        asOwnActivity.setPeopleNum(0);
+        asOwnActivity.setCountNum(0);
+        asOwnActivity.setAuditStatus(0);
+        asOwnActivity.setCreateTime(DateUtil.getTime());
+       // asOwnActivity.setShopId(ownGiftService.getShopId());
+        asOwnActivityMapper.insertSelective(asOwnActivity);
+        asOwnActivity.setActivityLink("business_activity_redRain_start.html#/attr?ownActivityId=" + asOwnActivity.getOwnActivityId());
+        asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity);
+
+        // 礼品池
+        giftPool(asOwnActivity, pro, pcf);
+
+    }
+
+    /**
+     * 添加礼品池
+     *
+     * @param asOwnActivity
+     * @param pro
+     * @param pcf
+     * @param asOwnActivity
+     */
+    private void giftPool(AsOwnActivity asOwnActivity, String pro, String pcf) {
+
+        String[] proArr = pro.split(",");
+        String[] pcfArr = pcf.split(",");
+
+        for (int i = 0; i < proArr.length; i++) {
+            AsOwnActivityDisc asOwnActivityDisc = new AsOwnActivityDisc();
+            asOwnActivityDisc.setOwnActivityId(asOwnActivity.getOwnActivityId());
+            BigDecimal bd = new BigDecimal(proArr[i]);
+            asOwnActivityDisc.setProbability(bd);
+            asOwnActivityDisc.setPrizeConfigId(Integer.parseInt(pcfArr[i]));
+            asOwnActivityDisc.setCreateTime(DateUtil.getTime());
+            asOwnActivityDiscMapper.insert(asOwnActivityDisc);
+        }
+
+    }
+
+    /**
+     * 查询商家活动
+     *
+     * @param asOwnActivity
+     * @param isShop
+     * @return
+     */
+    public List<AsOwnActivity> queryAll(AsOwnActivity asOwnActivity, int isShop) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("activityName", asOwnActivity.getActivityName());
+        map.put("status", asOwnActivity.getStatus());
+        map.put("startTime", asOwnActivity.getStartTime());
+        map.put("endTime", asOwnActivity.getEndTime());
+        map.put("shopId", isShop == 0 ? 0 : isShop);
+        return asOwnActivityMapper.queryAll(map);
+    }
+
+
+    /**
+     * 查询商家自主活动链接列表
+     *
+     * @param asOwnActivity
+     * @param isShop 0 是运营管理员或者是后台系统管理员
+     * @return
+     */
+    public List<AsOwnActivity> queryOwnActivityLinkList(AsOwnActivity asOwnActivity, int isShop) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("activityName", asOwnActivity.getActivityName());
+        map.put("startTime", asOwnActivity.getStartTime());
+        map.put("endTime", asOwnActivity.getEndTime());
+        map.put("shopId", isShop);
+        return asOwnActivityMapper.queryOwnActivityLinkList(map);
+    }
+
+    /**
+     * 删除
+     *
+     * @param ownActivityId
+     * @return
+     */
+    public int delete(Integer ownActivityId) {
+        int status = asOwnActivityMapper.delete(ownActivityId);
+        asOwnActivityDiscMapper.deleteByPrimaryKey(ownActivityId);
+        return status;
+    }
+
+    /**
+     * 去修改页面
+     *
+     * @param ownActivityId
+     * @return
+     */
+    public AsOwnActivity queryById(Integer ownActivityId) {
+
+        return asOwnActivityMapper.queryById(ownActivityId);
+    }
+
+    /**
+     * 修改
+     *
+     * @param asOwnActivity
+     * @param pro
+     * @param pcf
+     * @param discId
+     * @param count
+     */
+    public void edit(AsOwnActivity asOwnActivity, String pro, String pcf, String discId, Integer count) {
+        asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity);
+        // 更新礼品池
+        editGiftPool(asOwnActivity, pro, pcf, discId, count);
+    }
+
+    /**
+     * 修改礼品池
+     *
+     * @param asOwnActivity
+     * @param pro
+     * @param pcf
+     * @param discId
+     */
+    private void editGiftPool(AsOwnActivity asOwnActivity, String pro, String pcf, String discId, Integer count) {
+        String[] proArr = pro.split(",");
+        String[] pcfArr = pcf.split(",");
+        String[] discArr = discId.split(",");
+
+        //count的数值为修改的数值
+        for (int i = 0; i < count; i++) {
+            AsOwnActivityDisc asOwnActivityDisc = new AsOwnActivityDisc();
+            BigDecimal bd = new BigDecimal(proArr[i]);
+            asOwnActivityDisc.setProbability(bd);
+            asOwnActivityDisc.setPrizeConfigId(Integer.parseInt(pcfArr[i]));
+            asOwnActivityDisc.setOwnActivityDiscId(Integer.parseInt(discArr[i]));
+            asOwnActivityDiscMapper.updateByPrimaryKeySelective(asOwnActivityDisc);
+        }
+
+        //其余的为新增
+        for (int i = count; i < pcfArr.length; i++) {
+            AsOwnActivityDisc asOwnActivityDisc = new AsOwnActivityDisc();
+            BigDecimal bd = new BigDecimal(proArr[i]);
+            asOwnActivityDisc.setProbability(bd);
+            asOwnActivityDisc.setPrizeConfigId(Integer.parseInt(pcfArr[i]));
+            asOwnActivityDisc.setOwnActivityId(asOwnActivity.getOwnActivityId());
+            asOwnActivityDisc.setCreateTime(DateUtil.getTime());
+            asOwnActivityDiscMapper.insert(asOwnActivityDisc);
+        }
+    }
+
+    /**
+     * 查询礼品在活动中的状态
+     *
+     * @param prizeConfigId
+     * @return
+     */
+    public List<AsOwnActivity> queryStatus(Integer prizeConfigId) {
+        return asOwnActivityMapper.queryStatus(prizeConfigId);
+    }
+
+    /**
+     * 活动立即终止,设置结束时间为当前时间
+     *
+     * @param ownActivityId
+     * @param ownActivityId
+     * @return
+     */
+    public int editForOff(Integer ownActivityId) {
+        AsOwnActivity asOwnActivity = new AsOwnActivity();
+        asOwnActivity.setOwnActivityId(ownActivityId);
+        asOwnActivity.setEndTime(DateUtil.getTime());
+        return asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity);
+
+    }
+
+
+    /**
+     * 活动审核列表
+     *
+     * @param c
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    public Object listAudit(BaseController c) {
+        initialized(c);
+        addField("shopId", getUser().getAs_shop_id());
+        pageQueryModule(asOwnActivityMapper, "listAudit", true);
+        return renderView(OWN_ACTICITY_PAHT + "listAudit");
+
+    }
+
+    /**
+     * 批量通过审核
+     *
+     * @param ids
+     * @param auditStatus
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    public Object updateAuditStatus(String[] ids, Integer auditStatus) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        //List<String> errIds = new ArrayList<>();
+        String errIds = "";
+
+        if (ids.length > 0) {
+            for (int i = 0; i < ids.length; i++) {
+                Integer asOwnActivityId = Integer.valueOf(ids[i]);
+                AsOwnActivity asOwnActivity = new AsOwnActivity();
+                if (auditStatus == 1) {
+                    asOwnActivity.setOwnActivityId(asOwnActivityId);
+                    asOwnActivity.setAuditStatus(auditStatus);
+                    asOwnActivity.setAuditTime(DateUtil.getTime());
+                    asOwnActivity.setReason("审核通过");
+                    operaFlag = asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity) == 1;
+                    if (!operaFlag) {
+                        errIds = asOwnActivityId.toString() + ",";
+
+                    }
+                } else if (auditStatus == 2) {
+                    asOwnActivity.setOwnActivityId(asOwnActivityId);
+                    asOwnActivity.setAuditStatus(auditStatus);
+                    asOwnActivity.setAuditTime(DateUtil.getTime());
+                    asOwnActivity.setReason("审核不通过");
+                    operaFlag = asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity) == 1;
+                    ValidatorBreakException.NOT_TRUE(operaFlag);
+                    if (!operaFlag) {
+                        errIds = asOwnActivityId.toString() + ",";
+                    }
+                }
+            }
+            data.put("status", "0");
+            data.put("errIds", errIds);
+
+        } else {
+            data.put("status", "1");
+        }
+
+        return data;
+    }
+
+    /**
+     * 单个活动通过审核
+     *
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    public Object updateStatus(BaseController c) {
+        initialized(c);
+        int ownActivityId = pd.getInt("ownActivityId");
+        int auditStatus = pd.getInt("auditStatus");
+        String reason = pd.getString("reason");
+        AsOwnActivity asOwnActivity = new AsOwnActivity();
+        if (auditStatus == 1) {
+            asOwnActivity.setOwnActivityId(ownActivityId);
+            asOwnActivity.setAuditStatus(auditStatus);
+            asOwnActivity.setAuditTime(DateUtil.getTime());
+            asOwnActivity.setReason(reason);
+            operaFlag = asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity) == 1;
+            ValidatorBreakException.NOT_TRUE(operaFlag);
+        } else if (auditStatus == 2) {
+            asOwnActivity.setOwnActivityId(ownActivityId);
+            asOwnActivity.setAuditStatus(auditStatus);
+            asOwnActivity.setAuditTime(DateUtil.getTime());
+            asOwnActivity.setReason(reason);
+            operaFlag = asOwnActivityMapper.updateByPrimaryKeySelective(asOwnActivity) == 1;
+            ValidatorBreakException.NOT_TRUE(operaFlag);
+        }
+        return renderSuccess(1);
+    }
+
+    /**
+     * 自主活动审核历史列表
+     *
+     * @param c
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    public Object listAuditHistory(BaseController c) {
+        initialized(c);
+        addField("shopId", getUser().getAs_shop_id());
+        pageQueryModule(asOwnActivityMapper, "listAuditHistory", true);
+        return renderView(OWN_ACTICITY_PAHT + "listAuditHistory");
+    }
+
+
+    /**
+     * 获取自主单活动审核 历史  详情信息
+     *
+     * @param ownActivityId
+     * @return
+     * @author tgb
+     * 创建时间：2017年3月7日
+     * @version 1.0
+     */
+    public AsOwnActivity auditHistoryById(Integer ownActivityId) {
+        return asOwnActivityMapper.selectByPrimaryKey(ownActivityId);
+    }
+
+    /**
+     * #####################################自主活动 领取 兑换记录##########################################
+     */
+
+    @Autowired
+    private AsActivityReceivedRecordMapper recordMapper;
+
+    @Autowired
+    private AsPrizeMapper asPrizeMapper;
+
+    @Autowired
+    private AsActivityReceivedRecordMapper asActivityReceivedRecordmapper;
+
+
+    /**
+     * 自主活动礼品领取记录列表
+     *
+     * @param c
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月18日
+     */
+
+    public Object receivedHistory(BaseController c) {
+        initialized(c);
+        addField("shopId", getCurrentUser().getAs_shop_id());
+        addField("activityType", 4);
+        pageQueryModule(recordMapper, "listAll", true);
+        return renderView(OWN_ACTICITY_PAHT + "listReceiveHistory");
+    }
+
+    /**
+     * 自主活动礼品兑换领取记录列表
+     *
+     * @param c
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月18日
+     */
+
+    public Object exchangeHistory(BaseController c) {
+        initialized(c);
+        addField("shopId", getCurrentUser().getAs_shop_id());
+        addField("activityType", 4);
+        pageQueryModule(recordMapper, "listAllExchage", true);
+        return renderView(OWN_ACTICITY_PAHT + "listExchangeHistory");
+    }
+
+    /**
+     * go兑换页面
+     *
+     * @param c
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月18日
+     */
+
+    public Object receive(BaseController c) {
+        return renderView(OWN_ACTICITY_PAHT + "receive");
+    }
+
+    /**
+     * 进行兑换操作
+     *
+     * @return
+     * @author chenwenzhu
+     * @date 2017年2月21日
+     */
+
+    public int editReceive(String sn) {
+        User user = new User();
+        user = getUser();
+        if (!getUser().getAs_shop_id().equals("null")) {// 获取商铺id如果不为null则是商场账号 ，反之则是后台管理员账号
+            //判断自主活动是否有效
+            AsPrize prize = asPrizeMapper.findBySn(sn.trim(), 4);
+            if (prize == null) {
+                return 200;
+            }
+            String starttime=prize.getStartTime();
+            String endtime=prize.getEndTime();
+            if(starttime.isEmpty()){
+                return  100;
+            }else{
+                //判断优惠券到开始时间
+                long starTtime = DateUtil.parseDate(starttime).getTime();
+                if (new Date().getTime() < starTtime) {
+                    return 50;
+                }
+            }
+            if(endtime.isEmpty()){
+                return  100;
+            }else{
+                //判断优惠券是否过期
+                long endTime = DateUtil.parseDate(endtime).getTime();
+                if (new Date().getTime() > endTime) {
+                    return 300;
+                }
+            }
+            //判断是否属本店铺的自主活动
+            String shopId = getUser().getAs_shop_id();
+            if (!shopId.equals(new Integer(prize.getShopId()).toString())) {
+                return 400;
+            }
+            //自主活动是否被使用
+            int prizeId = prize.getPrizeId();
+            //AsPrize prize = asPrizeMapper.selectByPrimaryKey(prizeId);
+            if (prize.getStatus().equals(1)) {
+                return 500;
+            }
+            AsActivityReceivedRecord record = new AsActivityReceivedRecord();
+            record.setPrizeId(prizeId);
+            record.setType(1);
+            AsActivityReceivedRecord receivedRecord = asActivityReceivedRecordmapper.findByAttr(record);
+            if (receivedRecord != null) {
+                int result = asPrizeMapper.updateUsePrize(prizeId);
+                if (result > 0) {
+                        /*AsActivity activity = asActivityMapper.selectByStatusAndType(1, 2);
+                        Assert.notNull(activity, "活动已结束");*/
+                    AsActivityReceivedRecord r = new AsActivityReceivedRecord();
+                    r.setUserId(receivedRecord.getUserId());
+                    r.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    r.setPrizeId(prizeId);
+                    r.setType(2);
+                    r.setStoreId(prize.getStoreId());
+                    r.setShopId(prize.getShopId());
+                    r.setStaffId(Integer.valueOf(user.getNewUserId()));
+                    asActivityReceivedRecordmapper.insertSelective(r);
+                }
+                //兑换成功
+                return 700;
+            } else {
+                //尚未领取
+                return 600;
+            }
+        }
+        return 800;
+    }
+
+
+    /**
+     * 获取后台用户
+     *
+     * @return
+     */
+    public User getCurrentUser() {
+        Subject currentUser = SecurityUtils.getSubject();
+        Session session = currentUser.getSession();
+        User user = (User) session.getAttribute(Const.SESSION_USER);
+        return user;
+    }
+
+
+}

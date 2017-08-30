@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+	<head>
+		<base href="<%=basePath%>">
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="description" content="overview & stats" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+		<link href="css/bootstrap-responsive.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!-- 下拉框 -->
+		<link rel="stylesheet" href="css/chosen.css" />
+		<link rel="stylesheet" href="css/ace.min.css" />
+		<link rel="stylesheet" href="css/ace-responsive.min.css" />
+		<link rel="stylesheet" href="css/ace-skins.min.css" />
+		<script type="text/javascript" src="../js/jquery-1.7.2.js"></script>
+		<!--提示框-->
+		<script type="text/javascript" src="../js/jquery.tips.js"></script>
+		<script type="text/javascript" src="../js/angular.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+	
+</script>
+	</head>
+<body ng-controller="attrCtrl">
+	<!-- <div class="row-fluid">
+	<div class="span12">
+		<table id="table_bug_report" class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					
+					<th>序号</th>
+					<th>Price</th>
+					<th class="hidden-480">Clicks</th>
+					<th class="hidden-phone"><i class="icon-time hidden-phone"></i> Update</th>
+					<th class="hidden-480">Status</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+									
+			<tbody>
+				<tr>
+					<td><a href='#'>1</a></td>
+					<td>$55</td>
+					<td class='hidden-480'>4,250</td>
+					<td class='hidden-phone'>Jan 21</td>
+					<td class='hidden-480'><span class='label label-success'>Registered</span></td>
+					<td>
+						<div class="inline position-relative">
+							<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-only"></i></button>
+							<ul class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
+								<li><a href="#" class="tooltip-success" data-rel="tooltip" title="Edit" data-placement="left"><span class="green"><i class="icon-edit"></i></span></a></li>
+								<li><a href="#" class="tooltip-warning" data-rel="tooltip" title="Flag" data-placement="left"><span class="blue"><i class="icon-flag"></i></span> </a></li>
+								<li><a href="#" class="tooltip-error" data-rel="tooltip" title="Delete" data-placement="left"><span class="red"><i class="icon-trash"></i></span> </a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				
+	</tbody>
+		</table>
+	</div>/span
+</div>
+ -->
+ <span ng-click="scanQRCode()">扫一扫</span>
+ <input type="hidden" id="timestamp" value="${timestamp}"/>
+ <input type="hidden" id="nonceStr" value="${nonceStr}"/>
+ <input type="hidden" id="signature" value="${signature}"/>
+</body>
+<script>
+	var goodsId = ("${goodsId}");
+	function add(t){
+		var minus = '<a href="javascript:void(0)" onclick="minus(this)">删1除</a>';
+		var divHead = '<div class="control-group" style="margin-left:2%">';
+		var innerHtml = $(t).parent().parent().html();
+		var begin = innerHtml.indexOf("<a");
+		innerHtml = innerHtml.substring(0,begin)+minus+"</div>";
+		innerHtml = innerHtml.replace('style=""','style="width:12%"');
+		var divFoot = '</div>';
+		$(t).parent().parent().after(divHead+innerHtml+divFoot);
+		
+		console.log();
+	}
+	function minus(t){
+		alert(t)
+		$(t).parent().parent().remove();
+	}
+	
+	var module = angular.module("app",[]);
+	module.controller("attrCtrl",function($scope,$http){
+		
+		
+		$scope.getAttrValuesList = function(attrId){
+			angular.forEach(attrTypes,function(val,index){
+				if(attrId == val.attrTypeId){
+					//可选属性
+					var selecteds = [];
+					//输入属性
+					var inputs = [];
+					angular.forEach(val.attributes,function(val,index){
+						if(val.attrType == 2){
+							selecteds.push(val);
+						}else if(val.attrType == 1){
+							inputs.push(val);
+						}
+					})
+					$scope.attributes = selecteds;
+					$scope.inputs = inputs;
+					console.log(val.attributes);
+					if(inputs.length>0){
+						$scope.hasData1 = true;
+					}
+					
+					return ;
+				}
+			})
+		};
+		
+		$scope.getAttrValues = function(attrValues){
+			//console.log("ssss"+attrValues);
+			if(attrValues.indexOf(";")>0){
+				return attrValues.split(";")
+			}else{
+				var array = [];
+				array.push(attrValues);
+				return array;
+			}
+		};
+		$scope.submit = function(){
+			var selectors = $("[name=sku]");
+			var array = [];
+			angular.forEach(selectors,function(val,index){
+				var obj ={};
+				obj.key = $(val).data("key");
+				obj.value = $(val).val();
+				obj.type = $(val).data("tp");
+				obj.attrId = $(val).data("id");
+				array.push(obj);
+			})
+			$("#attrStr").val(JSON.stringify(array));
+			console.log(JSON.stringify(array));
+			$("#form").submit();
+		};
+		
+		$scope.scanQRCode = function(){
+			alert('23323');
+			wx.scanQRCode({
+		        needResult: 1,
+		        desc: 'scanQRCode desc',
+		        success: function (res) {
+		              //扫码后获取结果参数:htpp://xxx.com/c/?6123，截取到url中的防伪码后，赋值给Input
+		              alert("success");
+		               
+		        }
+		      });
+		}
+		
+		var req={
+			method:'GET',
+			url:"http://192.168.1.251/mallManager/goods/getWxConfig.do?url="+location.href
+		};
+		$http(req).success(function(data){
+			console.log(JSON.stringify(data));
+			$scope.data = data;
+			
+			wx.config({
+			      debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			      appId: $scope.data.appId, // 必填，公众号的唯一标识
+			      timestamp: $scope.data.timestamp, // 必填，生成签名的时间戳
+			      nonceStr: $scope.data.nonceStr, // 必填，生成签名的随机串
+			      signature: $scope.data.signature,// 必填，签名，见附录1
+			      jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			});
+		}) 
+			
+	})
+</script>
+</html>

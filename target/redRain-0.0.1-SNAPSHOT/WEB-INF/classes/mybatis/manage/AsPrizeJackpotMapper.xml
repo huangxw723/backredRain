@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeJackpotMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeJackpot" >
+    <id column="prize_jackpot_id" property="prizeJackpotId" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="is_definite" property="isDefinite" jdbcType="INTEGER" />
+    <result column="active_time" property="activeTime" jdbcType="VARCHAR" />
+    <result column="inactive_time" property="inactiveTime" jdbcType="VARCHAR" />
+    <result column="interval_time" property="intervalTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_jackpot_id, prize_config_id, is_definite, active_time, inactive_time, interval_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_prize_jackpot
+    where prize_jackpot_id = #{prizeJackpotId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByConfigId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from as_prize_jackpot
+    where prize_config_id = #{prizeConfigId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize_jackpot
+    where prize_jackpot_id = #{prizeJackpotId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrizeJackpot" >
+    insert into as_prize_jackpot (prize_jackpot_id, prize_config_id, is_definite, 
+      active_time, inactive_time, interval_time
+      )
+    values (#{prizeJackpotId,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, #{isDefinite,jdbcType=INTEGER}, 
+      #{activeTime,jdbcType=VARCHAR}, #{inactiveTime,jdbcType=VARCHAR}, #{intervalTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrizeJackpot" >
+    insert into as_prize_jackpot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeJackpotId != null" >
+        prize_jackpot_id,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="isDefinite != null" >
+        is_definite,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time,
+      </if>
+      <if test="intervalTime != null" >
+        interval_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeJackpotId != null" >
+        #{prizeJackpotId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="isDefinite != null" >
+        #{isDefinite,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="intervalTime != null" >
+        #{intervalTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrizeJackpot" >
+    update as_prize_jackpot
+    <set >
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="isDefinite != null" >
+        is_definite = #{isDefinite,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inactiveTime != null" >
+        inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="intervalTime != null" >
+        interval_time = #{intervalTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where prize_jackpot_id = #{prizeJackpotId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrizeJackpot" >
+    update as_prize_jackpot
+    set prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      is_definite = #{isDefinite,jdbcType=INTEGER},
+      active_time = #{activeTime,jdbcType=VARCHAR},
+      inactive_time = #{inactiveTime,jdbcType=VARCHAR},
+      interval_time = #{intervalTime,jdbcType=VARCHAR}
+    where prize_jackpot_id = #{prizeJackpotId,jdbcType=INTEGER}
+  </update>
+</mapper>

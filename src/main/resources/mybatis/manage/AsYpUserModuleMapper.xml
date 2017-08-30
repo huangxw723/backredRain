@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsYpUserModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsYpUserModule" >
+    <id column="user_module_id" property="userModuleId" jdbcType="INTEGER" />
+    <result column="user_template_id" property="userTemplateId" jdbcType="INTEGER" />
+    <result column="module_id" property="moduleId" jdbcType="INTEGER" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="service_type_id" property="serviceTypeId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="position" property="position" jdbcType="INTEGER" />
+    <result column="is_sys_default" property="isSysDefault" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="dynamic_value" property="dynamicValue" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <resultMap type="com.aoshi.domain.AsYpUserModule" id="ResultMapWithTemplate" extends="BaseResultMap">
+  	<association property="template" javaType="java.util.Map" notNullColumn="parent_user_module_id">
+  		<id property="parentUserModuleId" column="parent_user_module_id"/>
+  		<result property="id" column="id"/>
+  		<result property="name" column="name"/>
+  		<result property="rootUserTemplateId" column="root_user_template_id"/>
+  		<result property="path" column="path"/>
+  		<result property="userId" column="user_id"/>
+  	</association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_module_id, user_template_id, module_id, icon, service_type_id, type, position, 
+    is_sys_default, user_id, status, create_time,content, dynamic_value
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_yp_user_module
+    where user_module_id = #{userModuleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_yp_user_module
+    where user_module_id = #{userModuleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsYpUserModule" >
+    insert into as_yp_user_module (user_module_id, user_template_id, module_id, 
+      icon, service_type_id, type, 
+      position, is_sys_default, user_id, 
+      status, create_time, content, 
+      dynamic_value)
+    values (#{userModuleId,jdbcType=INTEGER}, #{userTemplateId,jdbcType=INTEGER}, #{moduleId,jdbcType=INTEGER}, 
+      #{icon,jdbcType=VARCHAR}, #{serviceTypeId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{position,jdbcType=INTEGER}, #{isSysDefault,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}, 
+      #{dynamicValue,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsYpUserModule" useGeneratedKeys="true" keyProperty="userModuleId">
+    insert into as_yp_user_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userModuleId != null" >
+        user_module_id,
+      </if>
+      <if test="userTemplateId != null" >
+        user_template_id,
+      </if>
+      <if test="moduleId != null" >
+        module_id,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+      <if test="serviceTypeId != null" >
+        service_type_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="isSysDefault != null" >
+        is_sys_default,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="dynamicValue != null" >
+        dynamic_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userModuleId != null" >
+        #{userModuleId,jdbcType=INTEGER},
+      </if>
+      <if test="userTemplateId != null" >
+        #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null" >
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTypeId != null" >
+        #{serviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isSysDefault != null" >
+        #{isSysDefault,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dynamicValue != null" >
+        #{dynamicValue,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsYpUserModule" >
+    update as_yp_user_module
+    <set >
+      <if test="userTemplateId != null" >
+        user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null" >
+        module_id = #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTypeId != null" >
+        service_type_id = #{serviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isSysDefault != null" >
+        is_sys_default = #{isSysDefault,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dynamicValue != null" >
+        dynamic_value = #{dynamicValue,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where user_module_id = #{userModuleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsYpUserModule" >
+    update as_yp_user_module
+    set user_template_id = #{userTemplateId,jdbcType=INTEGER},
+      module_id = #{moduleId,jdbcType=INTEGER},
+      icon = #{icon,jdbcType=VARCHAR},
+      service_type_id = #{serviceTypeId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      position = #{position,jdbcType=INTEGER},
+      is_sys_default = #{isSysDefault,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where user_module_id = #{userModuleId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByAttr" parameterType="com.aoshi.domain.AsYpUserModule" resultMap="ResultMapWithTemplate">
+  	select *,t.user_template_id as id from as_yp_user_module m
+  	left join as_yp_user_template t 
+  	on m.user_module_id = t.parent_user_module_id
+  	where 1=1 
+  	<if test="userId != null">
+  		and m.user_id = #{userId}
+  	</if>
+  	<if test="userTemplateId != null">
+  		and m.user_template_id = #{userTemplateId}
+  	</if>
+  </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.ExcelMapper" >
+	<select id="queryTypeId" resultType="com.aoshi.domain.AsConsultationType" parameterType="java.lang.String" >
+		SELECT consultation_type_id FROM as_consultation_type WHERE type_name LIKE '%${type}%'
+	</select>
+	<select id="queryProvinceId" resultType="com.aoshi.domain.AsProvince" parameterType="java.lang.String" >
+		SELECT province_id FROM as_province WHERE province_name LIKE '%${province}%'
+	</select>
+	<select id="queryCityId" resultType="com.aoshi.domain.AsCity" parameterType="java.lang.String" >
+		SELECT city_id FROM as_city WHERE city_name LIKE '%${city}%'
+	</select>
+	<select id="queryAreaId" resultType="com.aoshi.domain.AsArea" parameterType="java.lang.String" >
+		SELECT area_id FROM as_area WHERE area_name LIKE '%${area}%'
+	</select>
+	<select id="queryBusId" resultType="com.aoshi.domain.AsBusinessDistrict"  >
+		SELECT business_district_id FROM as_business_district WHERE name LIKE '%${bus}%' and area_id=#{id}
+	</select>
+	<select id="queryYpId" resultType="com.aoshi.domain.AsYpBaseCategory" parameterType="java.lang.String" >
+		SELECT id FROM as_yp_base_category WHERE name LIKE '%${yp}%'
+	</select>
+</mapper>

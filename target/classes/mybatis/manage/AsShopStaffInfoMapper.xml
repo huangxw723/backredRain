@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsShopStaffInfoMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsShopStaffInfo">
+    <id column="shop_staff_info_id" jdbcType="INTEGER" property="shopStaffInfoId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="shop_user_id" jdbcType="INTEGER" property="shopUserId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="sys_user_id" jdbcType="INTEGER" property="sysUserId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="user_head" jdbcType="VARCHAR" property="userHead" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="screen_domain_id" jdbcType="INTEGER" property="screenDomainId" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.aoshi.domain.AsShopStaffInfo">
+    <result column="descp" jdbcType="LONGVARCHAR" property="descp" />
+  </resultMap>
+  
+   <resultMap extends="ResultMapWithBLOBs" id="listBaseRowMap" type="com.aoshi.domain.AsResultMap">
+  <result column="sy.phone" jdbcType="VARCHAR" property="phone" />
+   <result column="user.create_time" jdbcType="VARCHAR" property="createTime" />
+   <result column="user.status" jdbcType="VARCHAR" property="userstatus" />
+   <result column="user.account" jdbcType="VARCHAR" property="account" />
+  </resultMap>
+  
+    <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  <result column="user.account" jdbcType="VARCHAR" property="account" />
+   <result column="user.create_time" jdbcType="VARCHAR" property="createTime" />
+  </resultMap>
+   <resultMap extends="BaseResultMap" id="BaseMap" type="com.aoshi.domain.AsResultMap">
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    shop_staff_info_id, user_id, shop_user_id, status, shop_id, update_time, sys_user_id, 
+    name, sn, user_head, create_time, tel, email, screen_domain_id
+  </sql>
+  <sql id="Blob_Column_List">
+    descp
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_shop_staff_info
+    where shop_staff_info_id = #{shopStaffInfoId,jdbcType=INTEGER}
+  </select>
+   <select id="findStaffInfo" resultMap="BaseMap">
+  	SELECT
+	OWNER.* 
+	FROM
+    as_shop_staff_info OWNER
+	JOIN  as_shop shop ON shop.shop_id = OWNER .shop_id
+	JOIN as_user user ON OWNER.user_id = user.user_id
+	where user.user_id = #{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_shop_staff_info
+    where shop_staff_info_id = #{shopStaffInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsShopStaffInfo">
+    insert into as_shop_staff_info (shop_staff_info_id, user_id, shop_user_id, 
+      status, shop_id, update_time, 
+      sys_user_id, name, sn, 
+      user_head, create_time, tel, 
+      email, screen_domain_id, descp
+      )
+    values (#{shopStaffInfoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{shopUserId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, #{updateTime,jdbcType=VARCHAR}, 
+      #{sysUserId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, 
+      #{userHead,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{screenDomainId,jdbcType=INTEGER}, #{descp,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsShopStaffInfo" useGeneratedKeys="true" keyProperty="shopStaffInfoId">
+    insert into as_shop_staff_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopStaffInfoId != null">
+        shop_staff_info_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="shopUserId != null">
+        shop_user_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="sysUserId != null">
+        sys_user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sn != null">
+        sn,
+      </if>
+      <if test="userHead != null">
+        user_head,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="screenDomainId != null">
+        screen_domain_id,
+      </if>
+      <if test="descp != null">
+        descp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopStaffInfoId != null">
+        #{shopStaffInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="shopUserId != null">
+        #{shopUserId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUserId != null">
+        #{sysUserId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="userHead != null">
+        #{userHead,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="screenDomainId != null">
+        #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null">
+        #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsShopStaffInfo">
+    update as_shop_staff_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="shopUserId != null">
+        shop_user_id = #{shopUserId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUserId != null">
+        sys_user_id = #{sysUserId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="userHead != null">
+        user_head = #{userHead,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="screenDomainId != null">
+        screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      </if>
+      <if test="descp != null">
+        descp = #{descp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where shop_staff_info_id = #{shopStaffInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsShopStaffInfo">
+    update as_shop_staff_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      shop_user_id = #{shopUserId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      sys_user_id = #{sysUserId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      user_head = #{userHead,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER},
+      descp = #{descp,jdbcType=LONGVARCHAR}
+    where shop_staff_info_id = #{shopStaffInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsShopStaffInfo">
+    update as_shop_staff_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      shop_user_id = #{shopUserId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      sys_user_id = #{sysUserId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      user_head = #{userHead,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      screen_domain_id = #{screenDomainId,jdbcType=INTEGER}
+    where shop_staff_info_id = #{shopStaffInfoId,jdbcType=INTEGER}
+  </update>
+
+ <select id="listAll" resultMap="listBaseRowMap">
+    SELECT staff.user_id,staff.sn,staff.name,user.account,`user`.create_time,staff.update_time,`staff`.`status` 
+    from as_shop_staff_info staff 
+    LEFT JOIN as_user user on staff.user_id=`user`.user_id 
+    LEFT JOIN  sys_user sy on sy.USER_ID=`user`.sys_user_id 
+    where 
+    user.status != 1 
+    and staff.shop_user_id=#{userId}
+    <if test="keyWord !=null and keyWord !=''">
+    and staff.name like concat(concat('%', #{keyWord}),'%')
+    or sy.phone like concat(concat('%', #{keyWord}),'%')
+    or staff.sn like concat(concat('%', #{keyWord}),'%')
+    </if>
+	order by `user`.create_time asc
+  </select>     
+   <select id="findByUserId" resultMap="BaseRowMap">
+  	SELECT
+   a.shop_staff_info_id, 
+	a.user_id,
+	a.shop_user_id,
+	a.status,
+	a.shop_id,
+	a.update_time,
+	a.sys_user_id,
+	a.user_head,
+	user.account,
+	user.create_time,
+    name, sn,descp
+	FROM
+		as_shop_staff_info  a
+	JOIN as_user user ON a.user_id = user.user_id
+	where user.user_id = #{userId}
+  </select>
+
+  <delete id="deleteByUserId">
+  	delete from as_shop_staff_info where user_id = #{userId}
+  </delete>
+
+
+  <update id="updateStatus">
+  	update as_shop_staff_info set status = #{status} where user_id = #{userId} and status != #{status}
+  </update>
+  
+  <select id="findByShopId" resultMap="BaseRowMap">
+  	select * from as_shop_staff_info where shop_id = #{shopId}
+  </select>
+  <select id="findData" resultType="String">
+  	select user_id from as_shop_staff_info where shop_id = #{shopId}
+  </select>
+  <update id="deleteByUserIds">
+  	delete from as_shop_staff_info where user_id in
+  	<foreach close=")" collection="ids" index="" item="id" open="(" separator=",">
+      #{id}  
+    </foreach> 
+  </update>
+  <select id="getAccountList" resultMap="BaseRowMap">
+    SELECT
+	a. STATUS,
+	u.type,
+	u.account,
+	u.create_time,
+	u.user_id
+	FROM
+		as_shop shop
+	LEFT JOIN as_shop_staff_info a ON a.shop_id = shop.shop_id
+	LEFT JOIN as_user u ON u.user_id = a.user_id
+	WHERE
+		a.shop_id = #{shopId}
+	AND u.type = 2
+	AND u.account NOT IN (
+		SELECT
+			u.account
+		FROM
+			as_shop sho
+		LEFT JOIN as_shop_owner_info a ON a.shop_id = sho.shop_id
+		LEFT JOIN as_user u ON u.user_id = a.user_id
+		WHERE
+			a.shop_id = #{shopId}
+		AND u.type = 1
+	)
+	UNION
+		SELECT
+		a. STATUS,
+		u.type,
+		u.account,
+		u.create_time,
+		u.user_id
+		FROM
+			as_shop shop
+		LEFT JOIN as_shop_owner_info a ON a.shop_id = shop.shop_id
+		LEFT JOIN as_user u ON u.user_id = a.user_id
+		WHERE
+			a.shop_id = #{shopId}
+  </select>
+  <delete id="deleteAlls">
+  	delete from as_shop_staff_info where shop_id = #{shoId}
+  </delete>
+  
+  <select id="getShopStaffInfoByUserIds" resultMap="BaseRowMap">
+	SELECT
+		staff.*,user.type,user.account,user.create_time as createTime,shop.name as shopName
+	FROM
+		as_shop_staff_info staff
+	JOIN
+		as_shop shop
+	ON staff.shop_id = shop.shop_id 
+	JOIN
+		as_user user
+	ON staff.user_id = user.user_id
+	WHERE
+		staff.user_id IN 
+	<foreach close=")" collection="ids" index="" item="id" open="(" separator=",">
+      #{id}  
+    </foreach> 
+	ORDER BY
+		shop_staff_info_id DESC
+  </select>
+   <select id="getStaffInfo" resultMap="BaseResultMap" >
+  	SELECT
+	* 
+	FROM
+    as_shop_staff_info
+	where user_id = #{userId}
+  </select>
+  <select id="getStaffInfoByShopId" resultMap="BaseResultMap" >
+  	SELECT
+	* 
+	FROM
+    as_shop_staff_info
+	where shop_id = #{shopId}
+  </select>
+  
+   <update id="updateStatusByShopId">
+  	update as_shop_staff_info set status = #{status} where shop_id = #{shopId}
+  </update>
+</mapper>

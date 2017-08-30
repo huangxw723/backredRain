@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsBeaconPrizeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsBeaconPrize" >
+    <id column="beacon_prize_id" property="beaconPrizeId" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="beacon_link_id" property="beaconLinkId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    beacon_prize_id, prize_config_id, beacon_link_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_beacon_prize
+    where beacon_prize_id = #{beaconPrizeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_beacon_prize
+    where beacon_prize_id = #{beaconPrizeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsBeaconPrize" >
+    insert into as_beacon_prize (beacon_prize_id, prize_config_id, beacon_link_id, 
+      create_time)
+    values (#{beaconPrizeId,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, #{beaconLinkId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsBeaconPrize" >
+    insert into as_beacon_prize
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beaconPrizeId != null" >
+        beacon_prize_id,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beaconPrizeId != null" >
+        #{beaconPrizeId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsBeaconPrize" >
+    update as_beacon_prize
+    <set >
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="beaconLinkId != null" >
+        beacon_link_id = #{beaconLinkId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where beacon_prize_id = #{beaconPrizeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsBeaconPrize" >
+    update as_beacon_prize
+    set prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      beacon_link_id = #{beaconLinkId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where beacon_prize_id = #{beaconPrizeId,jdbcType=INTEGER}
+  </update>
+    <delete id="deleteByBeaconLinkId" parameterType="java.lang.Integer" >
+        delete from as_beacon_prize
+        where beacon_link_id = #{beaconLinkId,jdbcType=INTEGER}
+    </delete>
+    <update id="deleteByIds">
+        delete from as_beacon_prize where beacon_link_id in
+        <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </update>
+    <select id="listByBeaconLinkId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from as_beacon_prize
+        where beacon_link_id = #{beaconLinkId,jdbcType=INTEGER}
+    </select>
+</mapper>

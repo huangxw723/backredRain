@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOrderMergeMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOrderMerge" >
+    <id column="order_merge_id" property="orderMergeId" jdbcType="INTEGER" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="actual_price" property="actualPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_merge_id, order_sn, user_id, pay_type, actual_price, create_time, trade_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_order_merge
+    where order_merge_id = #{orderMergeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_order_merge
+    where order_merge_id = #{orderMergeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOrderMerge" >
+    insert into as_order_merge (order_merge_id, order_sn, user_id, 
+      pay_type, actual_price, create_time, 
+      trade_no)
+    values (#{orderMergeId,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{payType,jdbcType=VARCHAR}, #{actualPrice,jdbcType=DECIMAL}, #{createTime,jdbcType=VARCHAR}, 
+      #{tradeNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOrderMerge" >
+    insert into as_order_merge
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderMergeId != null" >
+        order_merge_id,
+      </if>
+      <if test="orderSn != null" >
+        order_sn,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="actualPrice != null" >
+        actual_price,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="tradeNo != null" >
+        trade_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderMergeId != null" >
+        #{orderMergeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSn != null" >
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPrice != null" >
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOrderMerge" >
+    update as_order_merge
+    <set >
+      <if test="orderSn != null" >
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null" >
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_merge_id = #{orderMergeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOrderMerge" >
+    update as_order_merge
+    set order_sn = #{orderSn,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      actual_price = #{actualPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR}
+    where order_merge_id = #{orderMergeId,jdbcType=INTEGER}
+  </update>
+</mapper>

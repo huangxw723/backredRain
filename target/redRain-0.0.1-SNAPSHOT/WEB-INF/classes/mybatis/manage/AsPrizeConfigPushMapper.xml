@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsPrizeConfigPushMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsPrizeConfigPush" >
+    <id column="prize_config_push_id" property="prizeConfigPushId" jdbcType="INTEGER" />
+    <result column="prize_config_id" property="prizeConfigId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prize_config_push_id, prize_config_id, user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_prize_config_push
+    where prize_config_push_id = #{prizeConfigPushId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_prize_config_push
+    where prize_config_push_id = #{prizeConfigPushId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsPrizeConfigPush" >
+    insert into as_prize_config_push (prize_config_push_id, prize_config_id, 
+      user_id)
+    values (#{prizeConfigPushId,jdbcType=INTEGER}, #{prizeConfigId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsPrizeConfigPush" >
+    insert into as_prize_config_push
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prizeConfigPushId != null" >
+        prize_config_push_id,
+      </if>
+      <if test="prizeConfigId != null" >
+        prize_config_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prizeConfigPushId != null" >
+        #{prizeConfigPushId,jdbcType=INTEGER},
+      </if>
+      <if test="prizeConfigId != null" >
+        #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsPrizeConfigPush" >
+    update as_prize_config_push
+    <set >
+      <if test="prizeConfigId != null" >
+        prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where prize_config_push_id = #{prizeConfigPushId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsPrizeConfigPush" >
+    update as_prize_config_push
+    set prize_config_id = #{prizeConfigId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER}
+    where prize_config_push_id = #{prizeConfigPushId,jdbcType=INTEGER}
+  </update>
+</mapper>

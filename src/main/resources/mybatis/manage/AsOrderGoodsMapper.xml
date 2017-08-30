@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOrderGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOrderGoods" >
+    <id column="order_goods_id" property="orderGoodsId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_img" property="goodsImg" jdbcType="VARCHAR" />
+    <result column="goods_sn" property="goodsSn" jdbcType="VARCHAR" />
+    <result column="goods_amount" property="goodsAmount" jdbcType="INTEGER" />
+    <result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
+    <result column="sales_price" property="salesPrice" jdbcType="DECIMAL" />
+    <result column="activity_price" property="activityPrice" jdbcType="DECIMAL" />
+    <result column="actual_price" property="actualPrice" jdbcType="DECIMAL" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="derate_price" property="deratePrice" jdbcType="DECIMAL" />
+    <result column="shop_id" property="shopId" jdbcType="INTEGER" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
+    <result column="shop_logo" property="shopLogo" jdbcType="VARCHAR" />
+    <result column="unit_id" property="unitId" jdbcType="INTEGER" />
+    <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="attr_name" property="attrName" jdbcType="VARCHAR" />
+    <result column="extra_price" property="extraPrice" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="refund_no" property="refundNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <association property="order" javaType="com.aoshi.domain.AsOrder">
+      <id column="order_id" property="orderId" jdbcType="INTEGER" />
+      <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+      <result column="trade_no1" property="tradeNo" jdbcType="VARCHAR" />
+    </association>
+    <association property="orderMerge" javaType="com.aoshi.domain.AsOrderMerge">
+      <id column="order_merge_id" property="orderMergeId" jdbcType="INTEGER" />
+      <result column="trade_no2" property="tradeNo" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_goods_id, order_id, goods_id, goods_name, goods_img, goods_sn, goods_amount, 
+    market_price, sales_price, activity_price, actual_price, total_price, derate_price, 
+    shop_id, shop_name, shop_logo, unit_id, unit_name, product_id, attr_name, extra_price, 
+    status, refund_no, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    a.*, b.pay_type, b.trade_no as trade_no1, c.trade_no as trade_no2
+    from as_order_goods a
+    left join as_order b on a.order_id = b.order_id
+    left join as_order_merge c on b.order_merge_id = c.order_merge_id
+    where a.order_goods_id = #{orderGoodsId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAttr" resultMap="BaseResultMap" parameterType="pd" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_order_goods
+    <where>
+	  <if test="orderId != null and orderId != ''">
+		order_id = #{orderId}
+	  </if>
+    </where>
+  </select>
+  <select id="selectByPrimaryKeyWithLock" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List"/>
+    from as_order_goods 
+    where 
+    order_goods_id = #{orderGoodsId,jdbcType=INTEGER} 
+    for update 
+  </select>
+  <select id="selectByRefundNoWithLock" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List"/>
+    from as_order_goods 
+    where 
+    refund_no = #{refundNo,jdbcType=VARCHAR} order by order_goods_id limit 1 
+    for update 
+  </select>
+   <select id="selectNotRefundCounts" resultType="java.lang.Integer">
+	SELECT
+		count(1)
+	FROM
+		as_order_goods
+	WHERE
+		order_id = #{orderId,jdbcType=VARCHAR}
+	AND STATUS != 4
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_order_goods
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOrderGoods" >
+    insert into as_order_goods (order_goods_id, order_id, goods_id, 
+      goods_name, goods_img, goods_sn, 
+      goods_amount, market_price, sales_price, 
+      activity_price, actual_price, total_price, 
+      derate_price, shop_id, shop_name, 
+      shop_logo, unit_id, unit_name, 
+      product_id, attr_name, extra_price, 
+      status, refund_no, create_time
+      )
+    values (#{orderGoodsId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsImg,jdbcType=VARCHAR}, #{goodsSn,jdbcType=VARCHAR}, 
+      #{goodsAmount,jdbcType=INTEGER}, #{marketPrice,jdbcType=DECIMAL}, #{salesPrice,jdbcType=DECIMAL}, 
+      #{activityPrice,jdbcType=DECIMAL}, #{actualPrice,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, 
+      #{deratePrice,jdbcType=DECIMAL}, #{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, 
+      #{shopLogo,jdbcType=VARCHAR}, #{unitId,jdbcType=INTEGER}, #{unitName,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=INTEGER}, #{attrName,jdbcType=VARCHAR}, #{extraPrice,jdbcType=DECIMAL}, 
+      #{status,jdbcType=INTEGER}, #{refundNo,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOrderGoods" >
+    insert into as_order_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderGoodsId != null" >
+        order_goods_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsImg != null" >
+        goods_img,
+      </if>
+      <if test="goodsSn != null" >
+        goods_sn,
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount,
+      </if>
+      <if test="marketPrice != null" >
+        market_price,
+      </if>
+      <if test="salesPrice != null" >
+        sales_price,
+      </if>
+      <if test="activityPrice != null" >
+        activity_price,
+      </if>
+      <if test="actualPrice != null" >
+        actual_price,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="deratePrice != null" >
+        derate_price,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="shopName != null" >
+        shop_name,
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo,
+      </if>
+      <if test="unitId != null" >
+        unit_id,
+      </if>
+      <if test="unitName != null" >
+        unit_name,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="attrName != null" >
+        attr_name,
+      </if>
+      <if test="extraPrice != null" >
+        extra_price,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="refundNo != null" >
+        refund_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderGoodsId != null" >
+        #{orderGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImg != null" >
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSn != null" >
+        #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAmount != null" >
+        #{goodsAmount,jdbcType=INTEGER},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesPrice != null" >
+        #{salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activityPrice != null" >
+        #{activityPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deratePrice != null" >
+        #{deratePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null" >
+        #{unitId,jdbcType=INTEGER},
+      </if>
+      <if test="unitName != null" >
+        #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="attrName != null" >
+        #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="extraPrice != null" >
+        #{extraPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="refundNo != null" >
+        #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOrderGoods" >
+    update as_order_goods
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImg != null" >
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsSn != null" >
+        goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount = #{goodsAmount,jdbcType=INTEGER},
+      </if>
+      <if test="marketPrice != null" >
+        market_price = #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesPrice != null" >
+        sales_price = #{salesPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="activityPrice != null" >
+        activity_price = #{activityPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null" >
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="deratePrice != null" >
+        derate_price = #{deratePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null" >
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopLogo != null" >
+        shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null" >
+        unit_id = #{unitId,jdbcType=INTEGER},
+      </if>
+      <if test="unitName != null" >
+        unit_name = #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="attrName != null" >
+        attr_name = #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="extraPrice != null" >
+        extra_price = #{extraPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="refundNo != null" >
+        refund_no = #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOrderGoods" >
+    update as_order_goods
+    set order_id = #{orderId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_sn = #{goodsSn,jdbcType=VARCHAR},
+      goods_amount = #{goodsAmount,jdbcType=INTEGER},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      sales_price = #{salesPrice,jdbcType=DECIMAL},
+      activity_price = #{activityPrice,jdbcType=DECIMAL},
+      actual_price = #{actualPrice,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      derate_price = #{deratePrice,jdbcType=DECIMAL},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_logo = #{shopLogo,jdbcType=VARCHAR},
+      unit_id = #{unitId,jdbcType=INTEGER},
+      unit_name = #{unitName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      attr_name = #{attrName,jdbcType=VARCHAR},
+      extra_price = #{extraPrice,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      refund_no = #{refundNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateAgreeRefund" parameterType="com.aoshi.domain.AsOrderGoods" >
+    update as_order_goods
+    set status = 3
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER} and status = 2
+  </update>
+  
+  <update id="updateRejectRefund" parameterType="com.aoshi.domain.AsOrderGoods" >
+    update as_order
+    set status = 1
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER} and status = 2
+  </update>
+  
+  <update id="updateRefund" parameterType="com.aoshi.domain.AsOrderGoods" >
+    update as_order
+    set status = 4, refund_no = #{refundNo}
+    where order_goods_id = #{orderGoodsId,jdbcType=INTEGER} and status = 3
+  </update>
+</mapper>

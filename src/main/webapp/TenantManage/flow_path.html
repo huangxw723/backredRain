@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>入驻流程</title>
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/flow_path.css">
+</head>
+<body onkeydown="keyNext()">
+	<div class="">
+		<div class="detailed_flow_path"></div>
+		<a href="fill_in_info.html" title="" class="fill_datum">填写资料</a>
+	</div>
+</body>
+</html>
+
+<script>
+    var getQueryString = function(name) {
+        if (name != null && name.toString().length > 1) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            // 获取?后面的字符串处理后返回
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+    }
+
+    var id = getQueryString("id");
+    var uType = getQueryString("uType");
+    var status = getQueryString("status");
+
+    if ( id != null ) {
+        sessionStorage.setItem("token", id);
+        sessionStorage.setItem("userType", uType);
+    }
+
+    if( !isNaN(status) ) {
+      console.log(status)
+      sessionStorage.setItem("status", status);
+    } else {
+      console.log(2)
+      sessionStorage.setItem("status", 1003);
+    }
+
+    function keyNext () {
+      if (event.keyCode == 13){  //回车键的键值为13
+        location.href = "fill_in_info.html";
+      }
+    }
+
+</script>

@@ -1,0 +1,325 @@
+package com.aoshi.controller.system;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import com.aoshi.util.Conditions;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.aoshi.controller.base.BaseController;
+import com.aoshi.service.system.MenuService;
+import com.aoshi.service.system.RoleService;
+import com.aoshi.service.system.UserService;
+import com.aoshi.util.CommonUtils;
+import com.aoshi.util.SecurityUtil;
+
+/**
+ * @describe 类：MerchantController 类描述：商戶管理(入驻)
+ *
+ * @author huangxw
+ * @date 2017年06月21日
+ */
+@Controller
+@RequestMapping("/codeMerchant")
+@CrossOrigin
+public class MerchantController extends BaseController{
+	
+	@Resource(name = "userService")
+	private UserService userService;
+	@Resource(name = "roleService")
+	private RoleService roleService;
+	@Resource(name = "menuService")
+	private MenuService menuService;
+	
+	
+	/**
+     * @describe 发送验证码 
+     *
+     * @param account
+     * @param usertype
+     * @param phone
+     * @param type
+     * 
+     * @return Object
+     * @author huangxw
+     * @date 2017年06月20日
+     */
+	@RequestMapping("/getVerifyCode")
+	@ResponseBody
+	public synchronized Object getVerifyCode(
+			@RequestParam(required = true)String account, 
+			@RequestParam(required = true)Integer usertype, 
+			@RequestParam(required = true)String phone, 
+			@RequestParam(required = true)Integer type, 
+			@RequestParam(required = true)String password) throws Exception {
+		return userService.getVerifyCode(account,usertype, phone, type, password,this);
+
+	}
+	
+	/**
+     * @describe 注册 1 商场注册   2店铺注册
+     * @param type
+     * @param account
+     * @param phone
+     * @param password
+     * @param verifyCode
+     * @return
+     * @author huangxw
+     * @date 2017年06月20日
+     */
+	@RequestMapping("/register")
+	@ResponseBody
+	public synchronized Object register(@RequestParam(required = true)Integer userType, 
+			@RequestParam(required = true)String account,
+			@RequestParam(required = true)String password, 
+			@RequestParam(required = true)String phone 
+			) throws Exception {
+		return userService.register(userType, account, password, phone, this);
+
+	}
+	
+	/**
+	 * @describe 填写 资料页面    
+	 * 
+	 * @author huangxw
+     * @date 2017年06月20日        
+	 */
+	@RequestMapping("/merchantUserInfoPage")
+	public Object merchantUserInfoPage(String status,String uType, BaseController c) {
+		HttpServletRequest request =  c.getRequest();
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+		String id= SecurityUtil.encodeAES(getCurrentUser().getNewUserId());
+		return "redirect:"+basePath+"TenantManage/flow_path.html?id="+id+"&status="+status+"&uType="+uType;
+
+	}
+	
+	/**
+	 * @describe 商场信息 资料页面（登陆后）    
+	 * 
+	 * @author huangxw
+     * @date 2017年06月20日        
+	 */
+	@RequestMapping("/merchantRejectInfoPag")
+	public Object merchantRejectInfoPag(String status,String uType, BaseController c) {
+		HttpServletRequest request =  c.getRequest();
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+		String id= SecurityUtil.encodeAES(getCurrentUser().getNewUserId());
+		return "redirect:"+basePath+"TenantManage/fill_in_info.html?id="+id+"&status="+status+"&uType="+uType;
+	}
+	
+	/**
+	 * @describe 商场/店铺用户 资料页面    
+	 * 
+	 * @author huangxw
+     * @date 2017年06月20日        
+	 */
+	@RequestMapping("/operMerchantUserInfoPage")
+	@ResponseBody
+	public Object operMerchantUserInfoPage(String id, BaseController c) {
+		return userService.operMerchantUserInfoPage(id,c);
+		
+	}
+	
+	/**
+     * @describe 商场/店铺用户 资料填写      
+     * 
+     *  申请人姓名  证件类型 证件号码  法人姓名  证件类型 证件号码  证件照（2） 身份证照  营业执照  经营许可证
+     * @param applicant
+     * @param applicant_certificate_type
+     * @param applicant_certificate_num
+     * @param corporation 
+     * @param corporation_certificate_type
+     * @param corporation_certificate_num
+     * @param identity_front
+     * @param identity_back
+     * @param business_licence
+     * @param business_certificateconsumes="application/json"
+     * @return
+     * @author huangxw
+     * @date 2017年02月20日
+     */
+	@RequestMapping(value = "/operMerchantUserInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public Object operMerchantUserInfo(
+			String applicant,
+			Integer applicantCertificateType,
+			String applicantCertificateNum, 
+			String corporation, 
+			Integer corporationCertificateType,
+			String corporationCertificatenNum,
+			String identityFront,
+			String identityBack,
+			String businessLicence,
+			String businessCertificate,
+			String token,
+			String otype) throws Exception {
+		return userService.operMerchantUserInfo(applicant, applicantCertificateType, applicantCertificateNum, 
+				                    corporation,corporationCertificateType, corporationCertificatenNum,
+				                    identityFront,identityBack,businessLicence,businessCertificate,token,otype);
+
+	}
+
+	/**
+	 * 商场/店铺信息页面    
+	 * 
+	 *            
+	 */
+	@RequestMapping("/operMerchantPage")
+	@ResponseBody
+	public Object operMerchantPage(String id,BaseController c) {
+		return userService.operMerchantPage(id, c);
+		
+	}
+	/**
+     * @describe 商场/店铺信息操作  
+     * 商户名称  行业类型  商户logo 商户背景图 商户二维码 联系人 联系电话  联系邮箱 商户地址（省 市 区） 商场  所在楼层  区域 店铺详细地址 （经纬度)
+     * @param applicant
+     * @param applicant_certificate_type
+     * @param applicant_certificate_num
+     * @param corporation 
+     * @param corporation_certificate_type
+     * @param corporation_certificate_num
+     * @param identity_front
+     * @param identity_back
+     * @param business_licence
+     * @param business_certificate
+     * @return
+     * @author huangxw
+     * @date 2017年02月20日
+     */
+	@RequestMapping(value ="/operSaveMerchant", method = RequestMethod.POST)
+	@ResponseBody
+	public Object operSaveMerchant(
+			@RequestParam(required = true) String shopName,
+			@RequestParam(required = true) String tradeCategoryId,
+			@RequestParam(required = true)String logoUrl,
+			@RequestParam(required = true)String qrCodeUrl,
+			@RequestParam(required = true)String mainPicUrl,
+			@RequestParam(required = true)String contact,
+			@RequestParam(required = true)String tel,
+			@RequestParam(required = false)Integer provinceId,
+			@RequestParam(required = false)Integer cityId,
+			@RequestParam(required = false)Integer areaId,
+			@RequestParam(required = false)Integer businessDistrictId,
+			@RequestParam(required = false)Integer storeId,
+			@RequestParam(required = false)Integer floor,
+			@RequestParam(required = false)String address,
+			@RequestParam(required = false)String lng,
+			@RequestParam(required = false)String lat,
+			@RequestParam(required = true)String contactMail,
+			@RequestParam(required = false)String region,
+			String token,
+			String otype
+			) throws Exception {
+		return userService.saveMerchant(shopName, tradeCategoryId, logoUrl, qrCodeUrl, mainPicUrl,contact, tel,
+				provinceId,cityId,areaId,businessDistrictId,storeId,floor,address,lng,lat,contactMail,region,token,otype,this);
+
+	}
+
+	/**
+     * @describe 省份
+     */
+	@RequestMapping("/getProvince")
+	@ResponseBody
+	public Object getProvince(){
+		
+		return userService.getProvince(this);
+
+	}
+	/**
+     * @describe  城市
+     */
+	@RequestMapping("/getCity")
+	@ResponseBody
+	public Object getCity(@RequestParam(required = false)Integer provinceId){
+		
+		return userService.getCity(provinceId,this);
+
+	}
+	/**
+     * @describe 区
+     */
+	@RequestMapping("/getArea")
+	@ResponseBody
+	public Object getArea(@RequestParam(required = false)String cityId){
+		
+		return userService.getArea(cityId, this);
+
+	}
+	/**
+     * @describe 商圈
+     */
+	@RequestMapping("/getBusinessDistrict")
+	@ResponseBody
+	public Object getBusinessDistrict(@RequestParam(required = false)String areaId){
+		
+		return userService.getBusinessDistrict(areaId, this);
+
+	}
+	/**
+     * @describe 商场
+     */
+	@RequestMapping("/getStore")
+	@ResponseBody
+	public Object getStore(@RequestParam(required = false)String businessDistrictId){
+		
+		return userService.getStore(businessDistrictId, this);
+
+	}
+	/**
+     * @describe 楼层
+     */
+	@RequestMapping("/getFloor")
+	@ResponseBody
+	public Object getFloor(){
+		
+		return userService.getFloor(this);
+
+	}
+	/**
+     * @describe 行业类型
+     */
+	@RequestMapping("/getBaseType")
+	@ResponseBody
+	public Object getBaseType(Integer type){
+		
+		return userService.getBaseType(type, this);
+
+	}
+	
+	/**
+     * @describe 所有商场
+     */
+	@RequestMapping("/getStoreAll")
+	@ResponseBody
+	public Object getStoreAll(){
+		
+		return userService.getStoreAll(this);
+
+	}
+	
+	/**
+     * @describe 删除背景图片
+     */
+	@RequestMapping("/deleteMainPic")
+	@ResponseBody
+	public Object deleteMainPic(@RequestParam(required = true) Integer shopPicId){
+		return userService.deleteMainPic(shopPicId,this);
+
+	}
+	/**
+	 * @describe 获取商户信息
+	 */
+	@RequestMapping("/getUserInfoByUserId")
+	@ResponseBody
+	public Object getUserInfoByUserId(@RequestParam(required = true) String userId){
+		return userService.getUserInfoByUserId(this,userId);
+	}
+}

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aoshi.dao.AsConsultationShopMapper">
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsConsultationShop">
+    <id column="consultation_shop_id" jdbcType="INTEGER" property="consultationShopId" />
+    <result column="yp_base_category_id" jdbcType="INTEGER" property="ypBaseCategoryId" />
+    <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="cover_img" jdbcType="VARCHAR" property="coverImg" />
+    <result column="visit_count" jdbcType="INTEGER" property="visitCount" />
+    <result column="suggest_price" jdbcType="REAL" property="suggestPrice" />
+    <result column="star_level" jdbcType="VARCHAR" property="starLevel" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="motify_time" jdbcType="VARCHAR" property="motifyTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="business_district_id" jdbcType="INTEGER" property="businessDistrictId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="business_time" jdbcType="VARCHAR" property="businessTime" />
+    <result column="banner_img" jdbcType="VARCHAR" property="bannerImg" />
+    <result column="lng" jdbcType="VARCHAR" property="lng" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="site" jdbcType="VARCHAR" property="site" />
+    <result column="shop_type_yp_base_category_id" jdbcType="INTEGER" property="shopTypeYpBaseCategoryId" />
+  </resultMap>
+  <resultMap id="AsConsultationShopWithName" type="com.aoshi.domain.AsConsultationShop" extends="BaseResultMap" >
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="districtName" property="districtName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    consultation_shop_id, yp_base_category_id, province_id, city_id, area_id, shop_name, 
+    cover_img, visit_count, suggest_price, star_level, create_time, motify_time, status, 
+    business_district_id, address, phone, business_time, banner_img, lng, lat, site, 
+    shop_type_yp_base_category_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from as_consultation_shop
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from as_consultation_shop
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsConsultationShop" keyProperty="consultationShopId" useGeneratedKeys="true">
+    insert into as_consultation_shop (consultation_shop_id, yp_base_category_id, 
+      province_id, city_id, area_id, 
+      shop_name, cover_img, visit_count, 
+      suggest_price, star_level, create_time, 
+      motify_time, status, business_district_id, 
+      address, phone, business_time, 
+      banner_img, lng, lat, 
+      site, shop_type_yp_base_category_id)
+    values (#{consultationShopId,jdbcType=INTEGER}, #{ypBaseCategoryId,jdbcType=INTEGER}, 
+      #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, 
+      #{shopName,jdbcType=VARCHAR}, #{coverImg,jdbcType=VARCHAR}, #{visitCount,jdbcType=INTEGER}, 
+      #{suggestPrice,jdbcType=REAL}, #{starLevel,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
+      #{motifyTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{businessDistrictId,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{businessTime,jdbcType=VARCHAR}, 
+      #{bannerImg,jdbcType=VARCHAR}, #{lng,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR}, 
+      #{site,jdbcType=VARCHAR}, #{shopTypeYpBaseCategoryId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsConsultationShop" keyProperty="consultationShopId" useGeneratedKeys="true">
+    insert into as_consultation_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="consultationShopId != null">
+        consultation_shop_id,
+      </if>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id,
+      </if>
+      <if test="provinceId != null">
+        province_id,
+      </if>
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="coverImg != null">
+        cover_img,
+      </if>
+      <if test="visitCount != null">
+        visit_count,
+      </if>
+      <if test="suggestPrice != null">
+        suggest_price,
+      </if>
+      <if test="starLevel != null">
+        star_level,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="motifyTime != null">
+        motify_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="businessTime != null">
+        business_time,
+      </if>
+      <if test="bannerImg != null">
+        banner_img,
+      </if>
+      <if test="lng != null">
+        lng,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="site != null">
+        site,
+      </if>
+      <if test="shopTypeYpBaseCategoryId != null">
+        shop_type_yp_base_category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="consultationShopId != null">
+        #{consultationShopId,jdbcType=INTEGER},
+      </if>
+      <if test="ypBaseCategoryId != null">
+        #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="suggestPrice != null">
+        #{suggestPrice,jdbcType=REAL},
+      </if>
+      <if test="starLevel != null">
+        #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="motifyTime != null">
+        #{motifyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null">
+        #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="businessTime != null">
+        #{businessTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImg != null">
+        #{bannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="site != null">
+        #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="shopTypeYpBaseCategoryId != null">
+        #{shopTypeYpBaseCategoryId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsConsultationShop">
+    update as_consultation_shop
+    <set>
+      <if test="ypBaseCategoryId != null">
+        yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceId != null">
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null">
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImg != null">
+        cover_img = #{coverImg,jdbcType=VARCHAR},
+      </if>
+      <if test="visitCount != null">
+        visit_count = #{visitCount,jdbcType=INTEGER},
+      </if>
+      <if test="suggestPrice != null">
+        suggest_price = #{suggestPrice,jdbcType=REAL},
+      </if>
+      <if test="starLevel != null">
+        star_level = #{starLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="motifyTime != null">
+        motify_time = #{motifyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="businessDistrictId != null">
+        business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="businessTime != null">
+        business_time = #{businessTime,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImg != null">
+        banner_img = #{bannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="lng != null">
+        lng = #{lng,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="site != null">
+        site = #{site,jdbcType=VARCHAR},
+      </if>
+      <if test="shopTypeYpBaseCategoryId != null">
+        shop_type_yp_base_category_id = #{shopTypeYpBaseCategoryId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsConsultationShop">
+    update as_consultation_shop
+    set yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      cover_img = #{coverImg,jdbcType=VARCHAR},
+      visit_count = #{visitCount,jdbcType=INTEGER},
+      suggest_price = #{suggestPrice,jdbcType=REAL},
+      star_level = #{starLevel,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      motify_time = #{motifyTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      business_district_id = #{businessDistrictId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      business_time = #{businessTime,jdbcType=VARCHAR},
+      banner_img = #{bannerImg,jdbcType=VARCHAR},
+      lng = #{lng,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      site = #{site,jdbcType=VARCHAR},
+      shop_type_yp_base_category_id = #{shopTypeYpBaseCategoryId,jdbcType=INTEGER}
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </update>
+  <select id="queryList" parameterType="java.util.List" resultMap="AsConsultationShopWithName">
+    SELECT a.*,b.`name`,e.`area_name`,f.`name` as districtName FROM  as_consultation_shop a
+    LEFT JOIN as_yp_base_category b ON a.`yp_base_category_id` =b.`id`
+    LEFT JOIN `as_province` c ON a.`province_id` = c.`province_id`
+    LEFT JOIN `as_city` d ON a.`city_id` = d.`city_id`
+    LEFT JOIN `as_area` e ON a.`area_id` =e.`area_id`
+    LEFT JOIN as_business_district f ON a.business_district_id =f.`business_district_id`
+    where 1=1
+    <if test="ypBaseCategoryId != null">
+      and a.yp_base_category_id = #{ypBaseCategoryId,jdbcType=INTEGER}
+    </if>
+    <if test="provinceId != null">
+      and a.province_id = #{provinceId,jdbcType=INTEGER}
+    </if>
+    <if test="cityId != null">
+      and a.city_id = #{cityId,jdbcType=INTEGER}
+    </if>
+    <if test="areaId != null">
+      and a.area_id = #{areaId,jdbcType=INTEGER}
+    </if>
+    <if test="shopName != null">
+      and a.shop_name like CONCAT(CONCAT('%',#{shopName}),'%')
+    </if>
+    <if test="status != null">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    order by a.consultation_shop_id desc
+  </select>
+
+  <update id="deleteByIds">
+    delete from as_consultation_shop where consultation_shop_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+  <update id="offSaleAll">
+    update as_consultation_shop set status=3 where consultation_shop_id in
+    <foreach close=")" collection="array" index="index" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="AsConsultationShopWithName">
+    SELECT a.*,b.`name`,e.`area_name`,f.`name` as districtName FROM  as_consultation_shop a
+    LEFT JOIN as_yp_base_category b ON a.`yp_base_category_id` =b.`id`
+    LEFT JOIN `as_province` c ON a.`province_id` = c.`province_id`
+    LEFT JOIN `as_city` d ON a.`city_id` = d.`city_id`
+    LEFT JOIN `as_area` e ON a.`area_id` =e.`area_id`
+    LEFT JOIN as_business_district f ON a.business_district_id =f.`business_district_id`
+    where consultation_shop_id = #{consultationShopId,jdbcType=INTEGER}
+  </select>
+</mapper>

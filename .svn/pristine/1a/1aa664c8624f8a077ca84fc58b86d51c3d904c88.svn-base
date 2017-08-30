@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsCapitalActionMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsCapitalAction" >
+    <id column="capital_action_id" property="capitalActionId" jdbcType="INTEGER" />
+    <result column="capital_id" property="capitalId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="error_code" property="errorCode" jdbcType="VARCHAR" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    capital_action_id, capital_id, status, error_code, error_msg, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_capital_action
+    where capital_action_id = #{capitalActionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_capital_action
+    where capital_action_id = #{capitalActionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsCapitalAction" >
+    insert into as_capital_action (capital_action_id, capital_id, status, 
+      error_code, error_msg, create_time
+      )
+    values (#{capitalActionId,jdbcType=INTEGER}, #{capitalId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{errorCode,jdbcType=VARCHAR}, #{errorMsg,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsCapitalAction" >
+    insert into as_capital_action
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="capitalActionId != null" >
+        capital_action_id,
+      </if>
+      <if test="capitalId != null" >
+        capital_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="errorCode != null" >
+        error_code,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="capitalActionId != null" >
+        #{capitalActionId,jdbcType=INTEGER},
+      </if>
+      <if test="capitalId != null" >
+        #{capitalId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="errorCode != null" >
+        #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsCapitalAction" >
+    update as_capital_action
+    <set >
+      <if test="capitalId != null" >
+        capital_id = #{capitalId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="errorCode != null" >
+        error_code = #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where capital_action_id = #{capitalActionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsCapitalAction" >
+    update as_capital_action
+    set capital_id = #{capitalId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      error_code = #{errorCode,jdbcType=VARCHAR},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR}
+    where capital_action_id = #{capitalActionId,jdbcType=INTEGER}
+  </update>
+</mapper>

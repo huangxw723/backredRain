@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsFeedback" >
+    <id column="feedback_id" property="feedbackId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="feedback" property="feedback" jdbcType="VARCHAR" />
+    <result column="contact_num" property="contactNum" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sys_user_id" property="sysUserId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="BaseRowMap" type="com.aoshi.domain.AsResultMap">
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    feedback_id, user_id, feedback, contact_num, create_time, status, remark, sys_user_id, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from as_feedback
+    where feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_feedback
+    where feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsFeedback" >
+    insert into as_feedback (feedback_id, user_id, feedback, 
+      contact_num, create_time, status, 
+      remark, sys_user_id, update_time
+      )
+    values (#{feedbackId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{feedback,jdbcType=VARCHAR}, 
+      #{contactNum,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{sysUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsFeedback" >
+    insert into as_feedback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        feedback_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="feedback != null" >
+        feedback,
+      </if>
+      <if test="contactNum != null" >
+        contact_num,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="sysUserId != null" >
+        sys_user_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        #{feedbackId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="feedback != null" >
+        #{feedback,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUserId != null" >
+        #{sysUserId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsFeedback" >
+    update as_feedback
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="feedback != null" >
+        feedback = #{feedback,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        contact_num = #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUserId != null" >
+        sys_user_id = #{sysUserId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsFeedback" >
+    update as_feedback
+    set user_id = #{userId,jdbcType=INTEGER},
+      feedback = #{feedback,jdbcType=VARCHAR},
+      contact_num = #{contactNum,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      sys_user_id = #{sysUserId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </update>
+
+  <select id="listAll" resultMap="BaseRowMap">
+    select f.*,u.account account from as_feedback f
+    join as_user u on f.user_id = u.user_id
+    where 1=1
+    <if test="keyWord != null and keyWord != ''">
+      and u.account like concat(concat('%',#{keyWord}),'%')
+    </if>
+    <if test="status != null and status != ''">
+      and f.status = #{status}
+    </if>
+    order by f.create_time desc
+  </select>
+
+  <select id="findById" resultMap="BaseRowMap">
+    select f.*,u.account account,su.account saccount from as_feedback f
+    join as_user u on f.user_id = u.user_id
+    join as_user su on f.sys_user_id = su.user_id
+    where f.feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </select>
+
+  <select id="findByIdEdit" resultMap="BaseRowMap">
+    select f.*,u.account account from as_feedback f
+    join as_user u on f.user_id = u.user_id
+    where f.feedback_id = #{feedbackId,jdbcType=INTEGER}
+  </select>
+
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>酒店首页</title>
+    <link rel="stylesheet" type="text/css" href="../css/reset.css">
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
+    <link rel="stylesheet" type="text/css" href="../css/layout.css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+</head>
+
+<body>
+    <aside class="content-l">
+        <ul>
+            <li position="1">
+                <a href="javascript:;">
+                    <img src="images_hotel/img1.png" alt="imgs"></a>
+            </li>
+            <li position="2">
+                <a href="javascript:;">
+                    <img src="images_hotel/img2.png" alt="imgs"></a>
+            </li>
+            <li position="3">
+                <a href="javascript:;">
+                    <img src="images_hotel/img3.png" alt="imgs"></a>
+            </li>
+        </ul>
+    </aside>
+    <aside class="content-r">
+        <ul>
+            <li>
+                <a href="javascript:;">
+                    <img src="../images/aside_img1.png" alt="好客武汉" title="好客武汉"></a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="../images/aside_img2.png" alt="优惠券" title="优惠券"></a>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <img src="../images/aside_img3.png" alt="红包雨" title="红包雨"></a>
+            </li>
+        </ul>
+    </aside>
+    <section class="content-m">
+        <ul>
+            <li position="4">
+                <img src="images_hotel/img4.png" alt="公司简介" height="681">
+            </li>
+            <li>
+                <a href="javascript:;" class="cont-txt bg-darkblue">热烈庆祝四川商会招商活动在本店隆重举行
+                </a>
+            </li>
+            <li>
+                <a href="introduction.html">
+                    <img src="images_hotel/img5.png" alt="公司简介" title="介绍">
+                </a>
+            </li>
+        </ul>
+    </section>
+</body>
+<script type="text/javascript">
+	var host = "http://"+location.host+"/redRain/";
+	var api = "yp/admin/template/";
+	var addr = host+api;
+	var imgAddr = "http://120.24.240.62:8099/"
+	
+	var userTemplateId = location.href.split("?")[1].split("=")[1];
+	console.log(host);
+	$.ajax({
+		type: "GET",
+		url: addr+"getUserTemplateById",
+    	data: {userTemplateId:userTemplateId},
+		dataType:'json',
+		//beforeSend: validateData,
+		success: function(data){
+			console.log(JSON.stringify(data));
+			var userTemplate = data.userTemplate;
+			var userModules = data.userModules;
+			setData(userModules);
+		}
+	});
+	
+	function setData(data){
+		$.each(data,function(index,value){
+			var position = value.position;
+			var icon = value.icon;
+			
+			var _this = $("[position="+position+"]");
+			$(_this).find("img").attr("src",imgAddr+icon);
+			if(value.template != null){
+				$(_this).find("a").attr("href",value.template.path+".html?userTemplateId="+value.template.id);
+			}
+		})
+	}
+</script>
+</html>

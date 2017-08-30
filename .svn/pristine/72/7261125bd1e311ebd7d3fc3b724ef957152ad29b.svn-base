@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aoshi.dao.AsOrderRefundMapper" >
+  <resultMap id="BaseResultMap" type="com.aoshi.domain.AsOrderRefund" >
+    <id column="order_refund_id" property="orderRefundId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_goods_id" property="orderGoodsId" jdbcType="INTEGER" />
+    <result column="refund_price" property="refundPrice" jdbcType="DECIMAL" />
+    <result column="refund_type" property="refundType" jdbcType="VARCHAR" />
+    <result column="refund_no" property="refundNo" jdbcType="VARCHAR" />
+    <result column="refund_time" property="refundTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.aoshi.domain.AsOrderRefund" extends="BaseResultMap" >
+    <result column="refund_result" property="refundResult" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_refund_id, order_id, order_goods_id, refund_price, refund_type, refund_no, 
+    refund_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    refund_result
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from as_order_refund
+    where order_refund_id = #{orderRefundId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from as_order_refund
+    where order_refund_id = #{orderRefundId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.aoshi.domain.AsOrderRefund" >
+    insert into as_order_refund (order_refund_id, order_id, order_goods_id, 
+      refund_price, refund_type, refund_no, 
+      refund_time, refund_result)
+    values (#{orderRefundId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderGoodsId,jdbcType=INTEGER}, 
+      #{refundPrice,jdbcType=DECIMAL}, #{refundType,jdbcType=VARCHAR}, #{refundNo,jdbcType=VARCHAR}, 
+      #{refundTime,jdbcType=VARCHAR}, #{refundResult,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aoshi.domain.AsOrderRefund" >
+    insert into as_order_refund
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderRefundId != null" >
+        order_refund_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderGoodsId != null" >
+        order_goods_id,
+      </if>
+      <if test="refundPrice != null" >
+        refund_price,
+      </if>
+      <if test="refundType != null" >
+        refund_type,
+      </if>
+      <if test="refundNo != null" >
+        refund_no,
+      </if>
+      <if test="refundTime != null" >
+        refund_time,
+      </if>
+      <if test="refundResult != null" >
+        refund_result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderRefundId != null" >
+        #{orderRefundId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoodsId != null" >
+        #{orderGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="refundPrice != null" >
+        #{refundPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="refundType != null" >
+        #{refundType,jdbcType=VARCHAR},
+      </if>
+      <if test="refundNo != null" >
+        #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundTime != null" >
+        #{refundTime,jdbcType=VARCHAR},
+      </if>
+      <if test="refundResult != null" >
+        #{refundResult,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aoshi.domain.AsOrderRefund" >
+    update as_order_refund
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderGoodsId != null" >
+        order_goods_id = #{orderGoodsId,jdbcType=INTEGER},
+      </if>
+      <if test="refundPrice != null" >
+        refund_price = #{refundPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="refundType != null" >
+        refund_type = #{refundType,jdbcType=VARCHAR},
+      </if>
+      <if test="refundNo != null" >
+        refund_no = #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundTime != null" >
+        refund_time = #{refundTime,jdbcType=VARCHAR},
+      </if>
+      <if test="refundResult != null" >
+        refund_result = #{refundResult,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where order_refund_id = #{orderRefundId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.aoshi.domain.AsOrderRefund" >
+    update as_order_refund
+    set order_id = #{orderId,jdbcType=INTEGER},
+      order_goods_id = #{orderGoodsId,jdbcType=INTEGER},
+      refund_price = #{refundPrice,jdbcType=DECIMAL},
+      refund_type = #{refundType,jdbcType=VARCHAR},
+      refund_no = #{refundNo,jdbcType=VARCHAR},
+      refund_time = #{refundTime,jdbcType=VARCHAR},
+      refund_result = #{refundResult,jdbcType=LONGVARCHAR}
+    where order_refund_id = #{orderRefundId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aoshi.domain.AsOrderRefund" >
+    update as_order_refund
+    set order_id = #{orderId,jdbcType=INTEGER},
+      order_goods_id = #{orderGoodsId,jdbcType=INTEGER},
+      refund_price = #{refundPrice,jdbcType=DECIMAL},
+      refund_type = #{refundType,jdbcType=VARCHAR},
+      refund_no = #{refundNo,jdbcType=VARCHAR},
+      refund_time = #{refundTime,jdbcType=VARCHAR}
+    where order_refund_id = #{orderRefundId,jdbcType=INTEGER}
+  </update>
+</mapper>
